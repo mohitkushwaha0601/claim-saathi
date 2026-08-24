@@ -27,9 +27,9 @@ Optional settings:
 ```text
 APP_ENV=development
 ALLOWED_ORIGINS=http://localhost:3000
-CLAIMSAATHI_AI_ENABLED=false
-CLAIMSAATHI_AI_MODEL=gpt-5.6-luna
-CLAIMSAATHI_AI_TIMEOUT_SECONDS=5
+AI_ENABLED=false
+AI_MODEL=gpt-5.6-luna
+AI_TIMEOUT_SECONDS=5
 OPENAI_API_KEY=
 ```
 

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { ClaimSaathiApiError } from "@/lib/api/client";
@@ -28,6 +28,7 @@ import type {
   PolicySourceResponse,
   ResolutionResponse,
 } from "@/lib/api/types";
+import { renderWithProviders } from "@/test/render";
 
 import { JourneyExperience } from "./journey-experience";
 
@@ -427,7 +428,7 @@ function decisionWithState(state: DecisionState): DecisionDetailResponse {
 }
 
 function renderJourney() {
-  return render(<JourneyExperience journeyInstanceId="JRN-RAVI-TEST" />);
+  return renderWithProviders(<JourneyExperience journeyInstanceId="JRN-RAVI-TEST" />);
 }
 
 describe("journey evaluation experience", () => {
@@ -523,6 +524,97 @@ describe("journey evaluation experience", () => {
     const officialLink = screen.getByRole("link", { name: /View official source/ });
     expect(officialLink.getAttribute("target")).toBe("_blank");
     expect(officialLink.getAttribute("rel")).toContain("noopener");
+  });
+
+  it("presents Ravi's unchanged PASS decision in Hindi", async () => {
+    window.localStorage.setItem("claimsaathi.locale", "hi");
+    getJourneyMock.mockResolvedValue({ ...JOURNEY, latest_decision: PASS_DECISION });
+    listDecisionsMock.mockResolvedValue({
+      journey_instance_id: JOURNEY.journey_instance_id,
+      decisions: [PASS_DECISION],
+      demo: DEMO,
+    });
+    renderJourney();
+
+    expect(
+      await screen.findByRole("heading", { name: "आगे बढ़ने के लिए तैयार" }),
+    ).toBeTruthy();
+    expect(screen.getByText("Form 31")).toBeTruthy();
+    expect(PASS_DECISION.state).toBe("PASS");
+    expect(evaluateJourneyMock).not.toHaveBeenCalled();
+  });
+
+  it("presents Priya's unchanged ACTION_REQUIRED decision in Hindi", async () => {
+    window.localStorage.setItem("claimsaathi.locale", "hi");
+    getJourneyMock.mockResolvedValue({
+      ...PRIYA_JOURNEY,
+      latest_decision: PRIYA_DECISION,
+    });
+    getDecisionDetailMock.mockResolvedValue(PRIYA_DECISION);
+    listDecisionsMock.mockResolvedValue({
+      journey_instance_id: PRIYA_JOURNEY.journey_instance_id,
+      decisions: [PRIYA_DECISION],
+      demo: DEMO,
+    });
+    renderWithProviders(
+      <JourneyExperience journeyInstanceId={PRIYA_JOURNEY.journey_instance_id} />,
+    );
+
+    expect(
+      await screen.findByRole("heading", { name: "कार्रवाई आवश्यक" }),
+    ).toBeTruthy();
+    expect(
+      screen.getByText("पिछले रोजगार की Date of Exit दर्ज नहीं है"),
+    ).toBeTruthy();
+    expect(PRIYA_DECISION.state).toBe("ACTION_REQUIRED");
+    expect(evaluateJourneyMock).not.toHaveBeenCalled();
+  });
+
+  it("presents Arjun's unchanged POLICY_REVIEW_REQUIRED safe stop in Hindi", async () => {
+    window.localStorage.setItem("claimsaathi.locale", "hi");
+    getJourneyMock.mockResolvedValue({
+      ...ARJUN_JOURNEY,
+      latest_decision: ARJUN_DECISION,
+    });
+    getDecisionDetailMock.mockResolvedValue(ARJUN_DECISION);
+    listDecisionsMock.mockResolvedValue({
+      journey_instance_id: ARJUN_JOURNEY.journey_instance_id,
+      decisions: [ARJUN_DECISION],
+      demo: DEMO,
+    });
+    renderWithProviders(
+      <JourneyExperience journeyInstanceId={ARJUN_JOURNEY.journey_instance_id} />,
+    );
+
+    expect(
+      await screen.findByRole("heading", { name: "नीति सत्यापन आवश्यक" }),
+    ).toBeTruthy();
+    expect(screen.getByText("Form 19")).toBeTruthy();
+    expect(ARJUN_DECISION.state).toBe("POLICY_REVIEW_REQUIRED");
+    expect(evaluateJourneyMock).not.toHaveBeenCalled();
+  });
+
+  it("labels a loaded decision as previous and never re-evaluates it offline", async () => {
+    getJourneyMock.mockResolvedValue({ ...JOURNEY, latest_decision: PASS_DECISION });
+    listDecisionsMock.mockResolvedValue({
+      journey_instance_id: JOURNEY.journey_instance_id,
+      decisions: [PASS_DECISION],
+      demo: DEMO,
+    });
+    renderJourney();
+
+    expect(await screen.findByRole("heading", { name: "Ready to proceed" })).toBeTruthy();
+    const online = vi
+      .spyOn(Navigator.prototype, "onLine", "get")
+      .mockReturnValue(false);
+    fireEvent(window, new Event("offline"));
+    expect(await screen.findByText("Previously loaded result")).toBeTruthy();
+    expect(screen.getByText("Connect to refresh this journey.")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Check again" }));
+
+    expect(await screen.findByText(/no journey action was submitted/i)).toBeTruthy();
+    expect(evaluateJourneyMock).not.toHaveBeenCalled();
+    online.mockRestore();
   });
 
   it("restores the latest decision detail on refresh without re-evaluating", async () => {
@@ -630,7 +722,7 @@ describe("journey evaluation experience", () => {
 
   it("keeps Form 19 hidden until Arjun explicitly requests evaluation", async () => {
     getJourneyMock.mockResolvedValue(ARJUN_JOURNEY);
-    render(<JourneyExperience journeyInstanceId={ARJUN_JOURNEY.journey_instance_id} />);
+    renderWithProviders(<JourneyExperience journeyInstanceId={ARJUN_JOURNEY.journey_instance_id} />);
 
     expect(await screen.findByText("Final PF settlement")).toBeTruthy();
     expect(screen.getByText("Not checked yet")).toBeTruthy();
@@ -649,7 +741,7 @@ describe("journey evaluation experience", () => {
       demo: DEMO,
     });
 
-    const view = render(
+    const view = renderWithProviders(
       <JourneyExperience journeyInstanceId={ARJUN_JOURNEY.journey_instance_id} />,
     );
     fireEvent.click(await screen.findByRole("button", { name: "Check my journey" }));
@@ -676,7 +768,9 @@ describe("journey evaluation experience", () => {
     expect(pageText).not.toMatch(/\b\d+\s*(?:days?|months?)\b/i);
     expect(pageText).not.toMatch(/\b(?:approved|rejected|guaranteed)\b/i);
 
-    expect(await screen.findByText(FORMS_SOURCE.title)).toBeTruthy();
+    expect(
+      await screen.findByText("Official EPFO form and process labels"),
+    ).toBeTruthy();
     expect(getPolicySourceMock).toHaveBeenCalledTimes(1);
     expect(getPolicySourceMock).toHaveBeenCalledWith("SRC-EPFO-FORMS");
     expect(screen.getByText(/supports the Form 19 process label/)).toBeTruthy();
@@ -695,7 +789,7 @@ describe("journey evaluation experience", () => {
       demo: DEMO,
     });
 
-    render(<JourneyExperience journeyInstanceId={ARJUN_JOURNEY.journey_instance_id} />);
+    renderWithProviders(<JourneyExperience journeyInstanceId={ARJUN_JOURNEY.journey_instance_id} />);
 
     expect(await screen.findByRole("heading", { name: "Policy verification required" })).toBeTruthy();
     expect(screen.getByText("Form 19")).toBeTruthy();
@@ -715,7 +809,7 @@ describe("journey evaluation experience", () => {
     getDecisionDetailMock.mockResolvedValue(ARJUN_DECISION);
     getPolicySourceMock.mockRejectedValueOnce(new Error("private network detail"));
 
-    render(<JourneyExperience journeyInstanceId={ARJUN_JOURNEY.journey_instance_id} />);
+    renderWithProviders(<JourneyExperience journeyInstanceId={ARJUN_JOURNEY.journey_instance_id} />);
 
     expect(await screen.findByRole("heading", { name: "Policy verification required" })).toBeTruthy();
     expect(await screen.findByText("We couldn't complete that request right now.")).toBeTruthy();
@@ -769,7 +863,7 @@ describe("journey evaluation experience", () => {
       demo: DEMO,
     });
 
-    render(<JourneyExperience journeyInstanceId={PRIYA_JOURNEY.journey_instance_id} />);
+    renderWithProviders(<JourneyExperience journeyInstanceId={PRIYA_JOURNEY.journey_instance_id} />);
     fireEvent.click(await screen.findByRole("button", { name: "Check my journey" }));
 
     expect(await screen.findByRole("heading", { name: "Action required" })).toBeTruthy();
@@ -852,7 +946,7 @@ describe("journey evaluation experience", () => {
         demo: DEMO,
       });
 
-      render(<JourneyExperience journeyInstanceId={PRIYA_JOURNEY.journey_instance_id} />);
+      renderWithProviders(<JourneyExperience journeyInstanceId={PRIYA_JOURNEY.journey_instance_id} />);
 
       expect(await screen.findByRole("heading", { name: expectedLabel })).toBeTruthy();
       expect(startResolutionMock).not.toHaveBeenCalled();
@@ -876,7 +970,7 @@ describe("journey evaluation experience", () => {
     });
     startResolutionMock.mockRejectedValue(new Error("network detail"));
 
-    render(<JourneyExperience journeyInstanceId={PRIYA_JOURNEY.journey_instance_id} />);
+    renderWithProviders(<JourneyExperience journeyInstanceId={PRIYA_JOURNEY.journey_instance_id} />);
     fireEvent.click(await screen.findByRole("button", { name: "Start resolution" }));
 
     expect(await screen.findByText("We couldn't update this step right now.")).toBeTruthy();
@@ -905,7 +999,7 @@ describe("journey evaluation experience", () => {
       new Error("network detail"),
     );
 
-    render(<JourneyExperience journeyInstanceId={PRIYA_JOURNEY.journey_instance_id} />);
+    renderWithProviders(<JourneyExperience journeyInstanceId={PRIYA_JOURNEY.journey_instance_id} />);
     fireEvent.click(
       await screen.findByRole("button", {
         name: "Simulate Date of Exit update",

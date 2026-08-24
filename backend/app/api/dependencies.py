@@ -98,17 +98,17 @@ def load_settings() -> ApiSettings:
     if "*" in origins:
         raise ValueError("wildcard CORS origins are not permitted")
     timeout_seconds = float(
-        os.getenv("CLAIMSAATHI_AI_TIMEOUT_SECONDS", "5.0")
+        os.getenv("AI_TIMEOUT_SECONDS", "5.0")
     )
     if not isfinite(timeout_seconds) or timeout_seconds <= 0:
-        raise ValueError("CLAIMSAATHI_AI_TIMEOUT_SECONDS must be positive")
+        raise ValueError("AI_TIMEOUT_SECONDS must be positive")
     api_key = os.getenv("OPENAI_API_KEY")
     return ApiSettings(
         environment=os.getenv("APP_ENV", "development"),
         allowed_origins=origins,
-        ai_enabled=_parse_bool_setting("CLAIMSAATHI_AI_ENABLED", False),
+        ai_enabled=_parse_bool_setting("AI_ENABLED", False),
         openai_api_key=api_key.strip() if api_key and api_key.strip() else None,
-        ai_model=os.getenv("CLAIMSAATHI_AI_MODEL", "gpt-5.6-luna").strip()
+        ai_model=os.getenv("AI_MODEL", "gpt-5.6-luna").strip()
         or "gpt-5.6-luna",
         ai_timeout_seconds=timeout_seconds,
     )

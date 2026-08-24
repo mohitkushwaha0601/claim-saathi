@@ -148,6 +148,22 @@ performed. Completion gates passed with 302 backend tests, 66 frontend unit
 tests, a production build, and 7 real-backend browser tests running with AI
 disabled.
 
+## Phase 8.5 — Accessibility, Hindi, and Remote-Area Resilience (Complete)
+
+Improve presentation accessibility and static delivery resilience without
+changing any deterministic or AI authority semantics.
+
+Completed on 2026-08-25 with a compact keyboard-accessible preference menu,
+closed 100–200% text steps, high contrast, and exactly two `next-intl`
+catalogues (`en` and `hi`). English remains the canonical copy; Hindi is a
+reviewed committed lazy local chunk, and route-preserving switching performs no
+API action. Serwist precaches static build/application resources and supplies a
+small offline shell while all API calls, non-GET requests, and dynamic journey
+navigations remain NetworkOnly with no background sync. Loaded results are
+visibly marked as previous when offline; infrastructure failures never become
+citizen-policy states. No backend or deterministic behavior changed, and no
+deployment was performed.
+
 ## Phase 9 — Deployment (Planned)
 
 Complete any separately authorized deployment and operational validation.

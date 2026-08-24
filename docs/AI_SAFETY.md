@@ -166,5 +166,5 @@ citizen-state revision, resolution state, official process, and source
 provenance before and after explanation calls.
 
 The deterministic product therefore works unchanged with
-`CLAIMSAATHI_AI_ENABLED=false`, an absent `OPENAI_API_KEY`, a removed provider,
+`AI_ENABLED=false`, an absent `OPENAI_API_KEY`, a removed provider,
 or an unavailable model.

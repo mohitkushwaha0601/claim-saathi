@@ -17,9 +17,9 @@ def main() -> None:
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         raise SystemExit("OPENAI_API_KEY is not configured; smoke test skipped.")
-    model = os.getenv("CLAIMSAATHI_AI_MODEL", "gpt-5.6-luna")
+    model = os.getenv("AI_MODEL", "gpt-5.6-luna")
     timeout_seconds = float(
-        os.getenv("CLAIMSAATHI_AI_TIMEOUT_SECONDS", "5.0")
+        os.getenv("AI_TIMEOUT_SECONDS", "5.0")
     )
     sanitized = SanitizedExplanationInput(
         journey_label="Partial withdrawal",

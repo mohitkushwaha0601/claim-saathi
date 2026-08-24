@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import HowItWorksPage from "@/app/how-it-works/page";
@@ -13,6 +13,7 @@ import type {
   JourneyCreatedResponse,
   JourneyEvaluationResponse,
 } from "@/lib/api/types";
+import { renderWithProviders } from "@/test/render";
 
 import { AppHeader } from "./app-header";
 
@@ -331,7 +332,7 @@ describe("Phase 7D system explorer", () => {
   });
 
   it("renders the /how-it-works narrative, comparison, scenarios, and navigation", () => {
-    render(<HowItWorksPage />);
+    renderWithProviders(<HowItWorksPage />);
 
     expect(screen.getByRole("heading", { name: "From form hunting to guided journeys" })).toBeTruthy();
     expect(screen.getByText("Typical process today")).toBeTruthy();
@@ -349,12 +350,12 @@ describe("Phase 7D system explorer", () => {
     expect(screen.getByText(/AI is optional and explanation-only/)).toBeTruthy();
     expect(listDemoPersonasMock).not.toHaveBeenCalled();
 
-    render(<AppHeader />);
+    renderWithProviders(<AppHeader />);
     expect(screen.getByRole("link", { name: "How it works" }).getAttribute("href")).toBe("/how-it-works");
   });
 
   it("runs the real demo API sequence and renders Ravi's backend trace", async () => {
-    render(<HowItWorksPage />);
+    renderWithProviders(<HowItWorksPage />);
     fireEvent.click(screen.getByRole("button", { name: "Generate synthetic trace" }));
 
     expect(await screen.findByText("Ravi's stored decision")).toBeTruthy();
@@ -377,7 +378,7 @@ describe("Phase 7D system explorer", () => {
   });
 
   it("shows actual policy rules, source metadata, AI No, and keyboard-operable stage buttons", async () => {
-    render(<HowItWorksPage />);
+    renderWithProviders(<HowItWorksPage />);
     fireEvent.click(screen.getByRole("button", { name: "Generate synthetic trace" }));
     await screen.findByText("Ravi's stored decision");
 
@@ -389,12 +390,14 @@ describe("Phase 7D system explorer", () => {
     expect(screen.getByText("P31-AMOUNT-001")).toBeTruthy();
     expect(screen.getByText("AI used")).toBeTruthy();
     expect(screen.getAllByText("No").length).toBeGreaterThan(0);
-    expect(await screen.findByText("Reviewed source metadata")).toBeTruthy();
+    expect(
+      await screen.findByText("Current partial-withdrawal framework"),
+    ).toBeTruthy();
     expect(policyButton.getAttribute("aria-pressed")).toBe("true");
   });
 
   it("renders the connected prerequisite graph from backend node data", async () => {
-    render(<HowItWorksPage />);
+    renderWithProviders(<HowItWorksPage />);
     fireEvent.click(screen.getByRole("button", { name: "Generate synthetic trace" }));
     await screen.findByText("Ravi's stored decision");
     fireEvent.click(screen.getByRole("button", { name: /Stage 4.*Prerequisite Graph/ }));
@@ -407,7 +410,7 @@ describe("Phase 7D system explorer", () => {
   });
 
   it("renders Priya's live blocker and separates the recovery architecture", async () => {
-    render(<HowItWorksPage />);
+    renderWithProviders(<HowItWorksPage />);
     fireEvent.click(screen.getByRole("button", { name: /Priya.*Blocker path/ }));
     fireEvent.click(screen.getByRole("button", { name: "Generate synthetic trace" }));
     await screen.findByText("Priya's stored decision");
@@ -421,7 +424,7 @@ describe("Phase 7D system explorer", () => {
   });
 
   it("renders Arjun's backend safe stop without inventing a wait or AI fallback", async () => {
-    render(<HowItWorksPage />);
+    renderWithProviders(<HowItWorksPage />);
     fireEvent.click(screen.getByRole("button", { name: /Arjun.*Safety path/ }));
     fireEvent.click(screen.getByRole("button", { name: "Generate synthetic trace" }));
 
@@ -438,7 +441,7 @@ describe("Phase 7D system explorer", () => {
 
   it("keeps a safe error state when trace loading fails", async () => {
     getExecutionTraceMock.mockRejectedValueOnce(new Error("raw network detail"));
-    render(<HowItWorksPage />);
+    renderWithProviders(<HowItWorksPage />);
     fireEvent.click(screen.getByRole("button", { name: "Generate synthetic trace" }));
 
     expect((await screen.findByRole("alert")).textContent).toContain(

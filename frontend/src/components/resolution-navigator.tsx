@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { simulatePreviousExitDateUpdate } from "@/lib/api/demo";
 import {
@@ -15,44 +16,11 @@ import type {
   ResolutionState,
 } from "@/lib/api/types";
 
+import { useAppPreferences } from "./app-providers";
 import { DemoCorrectionPanel } from "./demo-correction-panel";
 import { PolicySources } from "./policy-sources";
 import { PrimaryButton } from "./primary-button";
 import { ResolutionStepList } from "./resolution-step-list";
-
-const RESOLUTION_STATUS: Record<
-  ResolutionState,
-  { label: string; copy: string }
-> = {
-  CREATED: {
-    label: "Resolution prepared",
-    copy: "ClaimSaathi has prepared the reviewed resolution workflow.",
-  },
-  CITIZEN_ACTION_REQUIRED: {
-    label: "Your action is needed",
-    copy: "Follow the official correction guidance shown below.",
-  },
-  EXTERNAL_ACTION_REQUIRED: {
-    label: "Your action is needed",
-    copy: "Follow the official correction guidance shown below.",
-  },
-  WAITING_FOR_UPDATE: {
-    label: "Waiting for record update",
-    copy: "ClaimSaathi has not verified the correction yet.",
-  },
-  RECHECKING: {
-    label: "Checking for an update",
-    copy: "ClaimSaathi is checking the trusted synthetic record.",
-  },
-  STILL_BLOCKED: {
-    label: "Not updated yet",
-    copy: "The trusted synthetic record still does not contain the required Date of Exit.",
-  },
-  RESOLVED: {
-    label: "Blocker resolved",
-    copy: "The trusted synthetic previous-employment record now contains a Date of Exit.",
-  },
-};
 
 type PendingAction = "start" | "confirm" | "recheck" | "demo" | "evaluate";
 
@@ -67,6 +35,11 @@ export function ResolutionNavigator({
   initialResolution: ResolutionResponse | null;
   onJourneyReevaluate: () => Promise<boolean>;
 }) {
+  const t = useTranslations("Resolution");
+  const sourcesT = useTranslations("Sources");
+  const errorT = useTranslations("Errors");
+  const networkT = useTranslations("Network");
+  const { online, saveData } = useAppPreferences();
   const [resolution, setResolution] = useState(initialResolution);
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
   const [commandError, setCommandError] = useState<string | null>(null);
@@ -100,12 +73,16 @@ export function ResolutionNavigator({
     command: () => Promise<ResolutionResponse>,
   ) {
     if (pendingAction) return;
+    if (!online) {
+      setCommandError(errorT("offlineRequest"));
+      return;
+    }
     setPendingAction(action);
     setCommandError(null);
     try {
       setResolution(await command());
     } catch {
-      setCommandError("We couldn't update this step right now.");
+      setCommandError(errorT("resolutionCommand"));
     } finally {
       setPendingAction(null);
     }
@@ -143,12 +120,16 @@ export function ResolutionNavigator({
 
   async function simulateCorrection() {
     if (pendingAction) return;
+    if (!online) {
+      setDemoError(errorT("offlineRequest"));
+      return;
+    }
     setPendingAction("demo");
     setDemoError(null);
     try {
       setDemoResult(await simulatePreviousExitDateUpdate(journeyInstanceId));
     } catch {
-      setDemoError("We couldn't update the synthetic demo record right now.");
+      setDemoError(errorT("demoUpdate"));
     } finally {
       setPendingAction(null);
     }
@@ -156,11 +137,15 @@ export function ResolutionNavigator({
 
   async function reevaluateJourney() {
     if (pendingAction) return;
+    if (!online) {
+      setCommandError(errorT("offlineRequest"));
+      return;
+    }
     setPendingAction("evaluate");
     setCommandError(null);
     const succeeded = await onJourneyReevaluate();
     if (!succeeded) {
-      setCommandError("We couldn't check this journey right now.");
+      setCommandError(errorT("journeyCheck"));
       setPendingAction(null);
     }
   }
@@ -170,14 +155,13 @@ export function ResolutionNavigator({
     return (
       <section className="mt-8 rounded-2xl border border-brand/25 bg-brand-soft p-5 sm:p-6" aria-labelledby="resolution-available-heading">
         <p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">
-          Resolution available
+          {t("available")}
         </p>
         <h2 id="resolution-available-heading" className="mt-2 text-2xl font-bold text-ink">
-          Reviewed guidance can help with this blocker
+          {t("availableTitle")}
         </h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
-          ClaimSaathi will load the approved resolution linked to this backend
-          decision. Starting it does not change a government record.
+          {t("availableCopy")}
         </p>
         <PrimaryButton
           className="mt-5 w-full sm:w-auto"
@@ -185,7 +169,7 @@ export function ResolutionNavigator({
           disabled={pendingAction !== null}
           onClick={() => void beginResolution()}
         >
-          {pendingAction === "start" ? "Starting resolution…" : "Start resolution"}
+          {pendingAction === "start" ? t("starting") : t("start")}
         </PrimaryButton>
         {commandError ? (
           <p role="alert" className="mt-4 text-sm font-semibold text-rose-800">
@@ -196,7 +180,10 @@ export function ResolutionNavigator({
     );
   }
 
-  const status = RESOLUTION_STATUS[resolution.state];
+  const status = {
+    label: t(`statuses.${resolution.state}.label`),
+    copy: t(`statuses.${resolution.state}.copy`),
+  };
   const canConfirm =
     resolution.state === "CITIZEN_ACTION_REQUIRED" ||
     resolution.state === "EXTERNAL_ACTION_REQUIRED" ||
@@ -206,14 +193,14 @@ export function ResolutionNavigator({
     <section className="mt-8 rounded-3xl border border-line-strong bg-white p-5 sm:p-8" aria-labelledby="resolution-heading">
       <div aria-live="polite" aria-atomic="true">
         <p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">
-          Resolution navigator
+          {t("navigator")}
         </p>
         <h2 id="resolution-heading" className="mt-2 text-2xl font-bold text-ink sm:text-3xl">
-          {resolution.title}
+          {resolution.resolution_id === "RES_EXIT" ? t("title") : resolution.title}
         </h2>
         <div className="mt-5 rounded-2xl border border-brand/25 bg-brand-soft p-4 sm:p-5">
           <p className="text-xs font-bold tracking-[0.1em] text-brand uppercase">
-            Current state
+            {t("current")}
           </p>
           <h3
             ref={stateHeadingRef}
@@ -225,7 +212,7 @@ export function ResolutionNavigator({
           <p className="mt-2 text-sm leading-6 text-muted">{status.copy}</p>
           {resolution.state === "WAITING_FOR_UPDATE" ? (
             <p className="mt-2 text-sm font-semibold text-ink">
-              ClaimSaathi is waiting for the trusted record to reflect an update.
+              {t("waitingExtra")}
             </p>
           ) : null}
         </div>
@@ -240,8 +227,8 @@ export function ResolutionNavigator({
           <PolicySources
             key={`${resolution.resolution_instance_id}-${resolution.updated_at}`}
             sourceIds={resolution.official_sources}
-            eyebrow="Official guidance"
-            heading="Resolution guidance source"
+            eyebrow={sourcesT("officialGuidance")}
+            heading={sourcesT("resolutionSource")}
           />
         </div>
       ) : null}
@@ -260,9 +247,9 @@ export function ResolutionNavigator({
       <div className="mt-8 border-t border-line pt-6">
         {canConfirm ? (
           <>
-            <p className="font-bold text-ink">Your next step</p>
+            <p className="font-bold text-ink">{t("next")}</p>
             <p className="mt-1 text-sm leading-6 text-muted">
-              Follow the official correction guidance shown above.
+              {t("nextCopy")}
             </p>
             <PrimaryButton
               className="mt-5 w-full sm:w-auto"
@@ -271,10 +258,10 @@ export function ResolutionNavigator({
               onClick={() => void confirmStep()}
             >
               {pendingAction === "confirm"
-                ? "Recording this step…"
+                ? t("recording")
                 : resolution.state === "STILL_BLOCKED"
-                  ? "I've started the official step again"
-                  : "I've started the official step"}
+                  ? t("startedAgain")
+                  : t("started")}
             </PrimaryButton>
           </>
         ) : null}
@@ -286,18 +273,17 @@ export function ResolutionNavigator({
             disabled={pendingAction !== null}
             onClick={() => void recheck()}
           >
-            {pendingAction === "recheck" ? "Checking for update…" : "Check for update"}
+            {pendingAction === "recheck" ? t("checkingUpdate") : t("checkUpdate")}
           </PrimaryButton>
         ) : null}
 
         {resolution.state === "RESOLVED" ? (
           <>
             <p className="font-bold text-ink">
-              This does not automatically mean the whole transfer journey is ready.
+              {t("resolvedCaution")}
             </p>
             <p className="mt-2 text-sm leading-6 text-muted">
-              The current journey decision remains Action required until every
-              backend check runs again.
+              {t("resolvedCopy")}
             </p>
             <PrimaryButton
               className="mt-5 w-full sm:w-auto"
@@ -305,7 +291,7 @@ export function ResolutionNavigator({
               disabled={pendingAction !== null}
               onClick={() => void reevaluateJourney()}
             >
-              {pendingAction === "evaluate" ? "Checking journey again…" : "Check journey again"}
+              {pendingAction === "evaluate" ? t("checkingJourney") : t("checkJourney")}
             </PrimaryButton>
           </>
         ) : null}
@@ -317,13 +303,16 @@ export function ResolutionNavigator({
         ) : null}
       </div>
 
+      {pendingAction && saveData ? (
+        <p className="mt-3 text-sm text-muted">{networkT("slowPending")}</p>
+      ) : null}
+
       <details className="mt-6 border-t border-line pt-5">
         <summary className="min-h-11 cursor-pointer font-semibold text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
-          How this works
+          {t("how")}
         </summary>
         <p className="mt-2 text-sm leading-6 text-muted">
-          Fixing a blocker does not rewrite an earlier decision. ClaimSaathi
-          runs all checks again and creates a new decision.
+          {t("howCopy")}
         </p>
       </details>
     </section>

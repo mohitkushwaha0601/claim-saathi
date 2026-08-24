@@ -315,3 +315,31 @@ offline; frontend typecheck and lint passed; all 66 Vitest tests passed; the
 Next.js production build succeeded; all 7 real-backend Chromium tests passed
 with AI explicitly disabled and no API key; and `git diff --check` passed. No
 real OpenAI request was made because no local `OPENAI_API_KEY` was available.
+
+## 2026-08-25 — Phase 8.5 Accessibility, Hindi, and Low-Bandwidth Resilience
+
+Codex added a compact header accessibility menu with exact 100–200% text steps,
+reset, and high contrast. Preferences are local browser presentation state and
+all controls use native keyboard-operable elements. Root font sizing and
+reflowing layouts replace any need for transform scaling.
+
+The frontend now uses `next-intl` with canonical committed English and reviewed
+Hindi catalogues. Hindi is emitted as a lazy local build chunk, locale choice
+persists, and switching leaves the current route, journey, Decision ID, backend
+enum, and Form identifier unchanged without an API request. Whole-page Hindi
+remains distinct from the optional Phase 8 explanation endpoint.
+
+Serwist generates a production service worker that precaches static build
+assets and the home, System Explorer, and offline shells. Its runtime boundary
+is NetworkOnly for all APIs, non-GET requests, and dynamic journey navigation;
+there is no background sync. Loaded offline results are labeled previously
+loaded, uncached journeys receive the offline shell, and connectivity errors do
+not become policy states. Save-Data support is feature-detected, navigation
+prefetch is suppressed, and no font, image, video, analytics, translation
+model, or other large runtime asset was added.
+
+Tests cover preference persistence and limits, Hindi home and all three stored
+persona outcomes, route/Decision ID preservation, absence of language-switch
+POSTs, offline mutation guards, slow pending behavior, 200% mobile reflow, and
+production service-worker cache inspection. No backend, deterministic engine,
+AI authority, live integration, deployment, or third language was changed.

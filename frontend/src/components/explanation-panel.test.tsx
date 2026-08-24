@@ -1,8 +1,9 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createDecisionExplanation } from "@/lib/api/explanations";
 import type { ExplanationResponse } from "@/lib/api/types";
+import { renderWithProviders } from "@/test/render";
 
 import { ExplanationPanel } from "./explanation-panel";
 
@@ -35,7 +36,7 @@ function renderWithPrimaryResult(
   heading = "Ready to proceed",
   supportingText = "Form 31",
 ) {
-  return render(
+  return renderWithProviders(
     <>
       <section aria-label="Deterministic result">
         <h1>{heading}</h1>

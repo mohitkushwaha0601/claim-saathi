@@ -12,6 +12,38 @@
   --brand-soft: #e8f2ed;
 }
 
+html[data-text-scale="100"] {
+  font-size: 100%;
+}
+
+html[data-text-scale="125"] {
+  font-size: 125%;
+}
+
+html[data-text-scale="150"] {
+  font-size: 150%;
+}
+
+html[data-text-scale="175"] {
+  font-size: 175%;
+}
+
+html[data-text-scale="200"] {
+  font-size: 200%;
+}
+
+html[data-contrast="high"] {
+  --canvas: #ffffff;
+  --surface: #ffffff;
+  --ink: #000000;
+  --muted: #202020;
+  --line: #202020;
+  --line-strong: #000000;
+  --brand: #004638;
+  --brand-strong: #002f26;
+  --brand-soft: #dff7ed;
+}
+
 @theme inline {
   --color-canvas: var(--canvas);
   --color-surface: var(--surface);
@@ -22,7 +54,7 @@
   --color-brand: var(--brand);
   --color-brand-strong: var(--brand-strong);
   --color-brand-soft: var(--brand-soft);
-  --font-sans: "Aptos", "Segoe UI", "Noto Sans", Arial, sans-serif;
+  --font-sans: "Aptos", "Segoe UI", "Noto Sans Devanagari", "Noto Sans", Arial, sans-serif;
 }
 
 * {
@@ -30,18 +62,77 @@
 }
 
 html {
-  min-width: 320px;
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   font-family: var(--font-sans);
+  overflow-wrap: anywhere;
+}
+
+.grid > *,
+.flex > * {
+  min-width: 0;
 }
 
 button,
 input {
   font: inherit;
+}
+
+.accessibility-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.accessibility-menu[open] > summary {
+  background: var(--brand-soft);
+}
+
+@media (max-width: 30rem) {
+  .page-container {
+    padding-inline: 12px;
+  }
+
+  .intent-card,
+  .decision-hero-content {
+    flex-direction: column;
+  }
+
+  .intent-card-arrow {
+    align-self: flex-end;
+  }
+}
+
+html[data-contrast="high"] :is(
+  .bg-amber-50,
+  .bg-amber-100,
+  .bg-emerald-50,
+  .bg-rose-50,
+  .bg-sky-50,
+  .bg-slate-50,
+  .bg-violet-50
+) {
+  border-color: #000000;
+}
+
+html[data-contrast="high"] :is(
+  .text-amber-800,
+  .text-amber-900,
+  .text-amber-950,
+  .text-emerald-900,
+  .text-emerald-950,
+  .text-rose-800,
+  .text-rose-950,
+  .text-sky-900,
+  .text-sky-950,
+  .text-slate-800,
+  .text-slate-950,
+  .text-violet-800,
+  .text-violet-900,
+  .text-violet-950
+) {
+  color: #000000;
 }
 
 ::selection {

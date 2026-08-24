@@ -1,33 +1,64 @@
-import type { ExecutionTraceStage } from "@/lib/api/types";
-import {
-  DECISION_PRESENTATION,
-  formatCheckedAt,
-} from "@/lib/decision-presentation";
-import { intentForGoal } from "@/lib/demo-intents";
+"use client";
 
+import { useTranslations } from "next-intl";
+import type { ExecutionTraceStage } from "@/lib/api/types";
+import { formatCheckedAt } from "@/lib/decision-presentation";
+
+import { useAppPreferences } from "./app-providers";
 import { PolicySources } from "./policy-sources";
 import { PrerequisiteTraceTree } from "./prerequisite-trace-tree";
 import { TraceStatus } from "./trace-status";
 
 function Summary({ stage }: { stage: ExecutionTraceStage }) {
+  const t = useTranslations("Trace");
+  const stateT = useTranslations("DecisionStates");
+  const homeT = useTranslations("Home");
+  const processT = useTranslations("Process");
+  const details = stage.details;
+  let input: string;
+  let output: string;
+  if (details.detail_type === "INTENT") {
+    input = homeT(`intents.${details.citizen_goal}.summary`);
+    output = t("goalRecorded");
+  } else if (details.detail_type === "JOURNEY_PLANNER") {
+    input = homeT(`intents.${details.citizen_goal}.summary`);
+    output = t("journeyMapped", {
+      journey: processT(`journeys.${details.journey_id}`),
+    });
+  } else if (details.detail_type === "POLICY_ENGINE") {
+    input = t("policyInput", { version: details.policy_version });
+    output = t("stateOutput", {
+      state: stateT(`${stage.state}.label`),
+    });
+  } else if (details.detail_type === "PREREQUISITE_GRAPH") {
+    input = t("graphInput", { version: details.graph_version });
+    output = t("stateOutput", {
+      state: stateT(`${stage.state}.label`),
+    });
+  } else {
+    input = t("decisionInput");
+    output = t("decisionOutput", { id: details.decision_id });
+  }
   return (
     <>
-      <p className="text-sm leading-6 text-muted">{stage.short_description}</p>
+      <p className="text-sm leading-6 text-muted">
+        {t(`stageDescriptions.${stage.stage_type}`)}
+      </p>
       <dl className="mt-5 grid gap-3 sm:grid-cols-2">
         <div className="rounded-xl bg-canvas p-4">
           <dt className="text-xs font-bold tracking-[0.1em] text-muted uppercase">
-            Input
+            {t("input")}
           </dt>
           <dd className="mt-2 break-words text-sm font-semibold text-ink">
-            {stage.input_summary}
+            {input}
           </dd>
         </div>
         <div className="rounded-xl bg-canvas p-4">
           <dt className="text-xs font-bold tracking-[0.1em] text-muted uppercase">
-            Output
+            {t("output")}
           </dt>
           <dd className="mt-2 break-words text-sm font-semibold text-ink">
-            {stage.output_summary}
+            {output}
           </dd>
         </div>
       </dl>
@@ -36,17 +67,20 @@ function Summary({ stage }: { stage: ExecutionTraceStage }) {
 }
 
 function NoAiFact() {
+  const t = useTranslations();
   return (
     <div className="rounded-xl border border-line bg-white p-4">
       <p className="text-xs font-bold tracking-[0.1em] text-muted uppercase">
-        AI used
+        {t("Trace.aiUsed")}
       </p>
-      <p className="mt-1 font-bold text-ink">No</p>
+      <p className="mt-1 font-bold text-ink">{t("Common.no")}</p>
     </div>
   );
 }
 
 export function TraceStageDetail({ stage }: { stage: ExecutionTraceStage }) {
+  const t = useTranslations();
+  const { locale } = useAppPreferences();
   const details = stage.details;
   const sourceIds =
     details.detail_type === "POLICY_ENGINE"
@@ -66,13 +100,12 @@ export function TraceStageDetail({ stage }: { stage: ExecutionTraceStage }) {
       {details.detail_type === "INTENT" ? (
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           <div className="rounded-xl border border-line bg-white p-4">
-            <p className="text-xs font-bold tracking-[0.1em] text-muted uppercase">Citizen goal</p>
+            <p className="text-xs font-bold tracking-[0.1em] text-muted uppercase">{t("Trace.citizenGoal")}</p>
             <p className="mt-1 font-bold text-ink">
-              {intentForGoal(details.citizen_goal)?.summary ?? details.citizen_goal}
+              {t(`Home.intents.${details.citizen_goal}.summary`)}
             </p>
             <p className="mt-2 text-sm leading-6 text-ink">
-              ClaimSaathi starts with the citizen&apos;s goal rather than asking
-              them to choose a government form.
+              {t("Trace.goalCopy")}
             </p>
           </div>
           <NoAiFact />
@@ -83,13 +116,13 @@ export function TraceStageDetail({ stage }: { stage: ExecutionTraceStage }) {
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           <div className="rounded-xl border border-line bg-white p-4">
             <p className="text-xs font-bold tracking-[0.1em] text-muted uppercase">
-              Method
+              {t("Trace.method")}
             </p>
             <p className="mt-1 font-bold text-ink">
-              Exact reviewed configuration mapping
+              {t("Trace.exactMapping")}
             </p>
             <p className="mt-2 text-sm leading-6 text-muted">
-              No fuzzy matching or model ranking is used.
+              {t("Trace.noFuzzy")}
             </p>
           </div>
           <NoAiFact />
@@ -99,9 +132,9 @@ export function TraceStageDetail({ stage }: { stage: ExecutionTraceStage }) {
       {details.detail_type === "POLICY_ENGINE" ? (
         <>
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-            <h4 className="text-lg font-bold text-ink">Rules evaluated</h4>
+            <h4 className="text-lg font-bold text-ink">{t("Trace.rules")}</h4>
             <span className="text-sm font-semibold text-muted">
-              Policy {details.policy_version}
+              {t("Trace.policy", { version: details.policy_version })}
             </span>
           </div>
           <ul className="mt-3 divide-y divide-line overflow-hidden rounded-2xl border border-line bg-white">
@@ -111,14 +144,14 @@ export function TraceStageDetail({ stage }: { stage: ExecutionTraceStage }) {
                   <p className="break-all font-bold text-ink">{rule.rule_id}</p>
                   {rule.issue_code ? (
                     <p className="mt-1 break-all text-xs text-muted">
-                      Issue: {rule.issue_code}
+                      {t("Trace.issue", { code: rule.issue_code })}
                     </p>
                   ) : null}
                 </div>
                 <TraceStatus
                   compact
                   state={rule.state}
-                  label={DECISION_PRESENTATION[rule.state].prerequisiteLabel}
+                  label={t(`DecisionStates.${rule.state}.prerequisite`)}
                 />
               </li>
             ))}
@@ -130,8 +163,8 @@ export function TraceStageDetail({ stage }: { stage: ExecutionTraceStage }) {
             <div className="mt-8 border-t border-line pt-6">
               <PolicySources
                 sourceIds={sourceIds}
-                eyebrow="Stored provenance"
-                heading="Inspect official source metadata"
+                eyebrow={t("Sources.storedProvenance")}
+                heading={t("Sources.inspect")}
               />
             </div>
           ) : null}
@@ -153,17 +186,16 @@ export function TraceStageDetail({ stage }: { stage: ExecutionTraceStage }) {
       {details.detail_type === "DECISION_RECORD" ? (
         <>
           <p className="mt-6 rounded-xl border border-brand/20 bg-brand-soft p-4 text-sm font-semibold leading-6 text-ink">
-            ClaimSaathi records the result as an immutable decision rather than
-            mutating history later.
+            {t("Trace.storedDecisionCopy")}
           </p>
           <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-3">
             {[
-              ["Decision ID", details.decision_id],
-              ["State revision", String(details.citizen_state_revision)],
-              ["Policy version", details.policy_version],
-              ["Graph version", details.graph_version],
-              ["Journey definition", String(details.journey_definition_version)],
-              ["Checked time", `${formatCheckedAt(details.evaluated_at)} UTC`],
+              [t("Audit.decisionId"), details.decision_id],
+              [t("Trace.stateRevision"), String(details.citizen_state_revision)],
+              [t("Audit.policyVersion"), details.policy_version],
+              [t("Audit.graphVersion"), details.graph_version],
+              [t("Trace.journeyDefinition"), String(details.journey_definition_version)],
+              [t("Trace.checkedTime"), `${formatCheckedAt(details.evaluated_at, locale)} UTC`],
             ].map(([label, value]) => (
               <div key={label} className="rounded-xl border border-line bg-white p-4">
                 <dt className="text-muted">{label}</dt>
@@ -171,8 +203,8 @@ export function TraceStageDetail({ stage }: { stage: ExecutionTraceStage }) {
               </div>
             ))}
             <div className="rounded-xl border border-line bg-white p-4">
-              <dt className="text-muted">AI used for decision</dt>
-              <dd className="mt-1 font-bold text-ink">No</dd>
+              <dt className="text-muted">{t("Audit.aiUsed")}</dt>
+              <dd className="mt-1 font-bold text-ink">{t("Common.no")}</dd>
             </div>
           </dl>
         </>

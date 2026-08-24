@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
+import { AppFooter } from "@/components/app-footer";
 import { AppHeader } from "@/components/app-header";
+import { AppProviders } from "@/components/app-providers";
+import { ConnectivityNotice } from "@/components/connectivity-notice";
 import { DemoBoundaryBar } from "@/components/demo-boundary-bar";
-import { PageContainer } from "@/components/page-container";
 
 import "./globals.css";
 
@@ -25,25 +27,21 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html
+      lang="en"
+      data-contrast="standard"
+      data-scroll-behavior="smooth"
+      data-text-scale="100"
+      suppressHydrationWarning
+    >
       <body className="min-h-dvh bg-canvas text-ink antialiased">
-        <a
-          href="#main-content"
-          className="fixed top-3 left-3 z-50 -translate-y-20 rounded-lg bg-ink px-4 py-3 font-semibold text-white focus:translate-y-0"
-        >
-          Skip to main content
-        </a>
-        <AppHeader />
-        <DemoBoundaryBar />
-        {children}
-        <footer className="border-t border-line bg-surface py-8">
-          <PageContainer>
-            <p className="text-sm leading-6 text-muted">
-              ClaimSaathi is an independent hackathon prototype. It is not an
-              official EPFO service.
-            </p>
-          </PageContainer>
-        </footer>
+        <AppProviders>
+          <AppHeader />
+          <DemoBoundaryBar />
+          <ConnectivityNotice />
+          {children}
+          <AppFooter />
+        </AppProviders>
       </body>
     </html>
   );

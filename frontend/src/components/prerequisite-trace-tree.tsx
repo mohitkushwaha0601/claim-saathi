@@ -1,5 +1,7 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import type { TraceGraphNodeResponse } from "@/lib/api/types";
-import { DECISION_PRESENTATION } from "@/lib/decision-presentation";
 
 import { TraceStatus } from "./trace-status";
 
@@ -12,17 +14,23 @@ function TraceTreeNode({
   nodes: Map<string, TraceGraphNodeResponse>;
   isRoot?: boolean;
 }) {
+  const t = useTranslations();
+  const traceT = useTranslations("Trace");
   const node = nodes.get(nodeId);
   if (!node) return null;
   return (
     <li className={isRoot ? "trace-tree-root" : "trace-tree-node"}>
       <div className="rounded-xl border border-line bg-white p-3 text-center shadow-sm">
-        <p className="text-sm font-bold leading-5 text-ink">{node.label}</p>
+        <p className="text-sm font-bold leading-5 text-ink">
+          {traceT.has(`nodeLabels.${node.node_id}`)
+            ? traceT(`nodeLabels.${node.node_id}`)
+            : node.label}
+        </p>
         <div className="mt-2">
           <TraceStatus
             compact
             state={node.state}
-            label={DECISION_PRESENTATION[node.state].prerequisiteLabel}
+            label={t(`DecisionStates.${node.state}.prerequisite`)}
           />
         </div>
         {node.rule_id ? (
@@ -49,11 +57,12 @@ export function PrerequisiteTraceTree({
   rootNodeId: string;
   nodes: TraceGraphNodeResponse[];
 }) {
+  const t = useTranslations("Trace");
   const byId = new Map(nodes.map((node) => [node.node_id, node]));
   return (
     <div
       className="trace-tree mt-5 rounded-2xl border border-line bg-canvas p-4 sm:p-6"
-      aria-label="Connected prerequisite graph"
+      aria-label={t("graphLabel")}
     >
       <ul>
         <TraceTreeNode nodeId={rootNodeId} nodes={byId} isRoot />

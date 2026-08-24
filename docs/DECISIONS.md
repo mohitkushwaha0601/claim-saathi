@@ -669,8 +669,45 @@ use.
 
 ### AI is disabled by default and never required
 
-`CLAIMSAATHI_AI_ENABLED` defaults to `false`; absence of `OPENAI_API_KEY` also
-keeps the provider disabled. The configured default model is `gpt-5.6-luna`
-with no silent model fallback. All provider and validation failures return
-deterministic English or Hindi wording while the citizen result remains fully
-usable.
+`AI_ENABLED` defaults to `false`; absence of `OPENAI_API_KEY` also keeps the
+provider disabled. The configured default model is `gpt-5.6-luna` with no
+silent model fallback. All provider and validation failures return deterministic
+English or Hindi wording while the citizen result remains fully usable.
+
+## Phase 8.5 — Accessibility, Localization, and Cache Boundaries
+
+### Locale is presentation state, not route or journey state
+
+`next-intl` renders exactly two committed catalogues without locale-prefixed
+URLs. English is canonical and initially rendered; Hindi is a lazy local build
+chunk. Changing locale updates no route, creates no journey, and invokes no API
+or Phase 8 explanation operation. Backend enum values and identifiers remain
+unchanged beneath localized citizen copy.
+
+### Text and contrast preferences are local presentation state
+
+The only allowed text scales are 100, 125, 150, 175, and 200 percent. A root
+data attribute changes rem-based typography; transforms and fixed-canvas zoom
+are prohibited. Contrast swaps reviewed CSS tokens only. Both preferences are
+stored locally without authentication and have no business-state dependency.
+
+### Static availability must not imply dynamic freshness
+
+Serwist may precache emitted static assets and the named static shells. Every
+API request, non-GET request, and `/journey/*` navigation is NetworkOnly.
+Background sync and mutation replay are absent. An offline loaded result is
+explicitly historical presentation until the citizen reconnects and performs a
+new explicit check.
+
+### Connectivity failure is infrastructure state
+
+Offline, timeout, and slow-network presentation never synthesize
+`UNABLE_TO_VERIFY`, `POLICY_REVIEW_REQUIRED`, or another domain state. The last
+confirmed deterministic result remains visible; a blocked network action may
+be retried explicitly after reconnection.
+
+### Translation authoring is offline and reviewed
+
+Runtime translation services and browser models are prohibited. IndicTrans2
+may assist future authoring, but any generated string must receive review and
+be committed in the static catalogue. LibreTranslate is not used in Phase 8.5.

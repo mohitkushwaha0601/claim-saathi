@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { ClaimSaathiApiError } from "@/lib/api/client";
@@ -9,6 +9,7 @@ import type {
   IntentGoal,
   JourneyCreatedResponse,
 } from "@/lib/api/types";
+import { renderWithProviders } from "@/test/render";
 
 import { DemoBoundaryBar } from "./demo-boundary-bar";
 import {
@@ -97,7 +98,7 @@ describe("intent-first landing experience", () => {
   });
 
   it("renders three backend-bound intents and the synthetic boundary", async () => {
-    render(
+    renderWithProviders(
       <>
         <DemoBoundaryBar />
         <HomeExperience />
@@ -128,8 +129,23 @@ describe("intent-first landing experience", () => {
     expect(listDemoPersonasMock).toHaveBeenCalledOnce();
   });
 
+  it("renders the home experience from the committed Hindi catalogue", async () => {
+    window.localStorage.setItem("claimsaathi.locale", "hi");
+    renderWithProviders(<HomeExperience />);
+
+    expect(
+      await screen.findByRole("heading", {
+        name: "आप अपने PF के साथ क्या करना चाहते हैं?",
+      }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("button", { name: /मुझे अपने PF से कुछ पैसे चाहिए/ }),
+    ).toBeTruthy();
+    expect(listDemoPersonasMock).toHaveBeenCalledOnce();
+  });
+
   it("validates Ravi's amount as positive integer rupees before creating", async () => {
-    render(<HomeExperience />);
+    renderWithProviders(<HomeExperience />);
     fireEvent.click(
       await screen.findByRole("button", {
         name: /I need some money from my PF/,
@@ -163,7 +179,7 @@ describe("intent-first landing experience", () => {
         "PRIYA_TRANSFER_MISSING_EXIT",
       ),
     );
-    render(<HomeExperience />);
+    renderWithProviders(<HomeExperience />);
 
     fireEvent.click(
       await screen.findByRole("button", {
@@ -188,9 +204,12 @@ describe("intent-first landing experience", () => {
         404,
       ),
     );
-    render(<HomeExperience />);
+    renderWithProviders(<HomeExperience />);
 
-    expect(await screen.findByText("Unknown demo persona.")).toBeTruthy();
+    expect(
+      await screen.findByText("We couldn't complete that request right now."),
+    ).toBeTruthy();
+    expect(screen.queryByText("Unknown demo persona.")).toBeNull();
     expect(screen.queryByText("DEMO_PERSONA_NOT_FOUND")).toBeNull();
   });
 
@@ -202,7 +221,7 @@ describe("intent-first landing experience", () => {
         0,
       ),
     );
-    render(<HomeExperience />);
+    renderWithProviders(<HomeExperience />);
 
     expect(
       await screen.findByText("ClaimSaathi's demo service is unavailable."),
@@ -217,6 +236,22 @@ describe("intent-first landing experience", () => {
     );
   });
 
+  it("does not submit a new journey while offline", async () => {
+    renderWithProviders(<HomeExperience />);
+    const intent = await screen.findByRole("button", {
+        name: /I changed jobs and want to move my old PF/,
+      });
+    const online = vi
+      .spyOn(Navigator.prototype, "onLine", "get")
+      .mockReturnValue(false);
+    fireEvent(window, new Event("offline"));
+    fireEvent.click(intent);
+
+    expect(await screen.findByText(/no journey action was submitted/i)).toBeTruthy();
+    expect(createJourneyMock).not.toHaveBeenCalled();
+    online.mockRestore();
+  });
+
   it("retries a failed journey creation without changing its request", async () => {
     createJourneyMock
       .mockRejectedValueOnce(new Error("temporary network detail"))
@@ -226,7 +261,7 @@ describe("intent-first landing experience", () => {
           "PRIYA_TRANSFER_MISSING_EXIT",
         ),
       );
-    render(<HomeExperience />);
+    renderWithProviders(<HomeExperience />);
 
     fireEvent.click(
       await screen.findByRole("button", {
@@ -250,7 +285,7 @@ describe("intent-first landing experience", () => {
       ...PERSONA_RESPONSE,
       personas: PERSONA_RESPONSE.personas.slice(0, 2),
     });
-    render(<HomeExperience />);
+    renderWithProviders(<HomeExperience />);
 
     expect(
       await screen.findByText(

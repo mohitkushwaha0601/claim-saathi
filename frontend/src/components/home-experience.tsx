@@ -2,11 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
-import {
-  ClaimSaathiApiError,
-  safeApiErrorMessage,
-} from "@/lib/api/client";
+import { ClaimSaathiApiError } from "@/lib/api/client";
 import { listDemoPersonas } from "@/lib/api/demo";
 import { createJourney } from "@/lib/api/journeys";
 import {
@@ -16,6 +14,7 @@ import {
 } from "@/lib/demo-intents";
 import { validatePositiveIntegerRupees } from "@/lib/rupees";
 
+import { useAppPreferences } from "./app-providers";
 import { ErrorState } from "./error-state";
 import { IntentCard } from "./intent-card";
 import { LoadingState } from "./loading-state";
@@ -25,17 +24,22 @@ import { SafetyNotice } from "./safety-notice";
 type PersonaLoadState =
   | { status: "loading" }
   | { status: "ready"; intents: BoundIntent[] }
-  | { status: "error"; title?: string; message: string };
+  | { status: "error"; kind: "network" | "configuration" | "generic" };
 
 interface FailedCreation {
   intent: BoundIntent;
   requestedAmountRupees?: number;
 }
 
-export function demoServiceUnavailableMessage(environment?: string): string {
+export function demoServiceUnavailableMessage(
+  environment: string | undefined,
+  developmentMessage = "Start the backend service and try again.",
+  productionMessage =
+    "The demo service is temporarily unavailable. Please try again shortly.",
+): string {
   return environment === "production"
-    ? "The demo service is temporarily unavailable. Please try again shortly."
-    : "Start the backend service and try again.";
+    ? productionMessage
+    : developmentMessage;
 }
 
 async function fetchBoundIntents(): Promise<BoundIntent[]> {
@@ -43,29 +47,24 @@ async function fetchBoundIntents(): Promise<BoundIntent[]> {
   return bindPersonasToIntents(response.personas);
 }
 
-function personaLoadError(error: unknown): {
-  title?: string;
-  message: string;
-} {
+function personaLoadErrorKind(
+  error: unknown,
+): "network" | "configuration" | "generic" {
   if (
     error instanceof ClaimSaathiApiError &&
     error.code === "NETWORK_ERROR"
   ) {
-    return {
-      title: "ClaimSaathi's demo service is unavailable.",
-      message: demoServiceUnavailableMessage(process.env.NODE_ENV),
-    };
+    return "network";
   }
-  return {
-    message:
-      error instanceof DemoConfigurationError
-        ? error.message
-        : safeApiErrorMessage(error),
-  };
+  return error instanceof DemoConfigurationError ? "configuration" : "generic";
 }
 
 export function HomeExperience() {
   const router = useRouter();
+  const t = useTranslations("Home");
+  const errorT = useTranslations("Errors");
+  const networkT = useTranslations("Network");
+  const { online, saveData } = useAppPreferences();
   const [loadState, setLoadState] = useState<PersonaLoadState>({
     status: "loading",
   });
@@ -78,34 +77,43 @@ export function HomeExperience() {
     null,
   );
   const amountInputRef = useRef<HTMLInputElement>(null);
-
   const loadPersonas = useCallback(async () => {
+    if (!navigator.onLine) {
+      setLoadState({ status: "error", kind: "network" });
+      return;
+    }
     try {
       setLoadState({
         status: "ready",
         intents: await fetchBoundIntents(),
       });
     } catch (error) {
-      const presentation = personaLoadError(error);
       setLoadState({
         status: "error",
-        ...presentation,
+        kind: personaLoadErrorKind(error),
       });
     }
   }, []);
 
   useEffect(() => {
     let active = true;
+    if (!navigator.onLine) {
+      queueMicrotask(() => {
+        if (active) setLoadState({ status: "error", kind: "network" });
+      });
+      return () => {
+        active = false;
+      };
+    }
     fetchBoundIntents()
       .then((intents) => {
         if (active) setLoadState({ status: "ready", intents });
       })
       .catch((error: unknown) => {
         if (active) {
-          const presentation = personaLoadError(error);
           setLoadState({
             status: "error",
-            ...presentation,
+            kind: personaLoadErrorKind(error),
           });
         }
       });
@@ -122,6 +130,11 @@ export function HomeExperience() {
     intent: BoundIntent,
     requestedAmountRupees?: number,
   ) {
+    if (!online) {
+      setCreationError(errorT("offlineRequest"));
+      setFailedCreation({ intent, requestedAmountRupees });
+      return;
+    }
     setCreationError(null);
     setFailedCreation(null);
     setCreatingGoal(intent.goal);
@@ -136,8 +149,8 @@ export function HomeExperience() {
       router.push(
         `/journey/${encodeURIComponent(journey.journey_instance_id)}`,
       );
-    } catch (error) {
-      setCreationError(safeApiErrorMessage(error));
+    } catch {
+      setCreationError(errorT("generic"));
       setFailedCreation({ intent, requestedAmountRupees });
       setCreatingGoal(null);
     }
@@ -158,7 +171,11 @@ export function HomeExperience() {
     if (!selectedIntent) return;
     const validation = validatePositiveIntegerRupees(amount);
     if (!validation.ok) {
-      setAmountError(validation.message);
+      setAmountError(
+        validation.reason === "required"
+          ? t("amountRequired")
+          : t("amountInvalid"),
+      );
       return;
     }
     setAmountError(null);
@@ -169,27 +186,42 @@ export function HomeExperience() {
     <main id="main-content" className="pb-16 pt-12 sm:pb-24 sm:pt-16">
       <section aria-labelledby="intent-heading">
         <p className="text-sm font-bold tracking-[0.16em] text-brand uppercase">
-          Start with your goal
+          {t("eyebrow")}
         </p>
         <h1
           id="intent-heading"
           className="mt-3 max-w-3xl text-4xl font-bold tracking-[-0.045em] text-ink sm:text-5xl sm:leading-[1.08]"
         >
-          What do you want to do with your PF?
+          {t("title")}
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-muted sm:text-lg">
-          Choose the outcome you understand. ClaimSaathi will connect it to the
-          right synthetic journey without asking you to know a government form.
+          {t("intro")}
         </p>
 
         <div className="mt-9" aria-busy={loadState.status === "loading"}>
           {loadState.status === "loading" ? (
-            <LoadingState message="Loading synthetic demo profiles…" />
+            <LoadingState message={t("loading")} />
           ) : null}
           {loadState.status === "error" ? (
             <ErrorState
-              title={loadState.title}
-              message={loadState.message}
+              title={
+                loadState.kind === "network"
+                  ? errorT("demoUnavailableTitle")
+                  : undefined
+              }
+              message={
+                loadState.kind === "network"
+                  ? !online
+                    ? errorT("offlineRequest")
+                    : demoServiceUnavailableMessage(
+                        process.env.NODE_ENV,
+                        errorT("demoUnavailableDevelopment"),
+                        errorT("demoUnavailableProduction"),
+                      )
+                  : loadState.kind === "configuration"
+                    ? errorT("configuration")
+                    : errorT("generic")
+              }
               onRetry={() => {
                 setLoadState({ status: "loading" });
                 void loadPersonas();
@@ -201,8 +233,8 @@ export function HomeExperience() {
               {loadState.intents.map((intent) => (
                 <IntentCard
                   key={intent.goal}
-                  title={intent.title}
-                  description={intent.description}
+                  title={t(`intents.${intent.goal}.title`)}
+                  description={t(`intents.${intent.goal}.description`)}
                   personaName={intent.persona.display_name}
                   icon={intent.icon}
                   disabled={creatingGoal !== null}
@@ -221,17 +253,16 @@ export function HomeExperience() {
           >
             <fieldset disabled={creatingGoal !== null}>
               <legend className="text-lg font-bold text-ink">
-                How much do you want to access?
+                {t("amountTitle")}
               </legend>
               <p className="mt-1 text-sm leading-6 text-muted">
-                Enter a positive amount in whole rupees. ClaimSaathi does not
-                calculate a limit in the browser.
+                {t("amountIntro")}
               </p>
               <label
                 htmlFor="requested-amount"
                 className="mt-5 block text-sm font-semibold text-ink"
               >
-                Amount in rupees
+                {t("amountLabel")}
               </label>
               <div className="mt-2 flex min-h-12 max-w-sm items-center rounded-xl border border-line-strong bg-surface px-4 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand">
                 <span aria-hidden="true" className="mr-2 text-lg text-muted">
@@ -255,7 +286,7 @@ export function HomeExperience() {
                 />
               </div>
               <p id="amount-help" className="mt-2 text-xs leading-5 text-muted">
-                Example only: ₹80,000. No amount is selected automatically.
+                {t("amountHelp")}
               </p>
               {amountError ? (
                 <p
@@ -269,8 +300,8 @@ export function HomeExperience() {
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <PrimaryButton type="submit">
                   {creatingGoal === selectedIntent.goal
-                    ? "Preparing your journey…"
-                    : "Prepare my journey"}
+                    ? t("preparing")
+                    : t("prepare")}
                 </PrimaryButton>
                 <button
                   type="button"
@@ -283,7 +314,7 @@ export function HomeExperience() {
                   }}
                   className="min-h-12 rounded-xl px-5 py-3 font-semibold text-brand underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                 >
-                  Choose a different goal
+                  {t("chooseDifferent")}
                 </button>
               </div>
             </fieldset>
@@ -296,7 +327,7 @@ export function HomeExperience() {
             aria-live="polite"
             className="mt-4 text-sm font-semibold text-brand"
           >
-            Preparing your journey…
+            {t("preparing")}
           </p>
         ) : null}
         {creationError ? (
@@ -323,10 +354,10 @@ export function HomeExperience() {
           id="how-it-works"
           className="text-2xl font-bold tracking-[-0.025em] text-ink sm:text-3xl"
         >
-          How ClaimSaathi works
+          {t("worksTitle")}
         </h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-4">
-          {["Your goal", "Reviewed checks", "Clear action", "Official process"].map(
+          {(t.raw("steps") as string[]).map(
             (step, index) => (
               <div
                 key={step}
@@ -343,9 +374,13 @@ export function HomeExperience() {
           )}
         </div>
         <p className="mt-5 max-w-3xl text-base leading-7 text-muted">
-          ClaimSaathi checks reviewed rules and your synthetic demo records
-          before showing the applicable next step.
+          {t("worksCopy")}
         </p>
+        {saveData ? (
+          <p className="mt-3 text-sm font-semibold text-muted">
+            {networkT("saveData")}
+          </p>
+        ) : null}
       </section>
 
       <div className="mt-10">

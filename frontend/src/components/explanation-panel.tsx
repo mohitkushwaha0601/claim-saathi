@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { createDecisionExplanation } from "@/lib/api/explanations";
 import type {
@@ -8,8 +9,7 @@ import type {
   ExplanationResponse,
 } from "@/lib/api/types";
 
-const EXPLANATION_ERROR =
-  "We couldn't load a different explanation right now. Your stored result is unchanged.";
+import { useAppPreferences } from "./app-providers";
 
 export function ExplanationPanel({
   journeyInstanceId,
@@ -18,6 +18,10 @@ export function ExplanationPanel({
   journeyInstanceId: string;
   decisionId: string;
 }) {
+  const t = useTranslations("Explanation");
+  const errorT = useTranslations("Errors");
+  const networkT = useTranslations("Network");
+  const { online, saveData } = useAppPreferences();
   const [pendingMode, setPendingMode] = useState<ExplanationMode | null>(null);
   const [lastMode, setLastMode] = useState<ExplanationMode | null>(null);
   const [explanation, setExplanation] =
@@ -26,6 +30,11 @@ export function ExplanationPanel({
 
   async function requestExplanation(mode: ExplanationMode) {
     if (pendingMode !== null) return;
+    if (!online) {
+      setLastMode(mode);
+      setError(errorT("offlineRequest"));
+      return;
+    }
     setPendingMode(mode);
     setLastMode(mode);
     setError(null);
@@ -37,7 +46,7 @@ export function ExplanationPanel({
       );
       setExplanation(response);
     } catch {
-      setError(EXPLANATION_ERROR);
+      setError(errorT("explanation"));
     } finally {
       setPendingMode(null);
     }
@@ -50,17 +59,16 @@ export function ExplanationPanel({
       aria-busy={pendingMode !== null}
     >
       <p className="text-xs font-bold tracking-[0.12em] text-muted uppercase">
-        Optional explanation
+        {t("eyebrow")}
       </p>
       <h2
         id="explanation-controls-heading"
         className="mt-2 text-xl font-bold text-ink"
       >
-        Need this explained differently?
+        {t("title")}
       </h2>
       <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
-        These controls explain the stored result only. They do not run or
-        change the journey check.
+        {t("copy")}
       </p>
       <div className="mt-5 flex flex-wrap gap-3">
         <button
@@ -69,7 +77,7 @@ export function ExplanationPanel({
           onClick={() => void requestExplanation("SIMPLE_ENGLISH")}
           className="min-h-11 rounded-xl border border-line-strong bg-surface px-4 py-2.5 font-semibold text-ink focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-60"
         >
-          {pendingMode === "SIMPLE_ENGLISH" ? "Explaining…" : "Explain simply"}
+          {pendingMode === "SIMPLE_ENGLISH" ? t("explaining") : t("simple")}
         </button>
         <button
           type="button"
@@ -78,14 +86,17 @@ export function ExplanationPanel({
           onClick={() => void requestExplanation("HINDI")}
           className="min-h-11 rounded-xl border border-line-strong bg-surface px-4 py-2.5 font-semibold text-ink focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-60"
         >
-          {pendingMode === "HINDI" ? "समझाया जा रहा है…" : "हिंदी में समझाएँ"}
+          {pendingMode === "HINDI" ? t("explainingHindi") : t("hindi")}
         </button>
       </div>
 
       {pendingMode ? (
         <p role="status" aria-live="polite" className="mt-3 text-sm text-muted">
-          Preparing an optional explanation. Your result remains visible above.
+          {t("pending")}
         </p>
+      ) : null}
+      {pendingMode && saveData ? (
+        <p className="mt-2 text-sm text-muted">{networkT("slowPending")}</p>
       ) : null}
 
       {error ? (
@@ -98,7 +109,7 @@ export function ExplanationPanel({
               onClick={() => void requestExplanation(lastMode)}
               className="mt-3 min-h-11 font-bold text-amber-950 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand"
             >
-              Try explanation again
+              {t("retry")}
             </button>
           ) : null}
         </div>
@@ -108,12 +119,12 @@ export function ExplanationPanel({
         <article className="mt-6 rounded-xl border border-line bg-surface p-5">
           <p className="text-xs font-bold tracking-[0.1em] text-brand uppercase">
             {explanation.ai_used_for_explanation
-              ? "AI-assisted explanation"
-              : "Plain-language explanation"}
+              ? t("aiLabel")
+              : t("plainLabel")}
           </p>
           {explanation.ai_used_for_explanation ? (
             <p className="mt-2 text-sm font-semibold text-ink">
-              AI did not determine this result.
+              {t("aiSafety")}
             </p>
           ) : null}
           <h3 className="mt-3 text-xl font-bold text-ink">
@@ -132,7 +143,7 @@ export function ExplanationPanel({
             {explanation.disclaimer}
           </p>
           <p className="mt-3 text-xs font-semibold text-muted">
-            AI used for decision: false
+            {t("aiDecision")}
           </p>
         </article>
       ) : null}
