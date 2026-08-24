@@ -6,6 +6,7 @@ export interface IntentDefinition {
   goal: IntentGoal;
   expectedPersonaId: string;
   title: string;
+  summary: string;
   description: string;
   icon: IntentIcon;
   requiresAmount: boolean;
@@ -20,6 +21,7 @@ export const INTENT_DEFINITIONS: readonly IntentDefinition[] = [
     goal: "ACCESS_SOME_PF_FUNDS",
     expectedPersonaId: "RAVI_PARTIAL_READY",
     title: "I need some money from my PF",
+    summary: "Access some PF funds",
     description:
       "Check whether your current records are ready for a partial withdrawal.",
     icon: "funds",
@@ -29,6 +31,7 @@ export const INTENT_DEFINITIONS: readonly IntentDefinition[] = [
     goal: "TRANSFER_PF_AFTER_EMPLOYMENT_CHANGE",
     expectedPersonaId: "PRIYA_TRANSFER_MISSING_EXIT",
     title: "I changed jobs and want to move my old PF",
+    summary: "Transfer PF after changing employment",
     description:
       "Check your previous employment record and transfer readiness.",
     icon: "transfer",
@@ -38,6 +41,7 @@ export const INTENT_DEFINITIONS: readonly IntentDefinition[] = [
     goal: "FINAL_PF_SETTLEMENT",
     expectedPersonaId: "ARJUN_FINAL_SETTLEMENT",
     title: "I left my job and want my PF",
+    summary: "Final PF settlement",
     description:
       "Check what can be safely determined from the current policy configuration.",
     icon: "settlement",

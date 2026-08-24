@@ -1,9 +1,10 @@
-# Frontend Foundation
+# ClaimSaathi Frontend
 
-Phase 7A provides a mobile-first Next.js App Router application at `frontend/`.
-It asks citizens for their PF goal, loads the three synthetic personas from the
-FastAPI demo API, and creates a real journey instance. It deliberately stops
-before journey evaluation or resolution navigation.
+Phases 7A and 7B provide a mobile-first Next.js App Router application at
+`frontend/`. It asks citizens for their PF goal, loads the three synthetic
+personas from FastAPI, creates a real journey instance, and supports Ravi's
+explicit deterministic journey evaluation. Priya resolution navigation remains
+out of scope.
 
 ## Run locally
 
@@ -32,7 +33,13 @@ Open `http://localhost:3000`.
   exact and fail safely when the backend contract drifts.
 - React performs basic input validation but contains no eligibility or policy
   calculations.
-- Creating a journey does not evaluate it, contact EPFO, or submit a claim.
+- Creating or refreshing a journey does not evaluate it. Evaluation is a
+  separate explicit button action.
+- Decision, prerequisite, process, source, and audit values come from the
+  backend API. Official form terminology is hidden until a decision exists.
+- A refresh retrieves the latest decision detail without creating another
+  decision record.
+- No frontend action contacts EPFO or submits a claim.
 - Demo and synthetic status remains visible in the shared application shell.
 
 ## Checks

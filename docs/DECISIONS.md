@@ -404,3 +404,45 @@ Components call focused demo and journey API modules rather than constructing
 URLs or parsing error envelopes themselves. The central client preserves safe
 backend error codes, messages, and HTTP status while replacing malformed or
 unknown failures with a generic citizen-safe message.
+
+## Phase 7B — Journey Evaluation Presentation Boundaries
+
+### Evaluation is an explicit citizen action
+
+Opening or refreshing a journey performs read-only journey and decision-detail
+requests. A new deterministic evaluation occurs only when the citizen selects
+“Check my journey” or “Check again”; pending controls prevent accidental double
+submission.
+
+### Refresh never creates a decision
+
+When `GET /journeys/{id}` reports a latest decision, the frontend retrieves its
+immutable detail by decision ID. It does not call the evaluation endpoint, and
+an expired process-local journey is presented as a demo reset rather than
+`UNABLE_TO_VERIFY`.
+
+### Official form terminology appears only after evaluation
+
+Although journey metadata already contains a reviewed process label, the
+frontend deliberately withholds it before a decision exists. After evaluation,
+the process card renders the exact backend label and visually connects it to the
+citizen's original goal.
+
+### `PASS` is ready to proceed, never approval
+
+The closed state presentation map labels `PASS` as “Ready to proceed” and
+states that it means only the configured prerequisites currently pass. It never
+creates a claim-submission action, promise, or government approval state.
+
+### Audit and source metadata are secondary
+
+Citizen-facing state and prerequisites lead the page. Decision ID, policy and
+graph versions, timestamp, reviewed source metadata, and the no-AI audit flag
+remain available in secondary trust and provenance sections without exposing
+raw records.
+
+### The frontend does not calculate policy thresholds
+
+React renders the backend's closed decision state and ordered prerequisite
+metadata. It contains no service-duration threshold, balance percentage,
+monetary cap calculation, graph aggregation, or eligibility condition.

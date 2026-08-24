@@ -133,3 +133,22 @@ error handling, and component tests for the three intents, amount validation,
 backend persona consumption, configuration drift, and journey creation. No
 eligibility calculation, policy value, government form label on the landing
 cards, journey-decision mock, runtime AI, or resolution UI was added.
+
+## 2026-08-24 — Phase 7B Ravi Journey Evaluation
+
+Codex extended the journey route into the first complete deterministic citizen
+check. It inspected the live FastAPI OpenAPI document, added runtime-validated
+clients for evaluation, decision detail, and policy-source metadata, and made
+evaluation an explicit citizen action. The UI renders backend prerequisite
+labels and states, reveals the returned official process only after evaluation,
+shows source provenance and versioned audit metadata, and makes the structural
+`ai_used_for_decision: false` result understandable without exposing raw JSON.
+
+Refresh restores the backend's latest immutable decision through a detail GET
+without creating a new evaluation. A failed later check preserves an already
+displayed decision, while expired in-memory journey URLs receive a demo-reset
+explanation rather than a citizen uncertainty state. Tests cover Ravi's PASS
+flow and Form 31 reveal, explicit loading, duplicate-submit prevention, source
+links, refresh behavior, safe 404 handling, failure preservation, and generic
+non-PASS rendering. No policy threshold, resolution interaction, backend
+change, or runtime AI was added.

@@ -1,4 +1,4 @@
-import { JourneyPreparation } from "@/components/journey-preparation";
+import { JourneyExperience } from "@/components/journey-experience";
 import { PageContainer } from "@/components/page-container";
 
 export default async function JourneyPage({
@@ -9,7 +9,7 @@ export default async function JourneyPage({
   const { journeyInstanceId } = await params;
   return (
     <PageContainer>
-      <JourneyPreparation journeyInstanceId={journeyInstanceId} />
+      <JourneyExperience journeyInstanceId={journeyInstanceId} />
     </PageContainer>
   );
 }

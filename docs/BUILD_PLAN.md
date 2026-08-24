@@ -65,7 +65,7 @@ and reviewed policy-source metadata. Runtime state is process-local and no live
 government integration, database, frontend, authentication, or AI was added.
 The Python service now resides in the canonical top-level `backend/` directory.
 
-## Phase 7 — Frontend (In Progress — Phase 7A Complete)
+## Phase 7 — Frontend (In Progress — Phases 7A and 7B Complete)
 
 Create the top-level `frontend/` directory and build the Next.js, TypeScript,
 and Tailwind presentation layer with accessible uncertainty, blocker,
@@ -75,8 +75,15 @@ Phase 7A completed on 2026-08-24 after the frontend type, lint, component, and
 production-build checks passed. The mobile-first foundation now discovers real
 synthetic personas from FastAPI, presents citizen goals before government form
 terminology, creates isolated demo journeys without evaluating them, and keeps
-API details behind a typed client boundary. Journey evaluation and resolution
-navigation remain future Phase 7 work.
+API details behind a typed client boundary. At the Phase 7A boundary, journey
+evaluation and resolution navigation remained future work.
+
+Phase 7B completed on 2026-08-24 after frontend type, lint, component,
+production-build, and live browser checks passed. The Ravi experience now runs
+an explicit backend evaluation, renders the returned prerequisite states,
+reveals official process metadata only after evaluation, restores existing
+decision detail on refresh without re-evaluating, and shows reviewed source and
+no-AI audit metadata. Priya resolution interaction remains future Phase 7 work.
 
 ## Phase 8 — Safe AI Gateway
 

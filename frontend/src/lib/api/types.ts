@@ -8,6 +8,14 @@ export type JourneyId =
   | "PF_TRANSFER"
   | "PF_FINAL_SETTLEMENT";
 
+export type DecisionState =
+  | "PASS"
+  | "ACTION_REQUIRED"
+  | "NOT_ELIGIBLE"
+  | "UNABLE_TO_VERIFY"
+  | "NOT_APPLICABLE"
+  | "POLICY_REVIEW_REQUIRED";
+
 export interface DemoMetadata {
   environment: "DEMO";
   synthetic_data: true;
@@ -51,7 +59,7 @@ export interface JourneyCreatedResponse {
 
 export interface DecisionSummary {
   decision_id: string;
-  state: string;
+  state: DecisionState;
   state_display: string;
   issue_codes: string[];
   resolution_ids: string[];
@@ -61,6 +69,69 @@ export interface DecisionSummary {
 
 export interface JourneyResponse extends JourneyCreatedResponse {
   latest_decision: DecisionSummary | null;
+}
+
+export interface PrerequisiteResponse {
+  node_id: string;
+  label: string;
+  state: DecisionState;
+  state_display: string;
+}
+
+export interface JourneyEvaluationResponse {
+  journey_instance_id: string;
+  decision_id: string;
+  journey_id: JourneyId;
+  state: DecisionState;
+  state_display: string;
+  official_process: OfficialProcess;
+  issue_codes: string[];
+  resolution_ids: string[];
+  policy_version: string;
+  graph_version: string;
+  journey_definition_version: number;
+  citizen_state_revision: number;
+  evaluated_at: string;
+  prerequisites: PrerequisiteResponse[];
+  sources: string[];
+  ai_used_for_decision: false;
+  demo: DemoMetadata;
+}
+
+export interface RuleResultResponse {
+  rule_id: string;
+  state: DecisionState;
+  issue_code: string | null;
+  resolution_id: string | null;
+  source_id: string | null;
+  policy_version: string;
+}
+
+export interface DecisionDetailResponse extends JourneyEvaluationResponse {
+  rule_results: RuleResultResponse[];
+}
+
+export type PolicySourceStatus =
+  | "ACTIVE"
+  | "INACTIVE"
+  | "SUPERSEDED"
+  | "REVIEW_REQUIRED";
+
+export interface PolicySourceResponse {
+  source_id: string;
+  authority: string;
+  title: string;
+  document_type: string;
+  published_at: string | null;
+  effective_from: string | null;
+  effective_to: string | null;
+  reference_url: string | null;
+  corroborating_urls: string[];
+  verified_at: string | null;
+  scope: string | null;
+  notes: string | null;
+  status: PolicySourceStatus;
+  demo: DemoMetadata;
 }
 
 export interface ApiErrorEnvelope {
