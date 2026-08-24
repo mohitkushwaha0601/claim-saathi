@@ -5,8 +5,13 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, status
 
 from app.api.dependencies import (
+    get_explanation_service,
     get_execution_trace_service,
     get_journey_service,
+)
+from app.api.schemas.explanation import (
+    CreateExplanationRequest,
+    ExplanationResponse,
 )
 from app.api.schemas.journey import (
     CreateJourneyRequest,
@@ -18,7 +23,11 @@ from app.api.schemas.journey import (
     JourneyResponse,
 )
 from app.api.schemas.trace import ExecutionTraceResponse
-from app.application import ExecutionTraceService, JourneyService
+from app.application import (
+    ExplanationService,
+    ExecutionTraceService,
+    JourneyService,
+)
 
 router = APIRouter(prefix="/journeys", tags=["journeys"])
 
@@ -98,6 +107,25 @@ def get_decision(
 ) -> DecisionDetailResponse:
     return DecisionDetailResponse.from_view(
         service.decision_detail(journey_instance_id, decision_id)
+    )
+
+
+@router.post(
+    "/{journey_instance_id}/decisions/{decision_id}/explanations",
+    response_model=ExplanationResponse,
+    summary="Explain one stored decision without changing it",
+)
+def create_explanation(
+    journey_instance_id: str,
+    decision_id: str,
+    request: CreateExplanationRequest,
+    service: Annotated[
+        ExplanationService,
+        Depends(get_explanation_service),
+    ],
+) -> ExplanationResponse:
+    return ExplanationResponse.from_result(
+        service.explain(journey_instance_id, decision_id, request.mode)
     )
 
 

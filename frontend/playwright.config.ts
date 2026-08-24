@@ -34,6 +34,8 @@ export default defineConfig({
       cwd: backendDirectory,
       env: {
         UV_CACHE_DIR: "/private/tmp/claimsaathi-uv-cache",
+        CLAIMSAATHI_AI_ENABLED: "false",
+        OPENAI_API_KEY: "",
       },
       url: "http://127.0.0.1:8000/health",
       reuseExistingServer: !process.env.CI,

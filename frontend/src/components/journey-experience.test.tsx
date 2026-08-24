@@ -467,6 +467,7 @@ describe("journey evaluation experience", () => {
     expect(screen.getByText("Access some PF funds")).toBeTruthy();
     expect(screen.getByText("Not checked yet")).toBeTruthy();
     expect(screen.getByRole("button", { name: "Check my journey" })).toBeTruthy();
+    expect(screen.queryByText("Need this explained differently?")).toBeNull();
     expect(screen.queryByText("Form 31")).toBeNull();
     expect(evaluateJourneyMock).not.toHaveBeenCalled();
   });
@@ -501,6 +502,9 @@ describe("journey evaluation experience", () => {
 
     expect(await screen.findByRole("heading", { name: "Ready to proceed" })).toBeTruthy();
     expect(screen.getByText("Form 31")).toBeTruthy();
+    expect(screen.getByText("Need this explained differently?")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Explain simply" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "हिंदी में समझाएँ" })).toBeTruthy();
     expect(screen.getByText("Partial withdrawal")).toBeTruthy();
     expect(screen.queryByText("Approved")).toBeNull();
     expect(screen.queryByText("Guaranteed")).toBeNull();

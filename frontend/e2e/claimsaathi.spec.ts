@@ -113,6 +113,13 @@ test("Ravi completes the backend PASS path and refresh remains read-only", async
   ).toBeVisible();
   await expect(page.getByText("Form 31", { exact: true })).toBeVisible();
   await expect(page.getByText("UAN ready", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Explain simply" }).click();
+  await expect(page.getByText("Plain-language explanation", { exact: true })).toBeVisible();
+  await expect(page.getByText("AI-assisted explanation", { exact: true })).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", { name: "Ready to proceed", exact: true }).first(),
+  ).toBeVisible();
+  await expect(page.getByText("Form 31", { exact: true })).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await expectReadOnlyReload(page, "Ready to proceed");
   await expect(page.getByText("Form 31", { exact: true })).toBeVisible();

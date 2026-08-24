@@ -1,8 +1,9 @@
 # ClaimSaathi Demo API
 
 Phase 6 exposes the deterministic ClaimSaathi domain engine through a synthetic
-hackathon API. It does not connect to EPFO, modify government records, submit
-claims, persist data, or use AI.
+hackathon API. Phase 8 adds an optional, downstream explanation endpoint for
+stored decisions. The API does not connect to EPFO, modify government records,
+submit claims, or persist data, and AI never participates in a decision.
 
 ## Run locally
 
@@ -26,6 +27,10 @@ Optional settings:
 ```text
 APP_ENV=development
 ALLOWED_ORIGINS=http://localhost:3000
+CLAIMSAATHI_AI_ENABLED=false
+CLAIMSAATHI_AI_MODEL=gpt-5.6-luna
+CLAIMSAATHI_AI_TIMEOUT_SECONDS=5
+OPENAI_API_KEY=
 ```
 
 Allowed origins are comma-separated. Wildcard origins are rejected, and CORS
@@ -42,6 +47,7 @@ credentials are disabled because this prototype has no authentication.
 | POST | `/api/v1/journeys/{journey_id}/evaluate` | Create a new full deterministic evaluation and decision record |
 | GET | `/api/v1/journeys/{journey_id}/decisions` | List ordered immutable decision summaries |
 | GET | `/api/v1/journeys/{journey_id}/decisions/{decision_id}` | Inspect safe rules, prerequisites, sources, and the no-AI audit flag |
+| POST | `/api/v1/journeys/{journey_id}/decisions/{decision_id}/explanations` | Optionally simplify or translate one stored immutable decision |
 | GET | `/api/v1/journeys/{journey_id}/decisions/{decision_id}/trace` | Describe a stored deterministic decision without re-running it |
 | POST | `/api/v1/journeys/{journey_id}/resolutions` | Start the approved resolution attached to a current issue |
 | GET | `/api/v1/journeys/{journey_id}/resolutions` | List existing resolution instances for read-only refresh recovery |
@@ -54,6 +60,41 @@ credentials are disabled because this prototype has no authentication.
 The `{resolution_id}` path segment above is the generated resolution instance
 ID. Clients cannot select a workflow ID such as `RES_EXIT`; the server derives
 that mapping from the specified deterministic issue.
+
+## Optional stored-decision explanation
+
+The explanation endpoint accepts exactly one of:
+
+```json
+{ "mode": "SIMPLE_ENGLISH" }
+```
+
+```json
+{ "mode": "HINDI" }
+```
+
+Extra fields are forbidden. The route verifies the journey, decision, and their
+ownership in the process-local store; it never accepts a browser-supplied
+decision or citizen state. A successful response contains bounded text fields,
+one to four points, and three structural audit flags. It never contains the
+model, prompt, provider response, token details, provider error, or API key
+status.
+
+When optional AI is disabled, unconfigured, unavailable, timed out, malformed,
+or rejected by semantic validation, the same endpoint returns a deterministic
+canonical fallback with HTTP 200, `ai_used_for_explanation: false`, and
+`fallback_used: true`. `ai_used_for_decision` is always `false`. See
+`docs/AI_SAFETY.md` for the exact sanitized input and validator boundary.
+
+An optional real-provider smoke test is deliberately separate from normal
+quality gates and requires an explicitly configured local key:
+
+```bash
+cd backend
+uv run python scripts/smoke_openai_explanation.py
+```
+
+It uses a fixed sanitized synthetic input and never prints the key.
 
 ## Observational execution trace
 

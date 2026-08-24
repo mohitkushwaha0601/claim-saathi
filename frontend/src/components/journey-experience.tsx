@@ -25,6 +25,7 @@ import type {
 import { DemoConfigurationError, intentForGoal } from "@/lib/demo-intents";
 
 import { ErrorState } from "./error-state";
+import { ExplanationPanel } from "./explanation-panel";
 import { JourneyDecision } from "./journey-decision";
 import { LoadingState } from "./loading-state";
 import { PrimaryButton } from "./primary-button";
@@ -271,23 +272,30 @@ export function JourneyExperience({
       </dl>
 
       {decision ? (
-        <div
-          ref={decisionRegionRef}
-          tabIndex={-1}
-          aria-labelledby="decision-heading"
-          className="mt-8 outline-none"
-        >
-          <JourneyDecision
-            citizenGoal={journey.citizen_goal}
+        <>
+          <div
+            ref={decisionRegionRef}
+            tabIndex={-1}
+            aria-labelledby="decision-heading"
+            className="mt-8 outline-none"
+          >
+            <JourneyDecision
+              citizenGoal={journey.citizen_goal}
+              journeyInstanceId={journeyInstanceId}
+              decision={decision}
+              decisionHistory={decisionHistory}
+              activeResolution={activeResolution}
+              evaluating={evaluating}
+              evaluationError={evaluationError}
+              onEvaluate={checkJourney}
+            />
+          </div>
+          <ExplanationPanel
+            key={decision.decision_id}
             journeyInstanceId={journeyInstanceId}
-            decision={decision}
-            decisionHistory={decisionHistory}
-            activeResolution={activeResolution}
-            evaluating={evaluating}
-            evaluationError={evaluationError}
-            onEvaluate={checkJourney}
+            decisionId={decision.decision_id}
           />
-        </div>
+        </>
       ) : (
         <section className="mt-8 rounded-2xl border border-line bg-surface p-6 sm:p-8" aria-labelledby="check-heading">
           <h2 id="check-heading" className="text-2xl font-bold tracking-[-0.025em] text-ink">

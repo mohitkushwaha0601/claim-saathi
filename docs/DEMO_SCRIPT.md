@@ -56,5 +56,6 @@ invented.
 
 Return to “How it works” and show the deterministic architecture and AI
 boundary. Close with: reviewed policy, journey, and resolution artifacts drive
-the decision path; optional AI explanation features are not currently enabled
-and cannot determine government outcomes.
+the decision path; optional AI explanations are explicit, one-way, and
+removable. With AI disabled, the same buttons return canonical fallback, and no
+explanation can determine or alter a government outcome.

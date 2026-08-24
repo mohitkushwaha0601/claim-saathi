@@ -5,6 +5,7 @@ description = "Deterministic domain contracts for ClaimSaathi"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.115,<1",
+    "openai>=2,<3",
     "pydantic>=2.12,<3",
     "uvicorn>=0.30,<1",
 ]

@@ -19,6 +19,13 @@ errors, a frontend-only expired-journey restart path, application not-found and
 error boundaries, request deduplication for concurrent source metadata, result
 focus management, responsive regression coverage, and submission metadata.
 
+Phase 8 adds two secondary controls after an immutable decision exists:
+“Explain simply” and “हिंदी में समझाएँ”. They call the stored-decision
+explanation endpoint only on an explicit button press. The canonical result,
+policy-review safe stop, prerequisites, resolution navigator, official process,
+sources, and audit metadata remain primary and visible while the optional
+request is pending or fails.
+
 ## Run locally
 
 Start the backend:
@@ -81,6 +88,13 @@ Open `http://localhost:3000`.
   the current live trace; it never invents a second decision record.
 - The Arjun example preserves `POLICY_REVIEW_REQUIRED` and states that no AI
   fallback, numeric waiting period, or government outcome is supplied.
+- Explanation controls do not exist before a decision record exists and never
+  run on page load. Duplicate requests are disabled while one is pending.
+- A real provider result is labeled “AI-assisted explanation” and states that
+  AI did not determine the result. Deterministic fallback is labeled
+  “Plain-language explanation” and is not presented as AI assistance.
+- Explanation transport failures preserve the entire deterministic result and
+  expose a scoped retry. They are not mapped to `UNABLE_TO_VERIFY`.
 - The citizen decision renderer treats `POLICY_REVIEW_REQUIRED` as a dedicated
   valid safe-stop state based on backend state alone. It is not a persona check,
   error, rejection, eligibility result, or resolution opportunity.
@@ -123,8 +137,9 @@ The `/how-it-works` route contains:
 4. an interactive Ravi, Priya, and Arjun live execution trace;
 5. Priya's conceptual recovery/re-evaluation architecture and Arjun's safe stop;
 6. plain-language uncertainty states; and
-7. the deterministic decision path separated from a disabled optional future
-   AI explanation layer.
+7. the deterministic decision path separated from the optional one-way
+   `DecisionRecord → Canonical explanation → Sanitizer → Optional AI` path,
+   with “NO PATH BACK TO DECISION” shown explicitly.
 
 Scenario and stage controls are real buttons with visible focus and accessible
 selected state. The stage pipeline and connected prerequisite tree reflow from

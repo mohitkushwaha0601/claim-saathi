@@ -342,6 +342,11 @@ describe("Phase 7D system explorer", () => {
     expect(screen.getByRole("button", { name: /Priya.*Blocker path/ })).toBeTruthy();
     expect(screen.getByRole("button", { name: /Arjun.*Safety path/ })).toBeTruthy();
     expect(screen.getByRole("link", { name: "Try the citizen journey" }).getAttribute("href")).toBe("/");
+    expect(screen.getByText("One-way explanation path")).toBeTruthy();
+    expect(screen.getByText("Canonical explanation")).toBeTruthy();
+    expect(screen.getByText("Sanitizer")).toBeTruthy();
+    expect(screen.getByText("NO PATH BACK TO DECISION")).toBeTruthy();
+    expect(screen.getByText(/AI is optional and explanation-only/)).toBeTruthy();
     expect(listDemoPersonasMock).not.toHaveBeenCalled();
 
     render(<AppHeader />);

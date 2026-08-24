@@ -265,19 +265,17 @@ export function SystemExplorer() {
           <p className="inline-flex rounded-full bg-brand-soft px-3 py-1 text-xs font-bold tracking-[0.1em] text-brand uppercase">
             Deterministic / policy-backed
           </p>
-          <ol className="mt-5 grid gap-2 sm:grid-cols-7 sm:items-center" aria-label="Deterministic decision path">
+          <ol className="mt-5 grid gap-2 sm:grid-cols-5 sm:items-center" aria-label="Deterministic decision path">
             {[
               "Citizen intent",
               "Journey Planner",
               "Policy Engine",
               "Prerequisite Graph",
               "DecisionRecord",
-              "Resolution Navigator",
-              "Official process identification",
             ].map((item, index) => (
               <li key={item} className="flex min-w-0 items-center gap-2 sm:block sm:text-center">
                 <span className="block min-w-0 flex-1 rounded-xl border border-brand/25 bg-brand-soft p-3 text-xs font-bold leading-5 text-ink">{item}</span>
-                {index < 6 ? (
+                {index < 4 ? (
                   <span aria-hidden="true" className="font-bold text-brand sm:mt-2 sm:block sm:rotate-90">→</span>
                 ) : null}
               </li>
@@ -288,14 +286,29 @@ export function SystemExplorer() {
           <p className="inline-flex rounded-full bg-slate-200 px-3 py-1 text-xs font-bold tracking-[0.1em] text-slate-800 uppercase">
             Not part of government decision
           </p>
-          <h3 className="mt-4 text-xl font-bold text-ink">Optional future explanation layer</h3>
-          <p className="mt-3 text-sm font-semibold leading-6 text-ink">
-            Canonical explanation → Sanitizer → AI simplification or translation
+          <h3 className="mt-4 text-xl font-bold text-ink">One-way explanation path</h3>
+          <ol className="mt-4 grid gap-2 sm:grid-cols-4 sm:items-center" aria-label="Optional one-way explanation path">
+            {[
+              "DecisionRecord",
+              "Canonical explanation",
+              "Sanitizer",
+              "Optional AI · simplified or Hindi explanation",
+            ].map((item, index) => (
+              <li key={item} className="flex min-w-0 items-center gap-2 sm:block sm:text-center">
+                <span className="block min-w-0 flex-1 rounded-xl border border-line bg-surface p-3 text-xs font-bold leading-5 text-ink">{item}</span>
+                {index < 3 ? (
+                  <span aria-hidden="true" className="font-bold text-slate-600 sm:mt-2 sm:block sm:rotate-90">→</span>
+                ) : null}
+              </li>
+            ))}
+          </ol>
+          <p className="mt-4 text-sm font-bold leading-6 text-ink">
+            NO PATH BACK TO DECISION
           </p>
-          <p className="mt-3 text-sm leading-6 text-muted">
-            Optional AI explanation features are not currently enabled. If
-            introduced in a later authorized phase, they remain downstream of
-            the immutable deterministic result.
+          <p className="mt-2 text-sm leading-6 text-muted">
+            AI is optional and explanation-only. It is called only when a
+            citizen explicitly requests simpler English or Hindi, and the
+            deterministic product continues to work when AI is unavailable.
           </p>
         </div>
       </section>
