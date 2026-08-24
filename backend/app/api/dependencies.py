@@ -26,7 +26,8 @@ from app.journeys import (
 from app.policies import load_policy_registry
 from app.resolutions import ResolutionNavigator, load_resolution_catalog
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+REPOSITORY_ROOT = BACKEND_ROOT.parent
 
 
 @dataclass(frozen=True)

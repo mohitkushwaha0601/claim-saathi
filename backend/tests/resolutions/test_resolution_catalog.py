@@ -15,7 +15,8 @@ from app.resolutions.exceptions import (
     UnknownResolutionError,
 )
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+REPOSITORY_ROOT = BACKEND_ROOT.parent
 RESOLUTION_DIRECTORY = REPOSITORY_ROOT / "resolutions" / "epfo"
 SOURCE_REGISTRY_PATH = REPOSITORY_ROOT / "policies" / "epfo" / "sources.json"
 WORKFLOW_PATH = RESOLUTION_DIRECTORY / "exit_date_missing.v1.json"

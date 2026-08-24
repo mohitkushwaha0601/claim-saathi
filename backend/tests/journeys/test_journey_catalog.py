@@ -15,7 +15,8 @@ from app.journeys.exceptions import (
 from app.policies import load_policy_registry
 from app.prerequisites import load_graph
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+REPOSITORY_ROOT = BACKEND_ROOT.parent
 JOURNEY_DIRECTORY = REPOSITORY_ROOT / "journeys" / "epfo"
 POLICY_DIRECTORY = REPOSITORY_ROOT / "policies" / "epfo"
 

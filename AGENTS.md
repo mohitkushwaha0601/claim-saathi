@@ -40,6 +40,9 @@ uncertainty take priority over convenience or persuasive presentation.
 
 ## Architecture Boundaries
 
+- Use `backend/` for the Python service and reserve the top-level `frontend/`
+  directory for the explicitly authorized frontend phase. Keep reviewed
+  `policies/`, `journeys/`, `resolutions/`, and `fixtures/` at repository root.
 - Keep business and government decision logic out of frontend components and
   FastAPI route handlers.
 - Route handlers and UI components may validate transport/UI concerns and call

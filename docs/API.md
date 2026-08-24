@@ -7,13 +7,19 @@ claims, persist data, or use AI.
 ## Run locally
 
 ```bash
-cd apps/api
+cd backend
 uv run uvicorn app.main:app --reload
 ```
 
 - OpenAPI UI: `http://localhost:8000/docs`
 - Health: `http://localhost:8000/health`
 - API prefix: `/api/v1`
+
+Run the backend suite from the same directory:
+
+```bash
+uv run pytest -q
+```
 
 Optional settings:
 

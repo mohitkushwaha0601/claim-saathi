@@ -10,7 +10,8 @@ import pytest
 from app.domain import CitizenIntent, CitizenState
 from app.policies import PolicyEngine, PolicyRegistry, load_policy_registry
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+REPOSITORY_ROOT = BACKEND_ROOT.parent
 POLICY_DIRECTORY = REPOSITORY_ROOT / "policies" / "epfo"
 DEMO_DIRECTORY = REPOSITORY_ROOT / "fixtures" / "demo"
 

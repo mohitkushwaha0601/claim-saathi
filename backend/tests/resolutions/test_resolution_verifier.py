@@ -10,7 +10,8 @@ from app.domain import (
 )
 from app.resolutions import load_resolution_workflow, verify_resolution_success
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+REPOSITORY_ROOT = BACKEND_ROOT.parent
 DEMO_PATH = REPOSITORY_ROOT / "fixtures" / "demo" / "priya_transfer_missing_exit.json"
 WORKFLOW_PATH = (
     REPOSITORY_ROOT / "resolutions" / "epfo" / "exit_date_missing.v1.json"

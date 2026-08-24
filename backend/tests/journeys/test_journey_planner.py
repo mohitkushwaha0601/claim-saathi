@@ -10,7 +10,8 @@ from app.domain import CitizenIntent, IntentGoal, JourneyId
 from app.journeys import JourneyPlanner, load_journey_catalog
 from app.policies import load_policy_registry
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+REPOSITORY_ROOT = BACKEND_ROOT.parent
 JOURNEY_DIRECTORY = REPOSITORY_ROOT / "journeys" / "epfo"
 POLICY_DIRECTORY = REPOSITORY_ROOT / "policies" / "epfo"
 CREATED_AT = datetime(2026, 8, 24, 9, 0, tzinfo=UTC)
@@ -95,4 +96,3 @@ def test_journey_instance_is_immutable() -> None:
 
     with pytest.raises(ValidationError):
         instance.citizen_id = "SYNTH-CHANGED"  # type: ignore[misc]
-

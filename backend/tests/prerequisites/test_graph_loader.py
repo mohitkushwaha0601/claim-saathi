@@ -13,7 +13,8 @@ from app.prerequisites.exceptions import (
     JourneyGraphMismatchError,
 )
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+REPOSITORY_ROOT = BACKEND_ROOT.parent
 GRAPH_DIRECTORY = REPOSITORY_ROOT / "journeys" / "epfo"
 
 

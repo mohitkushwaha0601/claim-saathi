@@ -19,7 +19,8 @@ from app.domain import (
 from app.policies import PolicyEngine, load_policy_registry
 from app.prerequisites import evaluate_graph, load_graph
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+REPOSITORY_ROOT = BACKEND_ROOT.parent
 GRAPH_DIRECTORY = REPOSITORY_ROOT / "journeys" / "epfo"
 POLICY_DIRECTORY = REPOSITORY_ROOT / "policies" / "epfo"
 DEMO_DIRECTORY = REPOSITORY_ROOT / "fixtures" / "demo"

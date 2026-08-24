@@ -22,9 +22,10 @@ from app.domain import (
 )
 from app.policies import PolicyRegistry
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+REPOSITORY_ROOT = BACKEND_ROOT.parent
 POLICY_DIRECTORY = REPOSITORY_ROOT / "policies" / "epfo"
-POLICY_PACKAGE = REPOSITORY_ROOT / "apps" / "api" / "app" / "policies"
+POLICY_PACKAGE = BACKEND_ROOT / "app" / "policies"
 
 
 def test_policy_directory_contains_only_required_configuration_files() -> None:

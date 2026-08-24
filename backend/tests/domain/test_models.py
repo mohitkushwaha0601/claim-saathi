@@ -35,7 +35,8 @@ from app.domain import (
     RuleResult,
 )
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+REPOSITORY_ROOT = BACKEND_ROOT.parent
 DEMO_FIXTURE_DIRECTORY = REPOSITORY_ROOT / "fixtures" / "demo"
 DEMO_FIXTURE_NAMES = (
     "ravi_partial_ready.json",

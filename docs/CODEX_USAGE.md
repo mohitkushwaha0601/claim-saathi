@@ -102,3 +102,17 @@ and continued operation with no AI dependency.
 
 No frontend, real EPFO integration, database, authentication, background work,
 claim submission, policy change, graph change, or runtime AI was introduced.
+
+## 2026-08-24 — Repository Layout Migration After Phase 6
+
+Codex made the repository consistent with its simplified two-application
+layout before frontend development began. The initial scaffold used `apps/api`
+for the Python service and an empty `apps/web` placeholder. The migration moved
+the service to top-level `backend/`, removed the unused web placeholder, and
+reserved top-level `frontend/` for the future Phase 7 implementation.
+
+Codex updated current commands, repository-root configuration discovery, and
+path-sensitive architecture tests while preserving the Python package name
+`app`, all government-policy configuration, and all application behavior. The
+reviewed policy, journey, resolution, and synthetic fixture directories remain
+top-level system artifacts. No frontend or runtime AI was added.

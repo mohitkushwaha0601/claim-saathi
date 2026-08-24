@@ -19,7 +19,7 @@ been implemented.
 ## Run the Backend
 
 ```bash
-cd apps/api
+cd backend
 uv run uvicorn app.main:app --reload
 ```
 

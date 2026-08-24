@@ -13,8 +13,8 @@ from app.api.dependencies import (
 from app.domain import CapabilityValue
 from app.main import create_app
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
-ROUTE_DIRECTORY = REPOSITORY_ROOT / "apps" / "api" / "app" / "api" / "routes"
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+ROUTE_DIRECTORY = BACKEND_ROOT / "app" / "api" / "routes"
 
 
 def test_ravi_complete_api_flow(

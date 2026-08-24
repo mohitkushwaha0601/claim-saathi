@@ -14,11 +14,12 @@ from app.domain import (
 )
 from app.resolutions import ResolutionNavigator, load_resolution_catalog
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+REPOSITORY_ROOT = BACKEND_ROOT.parent
 RESOLUTION_DIRECTORY = REPOSITORY_ROOT / "resolutions" / "epfo"
 SOURCE_REGISTRY_PATH = REPOSITORY_ROOT / "policies" / "epfo" / "sources.json"
 DEMO_PATH = REPOSITORY_ROOT / "fixtures" / "demo" / "priya_transfer_missing_exit.json"
-RESOLUTION_PACKAGE = REPOSITORY_ROOT / "apps" / "api" / "app" / "resolutions"
+RESOLUTION_PACKAGE = BACKEND_ROOT / "app" / "resolutions"
 CREATED_AT = datetime(2026, 8, 24, 10, 0, tzinfo=UTC)
 
 

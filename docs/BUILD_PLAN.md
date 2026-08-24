@@ -63,12 +63,13 @@ journey creation and evaluation, immutable decision history, approved
 resolution navigation, one allowlisted journey-local demo correction event,
 and reviewed policy-source metadata. Runtime state is process-local and no live
 government integration, database, frontend, authentication, or AI was added.
+The Python service now resides in the canonical top-level `backend/` directory.
 
 ## Phase 7 — Frontend
 
-Build the Next.js, TypeScript, and Tailwind presentation layer with accessible
-uncertainty, blocker, provenance, and mock-status communication and no business
-logic in components.
+Create the top-level `frontend/` directory and build the Next.js, TypeScript,
+and Tailwind presentation layer with accessible uncertainty, blocker,
+provenance, and mock-status communication and no business logic in components.
 
 ## Phase 8 — Safe AI Gateway
 

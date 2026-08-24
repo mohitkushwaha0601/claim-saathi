@@ -5,8 +5,8 @@ from pathlib import Path
 
 from app.domain import CapabilityValue, DecisionState
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
-JOURNEY_PACKAGE = REPOSITORY_ROOT / "apps" / "api" / "app" / "journeys"
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+JOURNEY_PACKAGE = BACKEND_ROOT / "app" / "journeys"
 
 
 def test_ravi_configured_prerequisites_pass(harness) -> None:
@@ -216,4 +216,3 @@ def test_journey_package_has_no_forbidden_runtime_dependencies_or_calls() -> Non
             and node.func.id in forbidden_calls
             for node in ast.walk(tree)
         )
-

@@ -19,8 +19,8 @@ from app.prerequisites.exceptions import (
     MissingRuleResultError,
 )
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
-PREREQUISITE_PACKAGE = REPOSITORY_ROOT / "apps" / "api" / "app" / "prerequisites"
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+PREREQUISITE_PACKAGE = BACKEND_ROOT / "app" / "prerequisites"
 
 
 def two_leaf_graph() -> PrerequisiteGraphDefinition:

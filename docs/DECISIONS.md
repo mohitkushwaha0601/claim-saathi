@@ -349,3 +349,22 @@ Missing resources return 404, invalid demo combinations return 400, invalid
 state transitions return 409, and reviewed-configuration corruption returns
 500. Configuration failures are never presented as citizen uncertainty, and
 responses disclose neither stack traces nor local filesystem paths.
+
+## Repository Layout After Phase 6
+
+### Backend and frontend use explicit top-level directories
+
+ClaimSaathi has one Python backend and will have one web frontend, so the
+canonical application directories are top-level `backend/` and `frontend/`.
+The Python package remains `backend/app/` and keeps its existing `from app...`
+imports. The frontend directory is not created until Phase 7 is explicitly
+authorized.
+
+### Reviewed system artifacts remain at repository root
+
+The versioned `policies/`, `journeys/`, and `resolutions/` configurations and
+synthetic `fixtures/` remain top-level. They are reviewed inputs and auditable
+system artifacts rather than private implementation details of either delivery
+application. Backend configuration discovery therefore resolves the repository
+as the parent of its own `backend/` directory and does not use an absolute
+developer-machine path.

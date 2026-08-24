@@ -8,6 +8,17 @@ why it concluded it, and which versioned sources supported that conclusion.
 All government decisions must be deterministic, source-backed, versioned,
 reproducible, and auditable.
 
+## Repository Layout
+
+ClaimSaathi has one Python service under `backend/` and will have one web
+application under top-level `frontend/` when that phase is authorized. The
+reviewed `policies/`, `journeys/`, `resolutions/`, and synthetic `fixtures/`
+directories remain at repository root because they are system artifacts shared
+across delivery layers, not implementation details of a route or UI component.
+
+The backend application package remains `backend/app/`; Python imports continue
+to use `from app...`. Backend development commands run from `backend/`.
+
 ## Architecture Principles
 
 - Separate the domain and deterministic application logic from delivery
