@@ -8,6 +8,7 @@ const backendDirectory = path.resolve(frontendDirectory, "../backend");
 
 export default defineConfig({
   testDir: "./e2e",
+  testIgnore: "**/pwa.spec.ts",
   fullyParallel: false,
   workers: 1,
   timeout: 45_000,
@@ -34,6 +35,8 @@ export default defineConfig({
       cwd: backendDirectory,
       env: {
         UV_CACHE_DIR: "/private/tmp/claimsaathi-uv-cache",
+        AI_ENABLED: "false",
+        OPENAI_API_KEY: "",
       },
       url: "http://127.0.0.1:8000/health",
       reuseExistingServer: !process.env.CI,

@@ -12,10 +12,17 @@
 
 # testing
 /coverage
+/test-results/
+/test-results-pwa/
+/playwright-report/
 
 # next.js
 /.next/
 /out/
+
+# Serwist-generated service worker output
+/public/sw*
+/public/swe-worker*
 
 # production
 /build

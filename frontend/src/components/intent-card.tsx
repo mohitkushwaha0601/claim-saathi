@@ -1,4 +1,5 @@
 import type { IntentIcon } from "@/lib/demo-intents";
+import { useTranslations } from "next-intl";
 
 function IntentGlyph({ icon }: { icon: IntentIcon }) {
   const common = "h-6 w-6";
@@ -39,12 +40,13 @@ export function IntentCard({
   disabled: boolean;
   onSelect: () => void;
 }) {
+  const t = useTranslations("Home");
   return (
     <button
       type="button"
       disabled={disabled}
       onClick={onSelect}
-      className="group flex min-h-36 w-full items-start gap-4 rounded-2xl border border-line bg-surface p-5 text-left shadow-[0_10px_30px_rgba(31,45,38,0.04)] transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-[0_14px_36px_rgba(31,45,38,0.08)] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-60 disabled:hover:translate-y-0 sm:p-6"
+      className="intent-card group flex min-h-36 min-w-0 w-full items-start gap-4 rounded-2xl border border-line bg-surface p-5 text-left shadow-[0_10px_30px_rgba(31,45,38,0.04)] transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-[0_14px_36px_rgba(31,45,38,0.08)] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-60 disabled:hover:translate-y-0 sm:p-6"
     >
       <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand transition group-hover:bg-brand group-hover:text-white">
         <IntentGlyph icon={icon} />
@@ -57,10 +59,10 @@ export function IntentCard({
           {description}
         </span>
         <span className="mt-3 block text-xs font-semibold tracking-wide text-brand uppercase">
-          Synthetic example · {personaName}
+          {t("syntheticExample", { name: personaName })}
         </span>
       </span>
-      <svg aria-hidden="true" viewBox="0 0 20 20" className="mt-1 h-5 w-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-brand" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <svg aria-hidden="true" viewBox="0 0 20 20" className="intent-card-arrow mt-1 h-5 w-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-brand" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path d="m7 4 6 6-6 6" />
       </svg>
     </button>

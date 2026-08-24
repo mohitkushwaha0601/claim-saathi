@@ -1,4 +1,9 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 export function DemoBoundaryBar() {
+  const t = useTranslations("Common");
   return (
     <div
       role="note"
@@ -16,7 +21,7 @@ export function DemoBoundaryBar() {
           <path d="M12 3 3.5 6.5v5.3c0 4.5 3.1 7.7 8.5 9.2 5.4-1.5 8.5-4.7 8.5-9.2V6.5L12 3Z" />
           <path d="M9 12.2 11 14l4-4" />
         </svg>
-        <span>Independent prototype · Uses synthetic data · No real EPFO action</span>
+        <span>{t("demoBoundary")}</span>
       </div>
     </div>
   );

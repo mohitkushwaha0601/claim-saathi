@@ -1,8 +1,9 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { getPolicySource } from "@/lib/api/policy";
 import type { PolicySourceResponse } from "@/lib/api/types";
+import { renderWithProviders } from "@/test/render";
 
 import { PolicySources } from "./policy-sources";
 
@@ -46,7 +47,7 @@ describe("reviewed policy source presentation", () => {
       }),
     );
 
-    render(
+    renderWithProviders(
       <>
         <PolicySources sourceIds={[SOURCE.source_id]} heading="Rule source" />
         <PolicySources
@@ -71,7 +72,7 @@ describe("reviewed policy source presentation", () => {
     getPolicySourceMock
       .mockRejectedValueOnce(new Error("network detail"))
       .mockResolvedValueOnce(SOURCE);
-    render(<PolicySources sourceIds={[SOURCE.source_id]} />);
+    renderWithProviders(<PolicySources sourceIds={[SOURCE.source_id]} />);
 
     fireEvent.click(await screen.findByRole("button", { name: "Try again" }));
 

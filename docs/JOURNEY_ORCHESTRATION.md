@@ -104,3 +104,12 @@ client-selected resolution identifier. An issue must exist in the current
 decision, its rule must already attach a resolution, and the Resolution Catalog
 must confirm the exact workflow. Resolution verification never changes a prior
 decision and cannot bypass full policy and graph re-evaluation.
+
+## Phase 8 downstream explanation boundary
+
+After an immutable `DecisionRecord` exists, a separate application service may
+project it into a deterministic `CanonicalExplanation`, sanitize an explicit
+allowlist of presentation facts, and optionally simplify or translate that
+content. This service does not belong to the orchestrator and cannot call back
+into planning, policy evaluation, prerequisite evaluation, resolution state,
+or trusted citizen state. Provider removal or failure changes no decision.

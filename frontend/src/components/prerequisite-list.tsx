@@ -1,6 +1,8 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import type { PrerequisiteResponse } from "@/lib/api/types";
 import {
-  DECISION_PRESENTATION,
   DECISION_VISUALS,
 } from "@/lib/decision-presentation";
 
@@ -9,20 +11,21 @@ export function PrerequisiteList({
 }: {
   prerequisites: PrerequisiteResponse[];
 }) {
+  const t = useTranslations();
   return (
     <section aria-labelledby="prerequisites-heading">
       <div>
         <p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">
-          Reviewed checks
+          {t("Prerequisites.eyebrow")}
         </p>
         <h2 id="prerequisites-heading" className="mt-2 text-2xl font-bold tracking-[-0.025em] text-ink">
-          Journey prerequisites
+          {t("Prerequisites.title")}
         </h2>
       </div>
       <ul className="mt-5 overflow-hidden rounded-2xl border border-line bg-surface">
         {prerequisites.map((prerequisite) => {
-          const presentation = DECISION_PRESENTATION[prerequisite.state];
           const visual = DECISION_VISUALS[prerequisite.state];
+          const labelKey = `Prerequisites.labels.${prerequisite.node_id}`;
           return (
             <li
               key={prerequisite.node_id}
@@ -36,10 +39,10 @@ export function PrerequisiteList({
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block font-semibold text-ink">
-                  {prerequisite.label}
+                  {t.has(labelKey) ? t(labelKey) : prerequisite.label}
                 </span>
                 <span className="mt-0.5 block text-sm text-muted">
-                  {presentation.prerequisiteLabel}
+                  {t(`DecisionStates.${prerequisite.state}.prerequisite`)}
                 </span>
               </span>
             </li>

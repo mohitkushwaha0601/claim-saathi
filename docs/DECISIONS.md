@@ -526,9 +526,9 @@ citizen entry journey.
 ### AI remains outside the deterministic decision path
 
 Every stored trace records `ai_used_for_decision: false`. The explorer depicts
-only a possible future explanation layer downstream of a canonical result and
-states that optional AI explanation features are not currently enabled. No
-runtime AI dependency or fallback is present.
+the explanation layer downstream of a canonical result. At the Phase 7D
+boundary that layer was future-only; Phase 8 later activated it as an optional
+one-way presentation path without changing the trace or decision contract.
 
 ### The current-process comparison is deliberately scoped
 
@@ -625,3 +625,89 @@ responsive CSS are presentation concerns only. They do not add policy
 thresholds, interpret eligibility, resolve uncertainty, mark a resolution
 complete, or reveal an official process before the corresponding backend
 decision permits it.
+
+## Phase 8 — Guarded AI Explanation Boundaries
+
+### Canonical wording precedes every optional provider call
+
+One frozen `CanonicalExplanation` is derived only from an existing stored
+`DecisionRecord` and presentation-safe reviewed metadata. It recalculates no
+rule, threshold, prerequisite, resolution, process, or policy meaning and exists
+when AI is disabled.
+
+### Sanitization is a positive allowlist
+
+`SanitizedExplanationInput` is constructed field by field and is the provider's
+only decision-related input. `DecisionRecord`, `CitizenState`, rule objects,
+graph internals, resolution objects, HTTP bodies, arbitrary frontend text, raw
+identifiers, monetary facts, employment dates, and service duration cannot
+cross this boundary.
+
+### Provider authority ends at presentation
+
+`ExplanationProvider` returns only bounded `ExplanationContent`. The OpenAI
+adapter lives under infrastructure integrations, uses the Responses API with
+schema-constrained Structured Outputs, supplies no tools, disables SDK retries,
+and uses a finite configured timeout. Domain, policy, prerequisite, journey,
+and resolution packages do not import OpenAI.
+
+### Structured output receives deterministic semantic review
+
+Schema adherence cannot prove factual authority. A conservative validator
+rejects new amounts, percentages, durations, dates, form IDs, URLs, actions,
+approval/rejection/guarantee claims, and stronger eligibility or readiness
+claims. `POLICY_REVIEW_REQUIRED` must preserve an explicit safe stop. Rejection
+selects canonical fallback; it never asks another model or retries into delay.
+
+### Explanation is a read-only stored-decision operation
+
+The endpoint verifies journey ownership and looks up an immutable decision in
+server memory. It creates no decision, mutates no history or citizen revision,
+and transitions no resolution. The response structurally fixes
+`ai_used_for_decision` to `false` and separately reports provider and fallback
+use.
+
+### AI is disabled by default and never required
+
+`AI_ENABLED` defaults to `false`; absence of `OPENAI_API_KEY` also keeps the
+provider disabled. The configured default model is `gpt-5.6-luna` with no
+silent model fallback. All provider and validation failures return deterministic
+English or Hindi wording while the citizen result remains fully usable.
+
+## Phase 8.5 — Accessibility, Localization, and Cache Boundaries
+
+### Locale is presentation state, not route or journey state
+
+`next-intl` renders exactly two committed catalogues without locale-prefixed
+URLs. English is canonical and initially rendered; Hindi is a lazy local build
+chunk. Changing locale updates no route, creates no journey, and invokes no API
+or Phase 8 explanation operation. Backend enum values and identifiers remain
+unchanged beneath localized citizen copy.
+
+### Text and contrast preferences are local presentation state
+
+The only allowed text scales are 100, 125, 150, 175, and 200 percent. A root
+data attribute changes rem-based typography; transforms and fixed-canvas zoom
+are prohibited. Contrast swaps reviewed CSS tokens only. Both preferences are
+stored locally without authentication and have no business-state dependency.
+
+### Static availability must not imply dynamic freshness
+
+Serwist may precache emitted static assets and the named static shells. Every
+API request, non-GET request, and `/journey/*` navigation is NetworkOnly.
+Background sync and mutation replay are absent. An offline loaded result is
+explicitly historical presentation until the citizen reconnects and performs a
+new explicit check.
+
+### Connectivity failure is infrastructure state
+
+Offline, timeout, and slow-network presentation never synthesize
+`UNABLE_TO_VERIFY`, `POLICY_REVIEW_REQUIRED`, or another domain state. The last
+confirmed deterministic result remains visible; a blocked network action may
+be retried explicitly after reconnection.
+
+### Translation authoring is offline and reviewed
+
+Runtime translation services and browser models are prohibited. IndicTrans2
+may assist future authoring, but any generated string must receive review and
+be committed in the static catalogue. LibreTranslate is not used in Phase 8.5.

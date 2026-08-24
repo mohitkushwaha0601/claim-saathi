@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { ClaimSaathiApiError } from "@/lib/api/client";
 import { listDemoPersonas } from "@/lib/api/demo";
@@ -15,8 +16,8 @@ import {
   bindPersonasToIntents,
   DemoConfigurationError,
 } from "@/lib/demo-intents";
-import { DECISION_PRESENTATION } from "@/lib/decision-presentation";
 
+import { useAppPreferences } from "./app-providers";
 import { TraceStageDetail } from "./trace-stage-detail";
 import { TraceStatus } from "./trace-status";
 
@@ -25,8 +26,6 @@ type ScenarioId = "ravi" | "priya" | "arjun";
 interface TraceScenario {
   id: ScenarioId;
   name: string;
-  pathLabel: string;
-  subtitle: string;
   personaId: string;
   goal: IntentGoal;
 }
@@ -35,24 +34,18 @@ const SCENARIOS: readonly TraceScenario[] = [
   {
     id: "ravi",
     name: "Ravi",
-    pathLabel: "Ready path",
-    subtitle: "All configured prerequisites pass",
     personaId: "RAVI_PARTIAL_READY",
     goal: "ACCESS_SOME_PF_FUNDS",
   },
   {
     id: "priya",
     name: "Priya",
-    pathLabel: "Blocker path",
-    subtitle: "A record blocker requires resolution",
     personaId: "PRIYA_TRANSFER_MISSING_EXIT",
     goal: "TRANSFER_PF_AFTER_EMPLOYMENT_CHANGE",
   },
   {
     id: "arjun",
     name: "Arjun",
-    pathLabel: "Safety path",
-    subtitle: "Policy uncertainty stops the system safely",
     personaId: "ARJUN_FINAL_SETTLEMENT",
     goal: "FINAL_PF_SETTLEMENT",
   },
@@ -63,30 +56,20 @@ function scenarioById(id: ScenarioId): TraceScenario {
 }
 
 function PriyaRecoveryArchitecture() {
-  const steps = [
-    ["Decision #1", "ACTION_REQUIRED"],
-    ["Reviewed resolution", "RES_EXIT"],
-    ["External trusted state", "record changes outside ClaimSaathi"],
-    ["Resolution verifier", "RESOLVED"],
-    ["Important", "whole journey is not automatically PASS"],
-    ["Full policy re-evaluation", "every configured rule runs again"],
-    ["Full graph re-evaluation", "every prerequisite is combined again"],
-    ["Decision #2", "PASS only after the completed demo flow"],
-  ] as const;
+  const t = useTranslations("Trace");
+  const steps = t.raw("priyaSteps") as [string, string][];
   return (
     <section className="mt-8 rounded-3xl border border-violet-200 bg-violet-50 p-5 sm:p-7" aria-labelledby="priya-recovery-heading">
       <p className="text-xs font-bold tracking-[0.14em] text-violet-900 uppercase">
-        Architecture · not the current live trace
+        {t("priyaEyebrow")}
       </p>
       <h3 id="priya-recovery-heading" className="mt-2 text-2xl font-bold text-violet-950">
-        Resolving one blocker does not rewrite or automatically pass the journey.
+        {t("priyaTitle")}
       </h3>
       <p className="mt-3 max-w-3xl text-sm leading-6 text-violet-950">
-        ClaimSaathi runs every configured rule and prerequisite again and creates
-        a new immutable decision. The full recovery interaction remains in
-        Priya&apos;s citizen journey.
+        {t("priyaCopy")}
       </p>
-      <ol className="mt-6 grid gap-2" aria-label="Priya recovery architecture">
+      <ol className="mt-6 grid gap-2" aria-label={t("priyaLabel")}>
         {steps.map(([label, value], index) => (
           <li key={label} className="relative rounded-xl border border-violet-200 bg-white/80 p-4 pl-12">
             <span className="absolute top-4 left-4 flex h-6 w-6 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-900" aria-hidden="true">
@@ -102,20 +85,18 @@ function PriyaRecoveryArchitecture() {
 }
 
 function ArjunSafeStop() {
+  const t = useTranslations("Trace");
+  const facts = t.raw("arjunFacts") as [string, string][];
   return (
     <section className="mt-8 rounded-3xl border border-violet-200 bg-violet-50 p-5 sm:p-7" aria-labelledby="arjun-safe-heading">
       <p className="text-xs font-bold tracking-[0.14em] text-violet-900 uppercase">
-        Safe state
+        {t("arjunEyebrow")}
       </p>
       <h3 id="arjun-safe-heading" className="mt-2 text-2xl font-bold text-violet-950">
-        The system stops instead of guessing.
+        {t("arjunTitle")}
       </h3>
       <dl className="mt-5 grid gap-3 sm:grid-cols-3">
-        {[
-          ["AI fallback", "Not used"],
-          ["Numeric waiting period", "Not invented"],
-          ["Government outcome", "Not claimed"],
-        ].map(([label, value]) => (
+        {facts.map(([label, value]) => (
           <div key={label} className="rounded-xl border border-violet-200 bg-white/80 p-4">
             <dt className="text-sm text-violet-900">{label}</dt>
             <dd className="mt-1 font-bold text-violet-950">{value}</dd>
@@ -127,6 +108,11 @@ function ArjunSafeStop() {
 }
 
 export function LiveExecutionTrace() {
+  const t = useTranslations("Trace");
+  const stateT = useTranslations("DecisionStates");
+  const errorT = useTranslations("Errors");
+  const networkT = useTranslations("Network");
+  const { online, saveData } = useAppPreferences();
   const [selectedScenarioId, setSelectedScenarioId] =
     useState<ScenarioId>("ravi");
   const [traces, setTraces] = useState<
@@ -158,9 +144,14 @@ export function LiveExecutionTrace() {
 
   async function generateTrace() {
     if (pendingScenario) return;
+    if (!online) {
+      setError(errorT("offlineRequest"));
+      setAnnouncement(errorT("offlineRequest"));
+      return;
+    }
     setPendingScenario(selectedScenarioId);
     setError(null);
-    setAnnouncement(`Generating ${scenario.name}'s synthetic trace.`);
+    setAnnouncement(t("generatingAnnouncement", { name: scenario.name }));
     try {
       const personaResponse = await listDemoPersonas();
       const intents = bindPersonasToIntents(personaResponse.personas);
@@ -196,11 +187,14 @@ export function LiveExecutionTrace() {
       }));
       setSelectedStageId("INTENT");
       setAnnouncement(
-        `${scenario.name}'s synthetic trace is ready: ${DECISION_PRESENTATION[result.decision_state].label}.`,
+        t("readyAnnouncement", {
+          name: scenario.name,
+          state: stateT(`${result.decision_state}.label`),
+        }),
       );
     } catch {
-      setError("We couldn't generate this synthetic trace right now.");
-      setAnnouncement("The synthetic trace could not be generated.");
+      setError(errorT("trace"));
+      setAnnouncement(t("failedAnnouncement"));
     } finally {
       setPendingScenario(null);
     }
@@ -208,14 +202,14 @@ export function LiveExecutionTrace() {
 
   return (
     <div>
-      <div aria-label="Synthetic trace scenarios" className="grid gap-3 sm:grid-cols-3">
+      <div aria-label={t("scenariosLabel")} className="grid gap-3 sm:grid-cols-3">
         {SCENARIOS.map((item) => {
           const selected = selectedScenarioId === item.id;
           return (
             <button
               key={item.id}
               type="button"
-              aria-label={`${item.name} — ${item.pathLabel}: ${item.subtitle}`}
+              aria-label={`${item.name} — ${t(`scenarios.${item.id}.path`)}: ${t(`scenarios.${item.id}.subtitle`)}`}
               aria-pressed={selected}
               disabled={pendingScenario !== null}
               onClick={() => selectScenario(item.id)}
@@ -227,10 +221,10 @@ export function LiveExecutionTrace() {
             >
               <span className="block text-xl font-bold text-ink">{item.name}</span>
               <span className="mt-1 block text-xs font-bold tracking-[0.1em] text-brand uppercase">
-                {item.pathLabel}
+                {t(`scenarios.${item.id}.path`)}
               </span>
               <span className="mt-3 block text-sm leading-5 text-muted">
-                {item.subtitle}
+                {t(`scenarios.${item.id}.subtitle`)}
               </span>
             </button>
           );
@@ -242,10 +236,9 @@ export function LiveExecutionTrace() {
         className="mt-5 rounded-2xl border border-line bg-white p-5 sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-6"
       >
         <div>
-          <p className="text-sm font-bold text-ink">{scenario.name} · {scenario.pathLabel}</p>
+          <p className="text-sm font-bold text-ink">{scenario.name} · {t(`scenarios.${scenario.id}.path`)}</p>
           <p className="mt-1 text-sm leading-6 text-muted">
-            This explicit demo action creates and evaluates a new isolated
-            synthetic journey, then reads its stored trace.
+            {t("explicitAction")}
           </p>
         </div>
         <button
@@ -255,12 +248,16 @@ export function LiveExecutionTrace() {
           className="mt-4 inline-flex min-h-12 w-full shrink-0 items-center justify-center rounded-xl bg-brand px-5 py-3 font-semibold text-white transition hover:bg-brand-strong focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand disabled:cursor-wait disabled:bg-slate-400 sm:mt-0 sm:w-auto"
         >
           {pendingScenario === selectedScenarioId
-            ? "Generating synthetic trace…"
+            ? t("generating")
             : error
-              ? "Try trace again"
-              : "Generate synthetic trace"}
+              ? t("retry")
+              : t("generate")}
         </button>
       </div>
+
+      {pendingScenario && saveData ? (
+        <p className="mt-2 text-sm text-muted">{networkT("slowPending")}</p>
+      ) : null}
 
       <p role="status" aria-live="polite" className="sr-only">
         {announcement}
@@ -276,30 +273,36 @@ export function LiveExecutionTrace() {
           <div className="flex flex-wrap items-start justify-between gap-4 rounded-2xl border border-line bg-white p-5 sm:p-6">
             <div>
               <p className="text-xs font-bold tracking-[0.12em] text-brand uppercase">
-                Current live trace · backend truth
+                {t("current")}
               </p>
               <h3 className="mt-2 text-2xl font-bold text-ink">
-                {scenario.name}&apos;s stored decision
+                {t("storedDecision", { name: scenario.name })}
               </h3>
               <p className="mt-2 text-sm leading-6 text-muted">
-                Applicable official process identified: {trace.official_process.label}.
-                ClaimSaathi has not executed that process.
+                {t("process", { form: trace.official_process.label })}
               </p>
             </div>
             <TraceStatus
               state={trace.decision_state}
-              label={DECISION_PRESENTATION[trace.decision_state].label}
+              label={stateT(`${trace.decision_state}.label`)}
             />
           </div>
 
-          <ol className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-stretch" aria-label="Execution trace stages">
+          <ol className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-stretch" aria-label={t("stagesLabel")}>
             {trace.stages.map((stage, index) => {
               const selected = selectedStage?.stage_id === stage.stage_id;
               return (
                 <li key={stage.stage_id} className="flex min-w-0 flex-1 flex-col sm:flex-row sm:items-center">
                   <button
                     type="button"
-                    aria-label={`Stage ${index + 1}: ${stage.label} — ${stage.state_display}`}
+                    aria-label={t("stageLabel", {
+                      number: index + 1,
+                      label: t(`stageNames.${stage.stage_type}`),
+                      state:
+                        stage.state === "RECORDED"
+                          ? stateT("RECORDED.label")
+                          : stateT(`${stage.state}.label`),
+                    })}
                     aria-pressed={selected}
                     onClick={() => setSelectedStageId(stage.stage_id)}
                     className={`min-h-24 w-full rounded-xl border p-3 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
@@ -309,13 +312,15 @@ export function LiveExecutionTrace() {
                     }`}
                   >
                     <span className="block text-xs font-bold tracking-[0.08em] text-muted uppercase">
-                      Stage {index + 1}
+                      {t("stage", { number: index + 1 })}
                     </span>
                     <span className="mt-1 block text-sm font-bold leading-5 text-ink">
-                      {stage.label}
+                      {t(`stageNames.${stage.stage_type}`)}
                     </span>
                     <span className="mt-2 block text-xs font-semibold text-muted">
-                      {stage.state_display}
+                      {stage.state === "RECORDED"
+                        ? stateT("RECORDED.label")
+                        : stateT(`${stage.state}.label`)}
                     </span>
                   </button>
                   {index < trace.stages.length - 1 ? (
@@ -334,7 +339,7 @@ export function LiveExecutionTrace() {
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="text-xs font-bold tracking-[0.12em] text-brand uppercase">
-                    Selected stage
+                    {t("selected")}
                   </p>
                   <h3
                     ref={detailHeadingRef}
@@ -342,12 +347,16 @@ export function LiveExecutionTrace() {
                     tabIndex={-1}
                     className="mt-2 text-2xl font-bold text-ink outline-none"
                   >
-                    {selectedStage.label}
+                    {t(`stageNames.${selectedStage.stage_type}`)}
                   </h3>
                 </div>
                 <TraceStatus
                   state={selectedStage.state}
-                  label={selectedStage.state_display}
+                  label={
+                    selectedStage.state === "RECORDED"
+                      ? stateT("RECORDED.label")
+                      : stateT(`${selectedStage.state}.label`)
+                  }
                 />
               </div>
               <div className="mt-5 border-t border-line pt-5">
@@ -358,7 +367,7 @@ export function LiveExecutionTrace() {
 
           {selectedScenarioId === "ravi" && trace.decision_state === "PASS" ? (
             <p className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-950">
-              Ravi&apos;s stored trace shows every configured prerequisite ready.
+              {t("raviReady")}
             </p>
           ) : null}
           {selectedScenarioId === "priya" ? <PriyaRecoveryArchitecture /> : null}
@@ -369,9 +378,9 @@ export function LiveExecutionTrace() {
         </div>
       ) : (
         <div className="mt-8 rounded-2xl border border-dashed border-line-strong bg-canvas p-6 text-center">
-          <p className="font-bold text-ink">No live trace generated yet</p>
+          <p className="font-bold text-ink">{t("none")}</p>
           <p className="mt-2 text-sm leading-6 text-muted">
-            Choose a scenario and generate its trace. Nothing runs automatically.
+            {t("noneCopy")}
           </p>
         </div>
       )}

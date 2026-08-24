@@ -1,7 +1,10 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import type { DecisionDetailResponse } from "@/lib/api/types";
-import { issuePresentation } from "@/lib/decision-presentation";
 
 export function JourneyIssues({ decision }: { decision: DecisionDetailResponse }) {
+  const t = useTranslations("Decision");
   if (decision.issue_codes.length === 0) return null;
 
   return (
@@ -10,14 +13,21 @@ export function JourneyIssues({ decision }: { decision: DecisionDetailResponse }
       aria-labelledby="issues-heading"
     >
       <p className="text-xs font-bold tracking-[0.14em] text-amber-900 uppercase">
-        What the check found
+        {t("issuesEyebrow")}
       </p>
       <h2 id="issues-heading" className="mt-2 text-2xl font-bold text-amber-950">
-        Attention needed
+        {t("issuesTitle")}
       </h2>
       <div className="mt-5 grid gap-4">
         {decision.issue_codes.map((issueCode) => {
-          const issue = issuePresentation(issueCode);
+          const exitDateMissing = issueCode === "EXIT_DATE_MISSING";
+          const issue = {
+            title: t(exitDateMissing ? "exitIssueTitle" : "genericIssueTitle"),
+            supportingCopy: t(
+              exitDateMissing ? "exitIssueCopy" : "genericIssueCopy",
+            ),
+            whyItMatters: exitDateMissing ? t("exitIssueWhy") : null,
+          };
           return (
             <article key={issueCode} className="rounded-xl border border-amber-200 bg-white/70 p-4">
               <h3 className="text-lg font-bold text-amber-950">{issue.title}</h3>
@@ -26,7 +36,7 @@ export function JourneyIssues({ decision }: { decision: DecisionDetailResponse }
               </p>
               {issue.whyItMatters ? (
                 <div className="mt-4 border-t border-amber-200 pt-4">
-                  <h4 className="font-bold text-amber-950">Why this matters</h4>
+                  <h4 className="font-bold text-amber-950">{t("whyMatters")}</h4>
                   <p className="mt-1 text-sm leading-6 text-amber-950">
                     {issue.whyItMatters}
                   </p>

@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
-import {
-  ClaimSaathiApiError,
-  safeApiErrorMessage,
-} from "@/lib/api/client";
+import { ClaimSaathiApiError } from "@/lib/api/client";
 import { listDemoPersonas } from "@/lib/api/demo";
 import {
   evaluateJourney,
@@ -24,7 +22,9 @@ import type {
 } from "@/lib/api/types";
 import { DemoConfigurationError, intentForGoal } from "@/lib/demo-intents";
 
+import { useAppPreferences } from "./app-providers";
 import { ErrorState } from "./error-state";
+import { ExplanationPanel } from "./explanation-panel";
 import { JourneyDecision } from "./journey-decision";
 import { LoadingState } from "./loading-state";
 import { PrimaryButton } from "./primary-button";
@@ -42,7 +42,9 @@ type JourneyLoadState =
   | { status: "loading" }
   | { status: "ready"; value: LoadedJourney }
   | { status: "not-found" }
-  | { status: "error"; message: string };
+  | { status: "error"; kind: "configuration" | "network" | "generic" };
+
+type EvaluationError = "offline" | "generic" | null;
 
 function isNotFound(error: unknown): boolean {
   return error instanceof ClaimSaathiApiError && error.status === 404;
@@ -53,11 +55,17 @@ export function JourneyExperience({
 }: {
   journeyInstanceId: string;
 }) {
+  const t = useTranslations("Journey");
+  const homeT = useTranslations("Home");
+  const errorT = useTranslations("Errors");
+  const networkT = useTranslations("Network");
+  const { online, saveData } = useAppPreferences();
   const [loadState, setLoadState] = useState<JourneyLoadState>({
     status: "loading",
   });
   const [evaluating, setEvaluating] = useState(false);
-  const [evaluationError, setEvaluationError] = useState<string | null>(null);
+  const [evaluationError, setEvaluationError] =
+    useState<EvaluationError>(null);
   const [reloadSequence, setReloadSequence] = useState(0);
   const decisionRegionRef = useRef<HTMLDivElement>(null);
   const focusDecisionAfterEvaluation = useRef(false);
@@ -65,6 +73,12 @@ export function JourneyExperience({
   useEffect(() => {
     let active = true;
     async function load() {
+      if (!navigator.onLine) {
+        queueMicrotask(() => {
+          if (active) setLoadState({ status: "error", kind: "network" });
+        });
+        return;
+      }
       try {
         const journey = await getJourney(journeyInstanceId);
         const [personaResponse, resolutionHistory, decisionHistory] = await Promise.all([
@@ -114,10 +128,13 @@ export function JourneyExperience({
         } else {
           setLoadState({
             status: "error",
-            message:
+            kind:
               error instanceof DemoConfigurationError
-                ? error.message
-                : safeApiErrorMessage(error),
+                ? "configuration"
+                : error instanceof ClaimSaathiApiError &&
+                    error.code === "NETWORK_ERROR"
+                  ? "network"
+                  : "generic",
           });
         }
       }
@@ -141,6 +158,10 @@ export function JourneyExperience({
 
   async function checkJourney(): Promise<boolean> {
     if (loadState.status !== "ready" || evaluating) return false;
+    if (!online) {
+      setEvaluationError("offline");
+      return false;
+    }
     setEvaluating(true);
     setEvaluationError(null);
     try {
@@ -160,7 +181,7 @@ export function JourneyExperience({
       focusDecisionAfterEvaluation.current = true;
       return true;
     } catch {
-      setEvaluationError("We couldn't check this journey right now.");
+      setEvaluationError("generic");
       return false;
     } finally {
       setEvaluating(false);
@@ -170,7 +191,7 @@ export function JourneyExperience({
   if (loadState.status === "loading") {
     return (
       <main id="main-content" className="py-12 sm:py-16">
-        <LoadingState message="Loading your synthetic journey…" />
+        <LoadingState message={t("loading")} />
       </main>
     );
   }
@@ -180,16 +201,17 @@ export function JourneyExperience({
       <main id="main-content" className="py-12 sm:py-16">
         <section className="rounded-2xl border border-line bg-surface p-6 sm:p-8">
           <h1 className="text-3xl font-bold tracking-[-0.03em] text-ink">
-            Demo journey expired
+            {t("expiredTitle")}
           </h1>
           <p className="mt-3 max-w-xl leading-7 text-muted">
-            Demo journeys reset when the backend restarts.
+            {t("expiredCopy")}
           </p>
           <Link
             href="/"
+            prefetch={false}
             className="mt-6 inline-flex min-h-12 items-center rounded-xl bg-brand px-5 py-3 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand"
           >
-            Start a new journey
+            {t("startNew")}
           </Link>
         </section>
       </main>
@@ -200,9 +222,15 @@ export function JourneyExperience({
     return (
       <main id="main-content" className="py-12 sm:py-16">
         <ErrorState
-          title="We couldn't load this demo journey"
+          title={errorT("journeyLoadTitle")}
           titleAsHeading
-          message={loadState.message}
+          message={
+            loadState.kind === "configuration"
+              ? errorT("configuration")
+              : loadState.kind === "network" && !online
+                ? errorT("offlineRequest")
+                : errorT("generic")
+          }
           onRetry={() => {
             setLoadState({ status: "loading" });
             setReloadSequence((current) => current + 1);
@@ -211,8 +239,9 @@ export function JourneyExperience({
         <Link
           className="mt-6 inline-flex min-h-11 items-center font-semibold text-brand underline underline-offset-4"
           href="/"
+          prefetch={false}
         >
-          Return to the start
+          {t("returnStart")}
         </Link>
       </main>
     );
@@ -229,7 +258,7 @@ export function JourneyExperience({
   if (!intent) {
     return (
       <main id="main-content" className="py-12 sm:py-16">
-        <ErrorState message="The synthetic demo is not configured correctly right now." />
+        <ErrorState message={errorT("configuration")} />
       </main>
     );
   }
@@ -237,16 +266,16 @@ export function JourneyExperience({
   return (
     <main id="main-content" className="py-12 sm:py-16">
       <p className="text-sm font-bold tracking-[0.16em] text-brand uppercase">
-        Synthetic journey
+        {t("eyebrow")}
       </p>
       <h1 className="mt-3 text-4xl font-bold tracking-[-0.045em] text-ink sm:text-5xl">
-        Your PF journey
+        {t("title")}
       </h1>
 
       <dl className="mt-7 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3">
         <div className="bg-surface p-5">
           <dt className="text-xs font-bold tracking-[0.1em] text-muted uppercase">
-            Synthetic demo persona
+            {t("persona")}
           </dt>
           <dd className="mt-2 text-lg font-semibold text-ink">
             {persona.display_name}
@@ -254,48 +283,68 @@ export function JourneyExperience({
         </div>
         <div className="bg-surface p-5">
           <dt className="text-xs font-bold tracking-[0.1em] text-muted uppercase">
-            Goal
+            {t("goal")}
           </dt>
           <dd className="mt-2 text-lg font-semibold text-ink">
-            {intent.summary}
+            {homeT(`intents.${journey.citizen_goal}.summary`)}
           </dd>
         </div>
         <div className="bg-surface p-5">
           <dt className="text-xs font-bold tracking-[0.1em] text-muted uppercase">
-            Status
+            {t("status")}
           </dt>
           <dd className="mt-2 text-lg font-semibold text-ink">
-            {decision ? "Checked" : "Not checked yet"}
+            {decision ? t("checked") : t("notChecked")}
           </dd>
         </div>
       </dl>
 
       {decision ? (
-        <div
-          ref={decisionRegionRef}
-          tabIndex={-1}
-          aria-labelledby="decision-heading"
-          className="mt-8 outline-none"
-        >
-          <JourneyDecision
-            citizenGoal={journey.citizen_goal}
+        <>
+          {!online ? (
+            <aside className="mt-8 rounded-2xl border-2 border-amber-900 bg-amber-100 p-4 text-amber-950" role="status">
+              <p className="font-bold">{networkT("previouslyLoaded")}</p>
+              <p className="mt-1 text-sm leading-6">
+                {networkT("connectToRefresh")}
+              </p>
+            </aside>
+          ) : null}
+          <div
+            ref={decisionRegionRef}
+            tabIndex={-1}
+            aria-labelledby="decision-heading"
+            className="mt-8 outline-none"
+          >
+            <JourneyDecision
+              citizenGoal={journey.citizen_goal}
+              journeyInstanceId={journeyInstanceId}
+              decision={decision}
+              decisionHistory={decisionHistory}
+              activeResolution={activeResolution}
+              evaluating={evaluating}
+              evaluationError={
+                evaluationError === "offline"
+                  ? errorT("offlineRequest")
+                  : evaluationError === "generic"
+                    ? errorT("journeyCheck")
+                    : null
+              }
+              onEvaluate={checkJourney}
+            />
+          </div>
+          <ExplanationPanel
+            key={decision.decision_id}
             journeyInstanceId={journeyInstanceId}
-            decision={decision}
-            decisionHistory={decisionHistory}
-            activeResolution={activeResolution}
-            evaluating={evaluating}
-            evaluationError={evaluationError}
-            onEvaluate={checkJourney}
+            decisionId={decision.decision_id}
           />
-        </div>
+        </>
       ) : (
         <section className="mt-8 rounded-2xl border border-line bg-surface p-6 sm:p-8" aria-labelledby="check-heading">
           <h2 id="check-heading" className="text-2xl font-bold tracking-[-0.025em] text-ink">
-            Ready for a deterministic check
+            {t("checkReadyTitle")}
           </h2>
           <p className="mt-3 max-w-2xl leading-7 text-muted">
-            ClaimSaathi can now check the reviewed rules and synthetic records
-            for this journey.
+            {t("checkReadyCopy")}
           </p>
           <PrimaryButton
             className="mt-6"
@@ -303,20 +352,30 @@ export function JourneyExperience({
             disabled={evaluating}
             onClick={() => void checkJourney()}
           >
-            {evaluating ? "Checking your journey…" : "Check my journey"}
+            {evaluating ? t("checking") : t("check")}
           </PrimaryButton>
           {evaluating ? (
             <p role="status" aria-live="polite" className="mt-3 text-sm text-muted">
-              Reviewing configured rules and synthetic records.
+              {t("reviewing")}
             </p>
+          ) : null}
+          {evaluating && saveData ? (
+            <p className="mt-2 text-sm text-muted">{networkT("slowPending")}</p>
           ) : null}
           {evaluationError ? (
             <div className="mt-5">
-              <ErrorState message={evaluationError} onRetry={() => void checkJourney()} />
+              <ErrorState
+                message={
+                  evaluationError === "offline"
+                    ? errorT("offlineRequest")
+                    : errorT("journeyCheck")
+                }
+                onRetry={() => void checkJourney()}
+              />
             </div>
           ) : null}
           <p className="mt-5 text-sm font-medium text-muted">
-            No real EPFO claim is submitted.
+            {t("noClaim")}
           </p>
         </section>
       )}

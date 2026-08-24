@@ -105,9 +105,9 @@ explicit Ravi, Priya, and Arjun synthetic create/evaluate/trace sequences and
 supports keyboard stage inspection, connected graph viewing, and reviewed
 source access. Static architecture sections distinguish the current live trace
 from Priya's conceptual recovery flow, explain explicit uncertainty, and keep a
-disabled optional future AI explanation layer outside the decision path. Phase
-7 remains in progress; Arjun's polished citizen safety flow and final polish
-were not started.
+then-disabled future AI explanation layer outside the decision path. Phase 7
+remained in progress at that boundary; Arjun's polished citizen safety flow and
+final polish were not started.
 
 Phase 7E completed on 2026-08-24 with a reusable citizen-facing
 `POLICY_REVIEW_REQUIRED` safe-stop experience. Arjun's journey now withholds
@@ -130,11 +130,39 @@ policy, graph, resolution, decision, runtime-AI, persistence, authentication,
 analytics, or deployment change was made. Phase 7 is complete; deployment was
 not started.
 
-## Phase 8 — Safe AI Gateway
+## Phase 8 — Guarded AI Explanation Layer (Complete)
 
 Optionally add an isolated gateway limited to simplifying, translating, or
 summarizing approved deterministic outputs, with a deterministic fallback and
 no path back into government decisions.
+
+Completed on 2026-08-24 with exactly two explicit stored-decision explanation
+modes: simple English and Hindi. A deterministic canonical explanation and
+positive allowlist sanitizer precede the isolated OpenAI Responses API adapter;
+strict Structured Outputs are followed by conservative semantic validation.
+Disabled AI, missing configuration, provider failures, timeouts, malformed
+output, and unsafe output all use deterministic fallback. The frontend calls
+the endpoint only after a decision and keeps every deterministic result,
+resolution, source, process, and audit element primary. No deployment was
+performed. Completion gates passed with 302 backend tests, 66 frontend unit
+tests, a production build, and 7 real-backend browser tests running with AI
+disabled.
+
+## Phase 8.5 — Accessibility, Hindi, and Remote-Area Resilience (Complete)
+
+Improve presentation accessibility and static delivery resilience without
+changing any deterministic or AI authority semantics.
+
+Completed on 2026-08-25 with a compact keyboard-accessible preference menu,
+closed 100–200% text steps, high contrast, and exactly two `next-intl`
+catalogues (`en` and `hi`). English remains the canonical copy; Hindi is a
+reviewed committed lazy local chunk, and route-preserving switching performs no
+API action. Serwist precaches static build/application resources and supplies a
+small offline shell while all API calls, non-GET requests, and dynamic journey
+navigations remain NetworkOnly with no background sync. Loaded results are
+visibly marked as previous when offline; infrastructure failures never become
+citizen-policy states. No backend or deterministic behavior changed, and no
+deployment was performed.
 
 ## Phase 9 — Deployment (Planned)
 

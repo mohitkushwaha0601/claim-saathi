@@ -1,7 +1,12 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 export function SafetyNotice({ compact = false }: { compact?: boolean }) {
+  const t = useTranslations("Safety");
   return (
     <aside
-      aria-label="Prototype safety information"
+      aria-label={t("label")}
       className={`rounded-2xl border border-line bg-surface ${compact ? "p-4" : "p-5 sm:p-6"}`}
     >
       <div className="flex gap-3">
@@ -18,11 +23,9 @@ export function SafetyNotice({ compact = false }: { compact?: boolean }) {
           </svg>
         </span>
         <div>
-          <h2 className="font-semibold text-ink">A safe demonstration</h2>
+          <h2 className="font-semibold text-ink">{t("title")}</h2>
           <p className="mt-1 text-sm leading-6 text-muted">
-            This prototype uses synthetic records. No claim is submitted to EPFO.
-            Government decisions are determined by reviewed rules in this
-            prototype, not by AI.
+            {t("copy")}
           </p>
         </div>
       </div>

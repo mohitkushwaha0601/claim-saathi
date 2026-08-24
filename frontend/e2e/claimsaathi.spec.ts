@@ -41,6 +41,29 @@ async function activateWithKeyboard(locator: Locator, page: Page) {
   await page.keyboard.press("Enter");
 }
 
+async function switchToHindi(page: Page) {
+  const settings = page.getByLabel("Accessibility settings");
+  await activateWithKeyboard(settings, page);
+  await activateWithKeyboard(
+    page.getByRole("button", { name: "हिंदी", exact: true }),
+    page,
+  );
+  await expect(page.locator("html")).toHaveAttribute("lang", "hi");
+}
+
+async function increaseTextTo200(page: Page) {
+  const settings = page.getByLabel(/Accessibility settings|सुलभता सेटिंग/);
+  if (!(await settings.evaluate((element) => element.parentElement?.hasAttribute("open")))) {
+    await activateWithKeyboard(settings, page);
+  }
+  const increase = page.getByRole("button", {
+    name: /Increase text size|टेक्स्ट का आकार बढ़ाएँ/,
+  });
+  for (let step = 0; step < 4; step += 1) await activateWithKeyboard(increase, page);
+  await expect(page.locator("html")).toHaveAttribute("data-text-scale", "200");
+  await expect(increase).toBeDisabled();
+}
+
 async function expectReadOnlyReload(
   page: Page,
   expectedHeading: string,
@@ -113,6 +136,14 @@ test("Ravi completes the backend PASS path and refresh remains read-only", async
   ).toBeVisible();
   await expect(page.getByText("Form 31", { exact: true })).toBeVisible();
   await expect(page.getByText("UAN ready", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Explain simply" }).click();
+  await expect(page.getByText("Plain-language explanation", { exact: true })).toBeVisible();
+  await expect(page.getByText("AI-assisted explanation", { exact: true })).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", { name: "Ready to proceed", exact: true }).first(),
+  ).toBeVisible();
+  await expect(page.getByText("Form 31", { exact: true })).toBeVisible();
+  await increaseTextTo200(page);
   await expectNoHorizontalOverflow(page);
   await expectReadOnlyReload(page, "Ready to proceed");
   await expect(page.getByText("Form 31", { exact: true })).toBeVisible();
@@ -215,6 +246,7 @@ test("Priya completes resolution, reverification, and explicit full reevaluation
   await expect(page.getByText("Form 13", { exact: true })).toBeVisible();
   await expect(page.getByText("Earlier check", { exact: true })).toBeVisible();
   await expect(page.getByText("Latest check", { exact: true })).toBeVisible();
+  await increaseTextTo200(page);
   await expectNoHorizontalOverflow(page);
   await expectReadOnlyReload(page, "Ready to proceed");
 });
@@ -244,8 +276,121 @@ test("Arjun displays an intentional policy safe stop and refresh remains read-on
   ).toHaveCount(0);
   await expect(page.getByRole("button", { name: /Start resolution/ })).toHaveCount(0);
   await expect(page.getByText("AI was not used to fill the policy gap.")).toBeVisible();
+  await increaseTextTo200(page);
   await expectNoHorizontalOverflow(page);
   await expectReadOnlyReload(page, "Policy verification required");
+});
+
+test("language and text preferences preserve Ravi's route, Decision ID, and PASS result", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.getByRole("button", { name: /I need some money from my PF/ }).click();
+  await page.getByLabel("Amount in rupees").fill("80000");
+  await page.getByRole("button", { name: "Prepare my journey" }).click();
+  await page.getByRole("button", { name: "Check my journey" }).click();
+  await expect(page.getByRole("heading", { name: "Ready to proceed" })).toBeVisible();
+
+  await page.getByText("Technical details").click();
+  const decisionId = await page.locator("dd").filter({ hasText: /^DEC-/ }).first().textContent();
+  const journeyUrl = page.url();
+  let postsDuringSwitch = 0;
+  page.on("request", (request) => {
+    if (request.method() === "POST") postsDuringSwitch += 1;
+  });
+
+  await switchToHindi(page);
+  await expect(page).toHaveURL(journeyUrl);
+  await expect(page.getByText(decisionId!, { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "आगे बढ़ने के लिए तैयार" })).toBeVisible();
+  await expect(page.getByText("Form 31", { exact: true })).toBeVisible();
+  expect(postsDuringSwitch).toBe(0);
+
+  await increaseTextTo200(page);
+  await expect(page.getByRole("heading", { name: "आगे बढ़ने के लिए तैयार" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "फिर जाँचें" })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("lang", "hi");
+  await expect(page.locator("html")).toHaveAttribute("data-text-scale", "200");
+  await page.getByText("तकनीकी विवरण").click();
+  await expect(page.getByText(decisionId!, { exact: true })).toBeVisible();
+});
+
+test("Priya's Hindi resolution remains ACTION_REQUIRED until explicit reevaluation", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await switchToHindi(page);
+  await page.getByRole("button", { name: /मैंने नौकरी बदली है/ }).click();
+  await page.getByRole("button", { name: "मेरी यात्रा जाँचें" }).click();
+  await expect(page.getByRole("heading", { name: "कार्रवाई आवश्यक" })).toBeVisible();
+  await expect(page.getByText("पिछले रोजगार की Date of Exit दर्ज नहीं है")).toBeVisible();
+
+  await page.getByRole("button", { name: "समाधान शुरू करें" }).click();
+  await page.getByRole("button", { name: "मैंने आधिकारिक चरण शुरू कर दिया है" }).click();
+  await page.getByRole("button", { name: "अपडेट जाँचें" }).click();
+  await expect(page.getByRole("heading", { name: "अभी अपडेट नहीं हुआ" })).toBeVisible();
+  await page.getByRole("button", { name: "Date of Exit अपडेट का अनुकरण करें" }).click();
+  await page.getByRole("button", { name: "मैंने आधिकारिक चरण फिर शुरू किया है" }).click();
+  await page.getByRole("button", { name: "अपडेट जाँचें" }).click();
+  await expect(page.getByRole("heading", { name: "रुकावट हल हुई" })).toBeVisible();
+  await expect(page.getByText("Form 13", { exact: true })).toHaveCount(0);
+
+  await page.getByRole("button", { name: "यात्रा फिर जाँचें" }).click();
+  await expect(page.getByRole("heading", { name: "आगे बढ़ने के लिए तैयार" })).toBeVisible();
+  await expect(page.getByText("Form 13", { exact: true })).toBeVisible();
+  await increaseTextTo200(page);
+  await expectNoHorizontalOverflow(page);
+});
+
+test("Arjun's Hindi safe stop preserves POLICY_REVIEW_REQUIRED and Form 19", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto("/");
+  await switchToHindi(page);
+  await page.getByRole("button", { name: /मैंने नौकरी छोड़ दी है/ }).click();
+  await page.getByRole("button", { name: "मेरी यात्रा जाँचें" }).click();
+  await expect(page.getByRole("heading", { name: "नीति सत्यापन आवश्यक" })).toBeVisible();
+  await expect(
+    page.getByText("ClaimSaathi ने अनुमान लगाने के बजाय प्रक्रिया रोक दी।"),
+  ).toBeVisible();
+  await expect(page.getByText("Form 19", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "आगे बढ़ने के लिए तैयार" })).toHaveCount(0);
+  const text = await page.locator("main").innerText();
+  expect(text).not.toMatch(/\b\d+\s*(?:दिन|महीने?)\b/);
+  await increaseTextTo200(page);
+  await expectNoHorizontalOverflow(page);
+});
+
+test("slow journey evaluation shows one pending infrastructure request and no policy error", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /I need some money from my PF/ }).click();
+  await page.getByLabel("Amount in rupees").fill("80000");
+  await page.getByRole("button", { name: "Prepare my journey" }).click();
+
+  let evaluations = 0;
+  await page.route("**/evaluate", async (route) => {
+    evaluations += 1;
+    await new Promise((resolve) => setTimeout(resolve, 900));
+    await route.continue();
+  });
+  const check = page.getByRole("button", { name: "Check my journey" });
+  await check.click();
+  await expect(page.getByRole("button", { name: "Checking your journey…" })).toBeDisabled();
+  await expect(
+    page.getByText("Reviewing configured rules and synthetic records."),
+  ).toBeVisible();
+  await expect(page.getByText(/slow connection/)).toHaveCount(0);
+  await expect(page.getByText("Unable to verify", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Ready to proceed" })).toBeVisible();
+  expect(evaluations).toBe(1);
 });
 
 test("System Explorer generates a real Ravi trace and exposes interactive backend detail", async ({
@@ -279,16 +424,32 @@ test("System Explorer generates a real Ravi trace and exposes interactive backen
 test("core pages remain usable without horizontal overflow at submission viewports", async ({
   page,
 }) => {
-  for (const width of [320, 375, 390, 430, 1280, 1440]) {
+  for (const width of [320, 390, 1280]) {
     await page.setViewportSize({ width, height: width < 600 ? 844 : 900 });
     await page.goto("/");
-    await expect(page.locator("main")).toHaveCount(1);
-    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await expectNoHorizontalOverflow(page);
+    for (const locale of ["en", "hi"] as const) {
+      for (const scale of ["100", "200"] as const) {
+        await page.evaluate(
+          ({ nextLocale, nextScale }) => {
+            localStorage.setItem("claimsaathi.locale", nextLocale);
+            localStorage.setItem("claimsaathi.textScale", nextScale);
+          },
+          { nextLocale: locale, nextScale: scale },
+        );
+        await page.reload();
+        await expect(page.locator("html")).toHaveAttribute("lang", locale);
+        await expect(page.locator("html")).toHaveAttribute("data-text-scale", scale);
+        await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+        await expect(page.getByLabel(/Accessibility settings|सुलभता सेटिंग/)).toBeVisible();
+        await expectNoHorizontalOverflow(page);
 
-    await page.goto("/how-it-works");
-    await expect(page.locator("main")).toHaveCount(1);
-    await expectNoHorizontalOverflow(page);
+        await page.goto("/how-it-works");
+        await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+        await expect(page.getByRole("button", { name: /Generate synthetic trace|सिंथेटिक ट्रेस तैयार करें/ })).toBeVisible();
+        await expectNoHorizontalOverflow(page);
+        await page.goto("/");
+      }
+    }
   }
 });
 

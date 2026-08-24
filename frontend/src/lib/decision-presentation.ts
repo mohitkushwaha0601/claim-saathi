@@ -126,10 +126,10 @@ export function issuePresentation(issueCode: string): IssuePresentation {
   );
 }
 
-export function formatCheckedAt(value: string): string {
+export function formatCheckedAt(value: string, locale = "en"): string {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "Recorded by the backend";
-  return new Intl.DateTimeFormat("en-IN", {
+  return new Intl.DateTimeFormat(locale === "hi" ? "hi-IN" : "en-IN", {
     dateStyle: "medium",
     timeStyle: "short",
     timeZone: "UTC",

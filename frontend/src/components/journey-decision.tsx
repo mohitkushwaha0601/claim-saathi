@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import type {
   DecisionDetailResponse,
   DecisionSummary,
@@ -37,6 +40,7 @@ export function JourneyDecision({
   evaluationError: string | null;
   onEvaluate: () => Promise<boolean>;
 }) {
+  const t = useTranslations();
   if (decision.state === "POLICY_REVIEW_REQUIRED") {
     return (
       <PolicyReviewRequiredExperience
@@ -81,8 +85,8 @@ export function JourneyDecision({
           <PolicySources
             key={decision.decision_id}
             sourceIds={decision.sources}
-            eyebrow="Decision evidence"
-            heading="Rule source"
+            eyebrow={t("Sources.decisionEvidence")}
+            heading={t("Sources.ruleSource")}
           />
         </div>
       ) : null}
@@ -100,11 +104,11 @@ export function JourneyDecision({
       {!(decision.state === "ACTION_REQUIRED" && (hasResolutionOpportunity || activeResolution)) ? (
       <div className="mt-10 border-t border-line pt-8">
         <PrimaryButton type="button" disabled={evaluating} onClick={() => void onEvaluate()}>
-          {evaluating ? "Checking your journey…" : "Check again"}
+          {evaluating ? t("Journey.checking") : t("Journey.checkAgain")}
         </PrimaryButton>
         {evaluating ? (
           <p role="status" aria-live="polite" className="mt-3 text-sm text-muted">
-            Reviewing configured rules and synthetic records.
+            {t("Journey.reviewing")}
           </p>
         ) : null}
         {evaluationError ? (

@@ -39,7 +39,9 @@ def create_app(
             "environment": active_settings.environment,
         }
 
-    application.state.container = container or create_application_container()
+    application.state.container = container or create_application_container(
+        settings=active_settings
+    )
     application.dependency_overrides[health.get_settings] = (
         lambda: active_settings
     )

@@ -282,3 +282,64 @@ GET-personas/create/evaluate/trace/source network sequence, and found zero error
 console entries. No backend or policy artifact changed, and no runtime AI,
 authentication, database, analytics SDK, deployment, or government integration
 was added.
+
+## 2026-08-24 — Phase 8 Guarded AI Explanation Layer
+
+Codex added a one-way, optional explanation path after immutable stored
+decisions. The backend now produces a frozen deterministic
+`CanonicalExplanation`, copies only an inspectable positive allowlist into
+`SanitizedExplanationInput`, and can pass that object to an isolated
+`ExplanationProvider`. The OpenAI implementation uses the current Responses API
+with Pydantic Structured Outputs, the configured `gpt-5.6-luna` model, no
+tools, no SDK retries, and a short finite timeout.
+
+A deterministic semantic validator rejects invented amounts, percentages,
+durations, dates, form IDs, URLs, actions, approval/rejection/guarantee claims,
+and stronger eligibility or readiness claims. Arjun's policy-review state has
+additional safe-stop validation. Every disabled, missing-key, provider,
+timeout, malformed-output, and unsafe-output path returns a deterministic
+English or Hindi fallback without changing an HTTP decision response or any
+business state.
+
+The frontend adds only the post-decision “Explain simply” and “हिंदी में
+समझाएँ” controls. It makes no automatic request, keeps Ravi's Form 31 result,
+Priya's resolution navigator, and Arjun's policy safe stop primary, and labels
+real AI assistance separately from fallback. The System Explorer now shows the
+one-way explanation path and no reverse authority. Normal component and browser
+tests use AI disabled and no API key. No chat, additional language, policy
+change, deterministic semantic change, live government integration, or
+deployment was added.
+
+Verification evidence: 302 backend tests passed and the uv lockfile resolved
+offline; frontend typecheck and lint passed; all 66 Vitest tests passed; the
+Next.js production build succeeded; all 7 real-backend Chromium tests passed
+with AI explicitly disabled and no API key; and `git diff --check` passed. No
+real OpenAI request was made because no local `OPENAI_API_KEY` was available.
+
+## 2026-08-25 — Phase 8.5 Accessibility, Hindi, and Low-Bandwidth Resilience
+
+Codex added a compact header accessibility menu with exact 100–200% text steps,
+reset, and high contrast. Preferences are local browser presentation state and
+all controls use native keyboard-operable elements. Root font sizing and
+reflowing layouts replace any need for transform scaling.
+
+The frontend now uses `next-intl` with canonical committed English and reviewed
+Hindi catalogues. Hindi is emitted as a lazy local build chunk, locale choice
+persists, and switching leaves the current route, journey, Decision ID, backend
+enum, and Form identifier unchanged without an API request. Whole-page Hindi
+remains distinct from the optional Phase 8 explanation endpoint.
+
+Serwist generates a production service worker that precaches static build
+assets and the home, System Explorer, and offline shells. Its runtime boundary
+is NetworkOnly for all APIs, non-GET requests, and dynamic journey navigation;
+there is no background sync. Loaded offline results are labeled previously
+loaded, uncached journeys receive the offline shell, and connectivity errors do
+not become policy states. Save-Data support is feature-detected, navigation
+prefetch is suppressed, and no font, image, video, analytics, translation
+model, or other large runtime asset was added.
+
+Tests cover preference persistence and limits, Hindi home and all three stored
+persona outcomes, route/Decision ID preservation, absence of language-switch
+POSTs, offline mutation guards, slow pending behavior, 200% mobile reflow, and
+production service-worker cache inspection. No backend, deterministic engine,
+AI authority, live integration, deployment, or third language was changed.

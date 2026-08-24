@@ -19,6 +19,21 @@ errors, a frontend-only expired-journey restart path, application not-found and
 error boundaries, request deduplication for concurrent source metadata, result
 focus management, responsive regression coverage, and submission metadata.
 
+Phase 8 adds two secondary controls after an immutable decision exists:
+“Explain simply” and “हिंदी में समझाएँ”. They call the stored-decision
+explanation endpoint only on an explicit button press. The canonical result,
+policy-review safe stop, prerequisites, resolution navigator, official process,
+sources, and audit metadata remain primary and visible while the optional
+request is pending or fails.
+
+Phase 8.5 adds a compact header accessibility menu, 100–200% root text scaling,
+a persistent high-contrast preference, and complete deterministic English/Hindi
+catalogues through `next-intl`. Locale changes preserve the current route and
+perform no API action. A Serwist production worker precaches static assets and
+the home, System Explorer, and offline shells while keeping every API request,
+mutation, and dynamic journey navigation NetworkOnly. Details and safety tests
+are in `docs/ACCESSIBILITY_AND_LOW_BANDWIDTH.md`.
+
 ## Run locally
 
 Start the backend:
@@ -81,12 +96,32 @@ Open `http://localhost:3000`.
   the current live trace; it never invents a second decision record.
 - The Arjun example preserves `POLICY_REVIEW_REQUIRED` and states that no AI
   fallback, numeric waiting period, or government outcome is supplied.
+- Explanation controls do not exist before a decision record exists and never
+  run on page load. Duplicate requests are disabled while one is pending.
+- A real provider result is labeled “AI-assisted explanation” and states that
+  AI did not determine the result. Deterministic fallback is labeled
+  “Plain-language explanation” and is not presented as AI assistance.
+- Explanation transport failures preserve the entire deterministic result and
+  expose a scoped retry. They are not mapped to `UNABLE_TO_VERIFY`.
 - The citizen decision renderer treats `POLICY_REVIEW_REQUIRED` as a dedicated
   valid safe-stop state based on backend state alone. It is not a persona check,
   error, rejection, eligibility result, or resolution opportunity.
 - For that state, an identified official process is displayed separately from
   readiness. The process source supports only the backend-provided process
   label, while any rule evidence remains a distinct provenance section.
+- Accessibility preferences are presentation-only local browser state. Text
+  uses fixed 100/125/150/175/200% root steps without transforms, and status
+  meaning remains textual at every scale and contrast setting.
+- `next-intl` receives only the two committed catalogues. Stable backend enums,
+  IDs, versions, and Form 31/13/19 values are never translated or sent to a
+  translation service.
+- Language switching is in-place: it creates no journey, evaluates no journey,
+  starts no resolution, and calls no explanation provider.
+- Serwist never caches an API response or `/journey/*` document. Every non-GET
+  request is NetworkOnly and background sync is absent.
+- Offline infrastructure state is separate from citizen state. A loaded result
+  is labeled previously loaded, new actions require a connection, and no
+  connectivity failure is presented as `UNABLE_TO_VERIFY`.
 
 ## Priya resolution flow
 
@@ -123,8 +158,9 @@ The `/how-it-works` route contains:
 4. an interactive Ravi, Priya, and Arjun live execution trace;
 5. Priya's conceptual recovery/re-evaluation architecture and Arjun's safe stop;
 6. plain-language uncertainty states; and
-7. the deterministic decision path separated from a disabled optional future
-   AI explanation layer.
+7. the deterministic decision path separated from the optional one-way
+   `DecisionRecord → Canonical explanation → Sanitizer → Optional AI` path,
+   with “NO PATH BACK TO DECISION” shown explicitly.
 
 Scenario and stage controls are real buttons with visible focus and accessible
 selected state. The stage pipeline and connected prerequisite tree reflow from
@@ -185,6 +221,7 @@ npm run lint
 npm test
 npm run build
 npm run test:e2e
+npm run test:e2e:pwa
 ```
 
 Playwright starts the real FastAPI and Next.js development servers, creates a
@@ -194,3 +231,7 @@ refresh behavior, responsive overflow, page-level not-found recovery, and
 expired in-memory journeys. Install the local browser once with
 `npx playwright install chromium`. Failure traces and screenshots are written
 under ignored `test-results/` paths.
+
+`test:e2e:pwa` uses the production build because service-worker registration is
+deliberately disabled in development. It writes artifacts under the ignored
+`test-results-pwa/` path.

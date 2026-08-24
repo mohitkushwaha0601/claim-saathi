@@ -117,6 +117,21 @@ export interface DecisionHistoryResponse {
   demo: DemoMetadata;
 }
 
+export type ExplanationMode = "SIMPLE_ENGLISH" | "HINDI";
+
+export interface ExplanationResponse {
+  decision_id: string;
+  mode: ExplanationMode;
+  title: string;
+  summary: string;
+  points: string[];
+  disclaimer: string;
+  ai_used_for_decision: false;
+  ai_used_for_explanation: boolean;
+  fallback_used: boolean;
+  demo: DemoMetadata;
+}
+
 export type TraceStageType =
   | "INTENT"
   | "JOURNEY_PLANNER"
