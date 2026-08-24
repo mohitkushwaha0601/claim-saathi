@@ -51,10 +51,7 @@ class ApplicationContainer:
 
 
 def load_settings() -> ApiSettings:
-    origins_text = os.getenv(
-        "CLAIMSAATHI_ALLOWED_ORIGINS",
-        "http://localhost:3000",
-    )
+    origins_text = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000")
     origins = tuple(
         origin.strip()
         for origin in origins_text.split(",")
@@ -63,7 +60,7 @@ def load_settings() -> ApiSettings:
     if "*" in origins:
         raise ValueError("wildcard CORS origins are not permitted")
     return ApiSettings(
-        environment=os.getenv("CLAIMSAATHI_ENV", "development"),
+        environment=os.getenv("APP_ENV", "development"),
         allowed_origins=origins,
     )
 
