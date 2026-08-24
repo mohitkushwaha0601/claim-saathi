@@ -1,13 +1,15 @@
 # ClaimSaathi Build Plan
 
-Application implementation has not started. Each phase below requires explicit
-authorization before work begins, and every phase remains subject to
-`AGENTS.md` and `ENGINEERING.md`.
+Implementation proceeds only through explicitly authorized phases. Every phase
+below remains subject to `AGENTS.md` and `ENGINEERING.md`.
 
-## Phase 1 — Domain Models
+## Phase 1 — Domain Models (Complete)
 
 Define framework-independent citizen-intent, process, prerequisite, result,
 uncertainty, and provenance contracts without encoding EPFO policy rules.
+
+Completed on 2026-08-24 after the full Phase 1 domain test suite passed. No
+policy registry, policy engine, or policy values were introduced.
 
 ## Phase 2 — Policy Registry + Policy Engine
 

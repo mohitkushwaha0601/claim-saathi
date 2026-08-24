@@ -1,0 +1,53 @@
+{
+  "persona_label": "Synthetic Demo Persona — Priya",
+  "intent": {
+    "goal": "TRANSFER_PF_AFTER_EMPLOYMENT_CHANGE",
+    "currently_employed": true,
+    "requested_amount_rupees": null
+  },
+  "citizen_state": {
+    "citizen_id": "SYNTH-CITIZEN-PRIYA-001",
+    "state_version": "SYNTH-PRIYA-STATE-V1",
+    "is_synthetic": true,
+    "access": {
+      "uan_status": "VERIFIED"
+    },
+    "identity": {
+      "aadhaar_status": "VERIFIED"
+    },
+    "bank": {
+      "verification_status": "VERIFIED"
+    },
+    "employment": {
+      "currently_employed": true,
+      "records": [
+        {
+          "employment_id": "SYNTH-EMPLOYMENT-PRIYA-PREVIOUS-001",
+          "employer_label": "Synthetic Demo Employer — Priya Previous",
+          "start_date": "2018-06-01",
+          "exit_date": null,
+          "exit_record_status": "NOT_RECORDED"
+        },
+        {
+          "employment_id": "SYNTH-EMPLOYMENT-PRIYA-CURRENT-002",
+          "employer_label": "Synthetic Demo Employer — Priya Current",
+          "start_date": "2023-02-01",
+          "exit_date": null,
+          "exit_record_status": "NOT_APPLICABLE"
+        }
+      ]
+    },
+    "service": {
+      "total_service_months": 72,
+      "status": "VERIFIED"
+    },
+    "pf": {
+      "available_balance_rupees": 180000,
+      "status": "VERIFIED"
+    },
+    "claims": {
+      "active_transfer": false,
+      "transfer_already_completed": false
+    }
+  }
+}

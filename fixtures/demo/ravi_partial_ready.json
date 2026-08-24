@@ -1,0 +1,46 @@
+{
+  "persona_label": "Synthetic Demo Persona — Ravi",
+  "intent": {
+    "goal": "ACCESS_SOME_PF_FUNDS",
+    "currently_employed": true,
+    "requested_amount_rupees": 50000
+  },
+  "citizen_state": {
+    "citizen_id": "SYNTH-CITIZEN-RAVI-001",
+    "state_version": "SYNTH-RAVI-STATE-V1",
+    "is_synthetic": true,
+    "access": {
+      "uan_status": "VERIFIED"
+    },
+    "identity": {
+      "aadhaar_status": "VERIFIED"
+    },
+    "bank": {
+      "verification_status": "VERIFIED"
+    },
+    "employment": {
+      "currently_employed": true,
+      "records": [
+        {
+          "employment_id": "SYNTH-EMPLOYMENT-RAVI-001",
+          "employer_label": "Synthetic Demo Employer — Ravi Current",
+          "start_date": "2014-01-01",
+          "exit_date": null,
+          "exit_record_status": "NOT_APPLICABLE"
+        }
+      ]
+    },
+    "service": {
+      "total_service_months": 144,
+      "status": "VERIFIED"
+    },
+    "pf": {
+      "available_balance_rupees": 250000,
+      "status": "VERIFIED"
+    },
+    "claims": {
+      "active_transfer": false,
+      "transfer_already_completed": false
+    }
+  }
+}

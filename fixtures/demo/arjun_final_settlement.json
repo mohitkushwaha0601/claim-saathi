@@ -1,0 +1,46 @@
+{
+  "persona_label": "Synthetic Demo Persona — Arjun",
+  "intent": {
+    "goal": "FINAL_PF_SETTLEMENT",
+    "currently_employed": false,
+    "requested_amount_rupees": null
+  },
+  "citizen_state": {
+    "citizen_id": "SYNTH-CITIZEN-ARJUN-001",
+    "state_version": "SYNTH-ARJUN-STATE-V1",
+    "is_synthetic": true,
+    "access": {
+      "uan_status": "VERIFIED"
+    },
+    "identity": {
+      "aadhaar_status": "VERIFIED"
+    },
+    "bank": {
+      "verification_status": "VERIFIED"
+    },
+    "employment": {
+      "currently_employed": false,
+      "records": [
+        {
+          "employment_id": "SYNTH-EMPLOYMENT-ARJUN-001",
+          "employer_label": "Synthetic Demo Employer — Arjun Former",
+          "start_date": "2017-01-01",
+          "exit_date": "2025-12-31",
+          "exit_record_status": "RECORDED"
+        }
+      ]
+    },
+    "service": {
+      "total_service_months": 96,
+      "status": "VERIFIED"
+    },
+    "pf": {
+      "available_balance_rupees": 320000,
+      "status": "VERIFIED"
+    },
+    "claims": {
+      "active_transfer": false,
+      "transfer_already_completed": false
+    }
+  }
+}

@@ -1,0 +1,18 @@
+[project]
+name = "claimsaathi-api"
+version = "0.1.0"
+description = "Deterministic domain contracts for ClaimSaathi"
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.12,<3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9,<10",
+]
+
+[tool.pytest.ini_options]
+addopts = ["-ra", "--strict-config", "--strict-markers"]
+pythonpath = ["."]
+testpaths = ["tests"]
