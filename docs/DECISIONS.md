@@ -280,3 +280,72 @@ The reviewed catalog pins policy, graph, rule, process-label, and supported
 resolution identifiers. Load-time validation rejects drift between those
 layers. It contains no numeric policy values, executable conditions, graph
 precedence, or resolution success logic.
+
+## Phase 6 — FastAPI and Demo Runtime Boundaries
+
+### HTTP routes contain no government decision logic
+
+Routes validate public request shapes, call application services, and map safe
+read views into response schemas. They do not import policy engines, graph
+evaluators, journey orchestrators, or resolution navigators and contain no
+eligibility, amount, graph-precedence, or resolution-success logic.
+
+### Demo state is synthetic, journey-isolated, and process-local
+
+Each journey creation loads a fresh typed copy of one allowlisted base fixture.
+Mutable state is keyed by generated `journey_instance_id`, so a correction in
+one browser journey cannot alter another. The in-memory store is explicitly
+prototype infrastructure; restarting the API discards sessions, resolutions,
+and decision history by design.
+
+### Demo correction events are allowlisted and non-government
+
+The API exposes exactly one synthetic mutation event for the Priya scenario. It
+updates only the unique previous-employment record in that journey's isolated
+snapshot, increments `state_revision` only when a fact changes, and never writes
+the base fixture. Every response states that the event is synthetic and no real
+government action occurred. There is no generic fact-mutation endpoint.
+
+### Historical decision records remain immutable
+
+Every explicit evaluation creates and appends a new frozen `DecisionRecord`,
+including when the citizen-state revision is unchanged. Resolution transitions
+and demo state changes never edit existing records. Decision history and detail
+endpoints return safe summaries of those historical values.
+
+### Public requests cannot submit citizen state
+
+Journey creation accepts only an allowlisted persona ID, a typed citizen goal,
+and an optional non-negative integer-rupee amount. Extra fields are forbidden;
+raw `CitizenState`, capability results, filesystem paths, policy inputs, and
+resolution instructions are not public request contracts.
+
+### Resolution HTTP commands cannot mark success directly
+
+Resolution creation accepts a decision ID and issue code, not a resolution ID.
+The server derives the approved workflow from the current deterministic issue.
+The only terminal check is the purpose-specific recheck command, which delegates
+to Phase 4's trusted-state verifier. There is no `resolved` command or arbitrary
+target-state endpoint.
+
+### The application boundary owns runtime IDs and time
+
+Application services generate UUID-based journey, decision, and resolution IDs
+and timezone-aware UTC timestamps. These values are passed into deterministic
+domain services; the policy engine, graph evaluator, orchestrator, and
+resolution verifier remain free of hidden clocks and randomness.
+
+### Mock capability behavior is explicit and not public input
+
+Priya's demo uses a clearly named mock authoritative-capability provider for
+`T13-ROUTE-001`. Its default is `AVAILABLE`; application construction can use
+`UNKNOWN` for tests. No public endpoint accepts a capability override, and no
+EPFO routing logic is reconstructed.
+
+### API errors separate client, state, and configuration failures
+
+Validation and expected application failures use one safe error envelope.
+Missing resources return 404, invalid demo combinations return 400, invalid
+state transitions return 409, and reviewed-configuration corruption returns
+500. Configuration failures are never presented as citizen uncertainty, and
+responses disclose neither stack traces nor local filesystem paths.

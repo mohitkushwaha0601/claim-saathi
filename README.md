@@ -10,4 +10,18 @@ ClaimSaathi maps a citizen's intent to the appropriate EPFO process, checks prer
 
 ## Current Development Status
 
-Repository scaffold and engineering constraints established; application implementation has not started, and Phase 1 awaits explicit authorization.
+Phases 1–6 are complete: the deterministic domain, reviewed policy engine,
+prerequisite graphs, resolution navigator, journey orchestration, immutable
+decision records, and synthetic FastAPI demo layer are implemented and tested.
+Frontend, real government integrations, persistence, and runtime AI have not
+been implemented.
+
+## Run the Backend
+
+```bash
+cd apps/api
+uv run uvicorn app.main:app --reload
+```
+
+- API docs: `http://localhost:8000/docs`
+- Health: `http://localhost:8000/health`

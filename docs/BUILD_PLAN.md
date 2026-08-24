@@ -52,10 +52,17 @@ immutable `JourneyDecision` and `DecisionRecord` outputs. Resolution initiation
 is explicit and limited to the resolution attached to a current deterministic
 issue. No transport, persistence, government integration, or AI was added.
 
-## Phase 6 — FastAPI
+## Phase 6 — FastAPI Application Layer (Complete)
 
 Expose application use cases through thin FastAPI transport adapters using
 Python 3.12+, Pydantic v2, and explicit mock-integration labeling.
+
+Completed on 2026-08-24 after the full Phase 1–6 backend suite and API
+TestClient suite passed. Thin routes now expose synthetic persona discovery,
+journey creation and evaluation, immutable decision history, approved
+resolution navigation, one allowlisted journey-local demo correction event,
+and reviewed policy-source metadata. Runtime state is process-local and no live
+government integration, database, frontend, authentication, or AI was added.
 
 ## Phase 7 — Frontend
 

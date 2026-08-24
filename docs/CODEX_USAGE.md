@@ -82,3 +82,23 @@ preserving their ownership boundaries. Specifically, Codex:
 
 No FastAPI route, frontend, database, external integration, policy change, graph
 aggregation change, or AI functionality was introduced.
+
+## 2026-08-24 — Phase 6 FastAPI Application Layer
+
+Codex implemented a FastAPI application factory with explicit demo metadata,
+environment-configured CORS, safe error envelopes, OpenAPI documentation, and
+thin versioned routes. It added application services that generate IDs and UTC
+timestamps at the boundary while delegating every journey decision to the
+existing Phase 5 orchestrator and every resolution success check to Phase 4.
+
+Codex also implemented an allowlisted synthetic persona provider, a clearly
+named mock authoritative-capability provider, journey-isolated in-memory state,
+immutable decision history, safe decision and prerequisite summaries, and one
+hackathon-only Priya correction event that never writes fixture files or claims
+a government action. FastAPI TestClient coverage proves the complete Ravi,
+Priya, and Arjun flows, Priya session isolation, validation and error behavior,
+source lookup without network access, absence of direct resolution success,
+and continued operation with no AI dependency.
+
+No frontend, real EPFO integration, database, authentication, background work,
+claim submission, policy change, graph change, or runtime AI was introduced.
