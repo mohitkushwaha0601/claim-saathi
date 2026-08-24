@@ -24,8 +24,8 @@ uv run pytest -q
 Optional settings:
 
 ```text
-CLAIMSAATHI_ENV=development
-CLAIMSAATHI_ALLOWED_ORIGINS=http://localhost:3000
+APP_ENV=development
+ALLOWED_ORIGINS=http://localhost:3000
 ```
 
 Allowed origins are comma-separated. Wildcard origins are rejected, and CORS
