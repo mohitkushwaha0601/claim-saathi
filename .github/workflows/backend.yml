@@ -35,4 +35,5 @@ jobs:
         run: uv run pytest -q
 
       - name: Build backend Docker image
-        run: docker build -t backend-sanity ./
+        working-directory: .
+        run: docker build -f backend/Dockerfile -t backend-sanity .
