@@ -30,10 +30,15 @@ Completed on 2026-08-24 after the full backend test suite passed. Graphs compose
 supplied `RuleResult` states using the single documented `ALL_OF` precedence;
 they do not evaluate policy, route citizen intent, or create journey decisions.
 
-## Phase 4 — Resolution Navigator
+## Phase 4 — Resolution Navigator (Complete)
 
 Map approved deterministic blockers to source-backed resolution guidance without
 inventing actions, rules, URLs, or outcomes.
+
+Completed on 2026-08-24 after the full backend test suite passed. The navigator
+maps exact issue codes to immutable approved workflows, applies explicit state
+transitions, and resolves only after an allowlisted verifier checks a fresh
+trusted `CitizenState`. It does not re-run policy or prerequisite graphs.
 
 ## Phase 5 — Journey Orchestrator + Decision Records
 

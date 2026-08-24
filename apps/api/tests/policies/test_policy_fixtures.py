@@ -45,6 +45,7 @@ def test_source_registry_contains_exact_reviewed_sources(
         "SRC-EPFO-PARTIAL-2026",
         "SRC-EPFO-TRANSFER-DOE",
         "SRC-EPFO-FORMS",
+        "SRC-EPFO-EXIT-RESOLUTION",
     }
     assert all(source.status is PolicySourceStatus.ACTIVE for source in sources)
     assert all(source.verified_at is not None for source in sources)

@@ -28,6 +28,10 @@ from .enums import (
     PrerequisiteAggregation,
     ResolutionActor,
     ResolutionState,
+    ResolutionStepType,
+    ResolutionSuccessVerifier,
+    ResolutionVerificationCode,
+    ResolutionWorkflowStatus,
     VerificationStatus,
 )
 from .intent import CitizenIntent
@@ -40,7 +44,12 @@ from .prerequisite import (
     PrerequisiteNodeResult,
     RuleResult,
 )
-from .resolution import ResolutionWorkflow
+from .resolution import (
+    ResolutionInstance,
+    ResolutionStep,
+    ResolutionVerificationResult,
+    ResolutionWorkflow,
+)
 
 __all__ = [
     "AccessState",
@@ -77,8 +86,14 @@ __all__ = [
     "PrerequisiteNode",
     "PrerequisiteNodeResult",
     "ResolutionActor",
+    "ResolutionInstance",
     "ResolutionState",
+    "ResolutionStep",
+    "ResolutionStepType",
+    "ResolutionSuccessVerifier",
+    "ResolutionVerificationCode",
     "ResolutionWorkflow",
+    "ResolutionWorkflowStatus",
     "RuleResult",
     "ServiceState",
     "VerificationStatus",

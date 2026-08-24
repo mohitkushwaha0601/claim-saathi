@@ -48,3 +48,17 @@ reproducibility, semantic precedence, dependency boundaries, and the Ravi,
 Priya, and Arjun MVP graph outcomes. No policy evaluation was moved into the
 graph layer, and no journey planning, `JourneyDecision`, resolution execution,
 routes, frontend, persistence, network access, or AI integration was added.
+
+## 2026-08-24 — Phase 4 Resolution Navigator
+
+Codex implemented the single approved `RES_EXIT` workflow as immutable,
+source-backed configuration; an exact issue-code catalog; explicit resolution
+state transitions; an allowlisted success verifier; and immutable resolution
+instances carrying workflow and citizen-state version audit metadata. The
+navigator can reach `RESOLVED` only by rechecking a fresh trusted
+`CitizenState`; citizen confirmation, elapsed time, and state-version changes do
+not prove success. Tests cover configuration rejection, catalog behavior, all
+MVP transitions, missing/ambiguous/wrong employment records, deterministic
+replay, source scope, and forbidden dependencies. No policy or graph
+re-evaluation, journey decision, persistence, government integration, route,
+frontend, or AI functionality was added.

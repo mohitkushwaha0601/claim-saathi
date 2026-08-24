@@ -146,6 +146,42 @@ class ResolutionActor(str, Enum):
     GOVERNMENT_AUTHORITY = "GOVERNMENT_AUTHORITY"
 
 
+class ResolutionStepType(str, Enum):
+    """Closed vocabulary for pre-approved resolution workflow steps."""
+
+    INFORMATION = "INFORMATION"
+    EXTERNAL_ACTION = "EXTERNAL_ACTION"
+    WAIT = "WAIT"
+    SYSTEM_ACTION = "SYSTEM_ACTION"
+
+
+class ResolutionSuccessVerifier(str, Enum):
+    """Allowlisted deterministic checks for resolution success."""
+
+    PREVIOUS_EMPLOYMENT_EXIT_DATE_PRESENT = (
+        "PREVIOUS_EMPLOYMENT_EXIT_DATE_PRESENT"
+    )
+
+
+class ResolutionWorkflowStatus(str, Enum):
+    """Lifecycle state for immutable resolution workflow versions."""
+
+    DRAFT = "DRAFT"
+    APPROVED = "APPROVED"
+    ACTIVE = "ACTIVE"
+    SUPERSEDED = "SUPERSEDED"
+
+
+class ResolutionVerificationCode(str, Enum):
+    """Non-sensitive reason recorded by a resolution success verifier."""
+
+    SUCCESS_CONDITION_SATISFIED = "SUCCESS_CONDITION_SATISFIED"
+    EXIT_DATE_STILL_MISSING = "EXIT_DATE_STILL_MISSING"
+    PREVIOUS_EMPLOYMENT_RECORD_NOT_UNIQUE = (
+        "PREVIOUS_EMPLOYMENT_RECORD_NOT_UNIQUE"
+    )
+
+
 class ResolutionState(str, Enum):
     """States reserved for a future resolution state machine."""
 

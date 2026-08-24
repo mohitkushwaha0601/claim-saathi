@@ -37,5 +37,19 @@
     "status": "ACTIVE",
     "scope": "Only process-label mapping: Form 31 for withdrawal in certain cases, Form 13 for transfer of an old account to a new account, and Form 19 for final settlement.",
     "notes": "These labels are metadata and do not establish eligibility."
+  },
+  {
+    "source_id": "SRC-EPFO-EXIT-RESOLUTION",
+    "authority": "Employees' Provident Fund Organisation",
+    "title": "Member self-service process for a missing Date of Exit",
+    "document_type": "EPFO_FAQ_RESOLUTION_GUIDANCE",
+    "reference_url": "https://www.epfindia.gov.in/site_en/FAQ.php",
+    "corroborating_urls": [
+      "https://www.epfindia.gov.in/site_docs/PDFs/Circulars/Y2020-2021/faq_transfer_claim.pdf"
+    ],
+    "verified_at": "2026-08-24T00:00:00+05:30",
+    "status": "ACTIVE",
+    "scope": "Only the missing Date-of-Exit correction guidance supplied for RES_EXIT: the conditional member Mark Exit self-service path, its portal route, previous-employment selection, Date and Reason of Exit entry, and Aadhaar-linked OTP authentication.",
+    "notes": "Resolution guidance only. ClaimSaathi does not evaluate the applicable 60-day condition, generalize other FAQ content, or treat this source as a new eligibility rule."
   }
 ]

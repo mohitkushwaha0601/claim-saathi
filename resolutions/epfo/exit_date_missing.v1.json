@@ -1,0 +1,45 @@
+{
+  "resolution_id": "RES_EXIT",
+  "version": 1,
+  "issue_code": "EXIT_DATE_MISSING",
+  "title": "Update previous employment Date of Exit",
+  "actor": "CITIZEN",
+  "status": "ACTIVE",
+  "approved_steps": [
+    {
+      "step_id": "REVIEW_RECORD",
+      "step_type": "INFORMATION",
+      "title": "Review the previous employment record",
+      "canonical_guidance": "Confirm that Date of Exit is missing for the previous employment record."
+    },
+    {
+      "step_id": "FOLLOW_OFFICIAL_MARK_EXIT_PROCESS",
+      "step_type": "EXTERNAL_ACTION",
+      "title": "Follow the official Mark Exit process",
+      "canonical_guidance": "EPFO provides a self-service Mark Exit process after the applicable 60-day condition is satisfied.",
+      "official_route": [
+        "Member Unified Portal",
+        "Manage",
+        "Mark Exit",
+        "Select previous employment",
+        "Enter Date of Exit and Reason of Exit",
+        "Authenticate using Aadhaar-linked OTP"
+      ]
+    },
+    {
+      "step_id": "WAIT_FOR_OFFICIAL_RECORD_UPDATE",
+      "step_type": "WAIT",
+      "title": "Wait for the official record update",
+      "canonical_guidance": "ClaimSaathi is waiting for the trusted EPFO-style citizen state to reflect the correction."
+    },
+    {
+      "step_id": "RECHECK_TRUSTED_STATE",
+      "step_type": "SYSTEM_ACTION",
+      "title": "Recheck trusted citizen state",
+      "canonical_guidance": "Reload trusted CitizenState and verify whether the missing Date of Exit now exists."
+    }
+  ],
+  "official_source_ids": ["SRC-EPFO-EXIT-RESOLUTION"],
+  "success_condition": "The unique PREVIOUS employment record has a non-null exit_date.",
+  "success_verifier": "PREVIOUS_EMPLOYMENT_EXIT_DATE_PRESENT"
+}

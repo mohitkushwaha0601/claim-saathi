@@ -1,8 +1,9 @@
 # ClaimSaathi MVP Policy Sources
 
 This register documents exactly which reviewed source supports each Phase 2
-rule and what ClaimSaathi deliberately does not derive. URLs are provenance
-metadata only; policy evaluation performs no network access.
+rule or Phase 4 approved resolution workflow, and what ClaimSaathi deliberately
+does not derive. URLs are provenance metadata only; policy and resolution
+evaluation perform no network access.
 
 All entries were reviewed for this repository on **2026-08-24**. Publication
 and effective dates remain unset where they were not explicitly supplied.
@@ -14,6 +15,7 @@ and effective dates remain unset where they were not explicitly supplied.
 | `SRC-EPFO-PARTIAL-2026` | Ministry of Labour & Employment / PIB | Supplied partial-withdrawal service and amount facts only | `EPFO-PARTIAL-WITHDRAWAL@1.0.0` |
 | `SRC-EPFO-TRANSFER-DOE` | Employees' Provident Fund Organisation | Previous-employment Date-of-Exit requirement for online transfer only | `EPFO-TRANSFER@1.0.0` |
 | `SRC-EPFO-FORMS` | Employees' Provident Fund Organisation | Form/process labels only; no eligibility rule | Metadata only |
+| `SRC-EPFO-EXIT-RESOLUTION` | Employees' Provident Fund Organisation | Conditional member Mark Exit correction guidance for `RES_EXIT` only | `RES_EXIT@1` |
 
 ## SRC-EPFO-PARTIAL-2026
 
@@ -70,6 +72,41 @@ Deliberately not derived:
 
 The remaining transfer rules are source-free factual `DATA_CHECK` contracts or
 the caller-supplied `AUTHORITATIVE_CAPABILITY` route check.
+
+This is the **rule source** for the Date-of-Exit requirement. It supports the
+deterministic `T13-DOE-001` condition and does not define the executable
+resolution workflow.
+
+## SRC-EPFO-EXIT-RESOLUTION
+
+Primary reference:
+https://www.epfindia.gov.in/site_en/FAQ.php
+
+Corroborating reference:
+https://www.epfindia.gov.in/site_docs/PDFs/Circulars/Y2020-2021/faq_transfer_claim.pdf
+
+This is the **resolution source** for approved correction guidance in
+`RES_EXIT@1`. It supports only the supplied facts that:
+
+- Date of Exit for previous employment is mandatory for an online transfer;
+- EPFO provides a member self-service Mark Exit path after the applicable
+  60-day/two-month condition;
+- the route is Member Unified Portal → Manage → Mark Exit;
+- the member selects the previous employment, enters Date of Exit and Reason of
+  Exit, and authenticates using an OTP sent to the Aadhaar-linked mobile number.
+
+ClaimSaathi deliberately does not:
+
+- calculate or assert that the 60-day condition is satisfied for a citizen;
+- infer a leaving date from employment names, start dates, current employment,
+  or the current date;
+- treat the guidance as a new eligibility rule;
+- generalize the FAQ into other correction workflows; or
+- modify an EPFO record or claim that an external action succeeded.
+
+The prose is approved workflow data. Resolution success is separately verified
+from fresh trusted citizen facts using an allowlisted verifier; the prose itself
+is never executed.
 
 ## SRC-EPFO-FORMS
 

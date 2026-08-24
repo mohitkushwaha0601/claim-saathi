@@ -25,8 +25,12 @@ from app.domain import (
     PolicySourceStatus,
     PrerequisiteNode,
     ResolutionActor,
+    ResolutionStep,
+    ResolutionStepType,
     ResolutionState,
+    ResolutionSuccessVerifier,
     ResolutionWorkflow,
+    ResolutionWorkflowStatus,
     RuleResult,
 )
 
@@ -111,12 +115,24 @@ def build_configuration_contracts() -> tuple[BaseModel, ...]:
     )
     resolution = ResolutionWorkflow(
         resolution_id="SYNTH-RESOLUTION-CONTRACT-001",
+        version=1,
         issue_code=rule.issue_code,
         title="Synthetic Contract Resolution",
         actor=ResolutionActor.CITIZEN,
-        approved_steps=("Synthetic approved step placeholder.",),
+        status=ResolutionWorkflowStatus.DRAFT,
+        approved_steps=(
+            ResolutionStep(
+                step_id="SYNTH-STEP-001",
+                step_type=ResolutionStepType.INFORMATION,
+                title="Synthetic Contract Step",
+                canonical_guidance="Synthetic approved step placeholder.",
+            ),
+        ),
         official_source_ids=(source.source_id,),
         success_condition="Synthetic contract condition.",
+        success_verifier=(
+            ResolutionSuccessVerifier.PREVIOUS_EMPLOYMENT_EXIT_DATE_PRESENT
+        ),
     )
     journey = JourneyDefinition(
         journey_id=JourneyId.PF_TRANSFER,
