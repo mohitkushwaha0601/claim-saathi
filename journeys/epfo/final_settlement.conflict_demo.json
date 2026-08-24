@@ -1,0 +1,18 @@
+{
+  "journey_id": "PF_FINAL_SETTLEMENT",
+  "graph_version": "CONFLICT-DEMO-1",
+  "root_node_id": "FINAL_SETTLEMENT_PREREQUISITES",
+  "nodes": [
+    {
+      "node_id": "FINAL_SETTLEMENT_PREREQUISITES",
+      "label": "Final settlement prerequisites",
+      "children": ["POLICY_VERIFIED"],
+      "aggregation": "ALL_OF"
+    },
+    {
+      "node_id": "POLICY_VERIFIED",
+      "label": "Policy verified",
+      "rule_ids": ["FINAL_SETTLEMENT_WAIT_PERIOD"]
+    }
+  ]
+}

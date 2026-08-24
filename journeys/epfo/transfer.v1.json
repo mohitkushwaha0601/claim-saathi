@@ -1,0 +1,50 @@
+{
+  "journey_id": "PF_TRANSFER",
+  "graph_version": "1.0.0",
+  "root_node_id": "TRANSFER_PREREQUISITES",
+  "nodes": [
+    {
+      "node_id": "TRANSFER_PREREQUISITES",
+      "label": "Transfer prerequisites",
+      "children": [
+        "PREVIOUS_EMPLOYMENT_EXISTS",
+        "CURRENT_EMPLOYMENT_EXISTS",
+        "PREVIOUS_EXIT_DATE_PRESENT",
+        "NO_ACTIVE_TRANSFER",
+        "TRANSFER_NOT_ALREADY_COMPLETE",
+        "TRANSFER_ROUTE_AVAILABLE"
+      ],
+      "aggregation": "ALL_OF"
+    },
+    {
+      "node_id": "PREVIOUS_EMPLOYMENT_EXISTS",
+      "label": "Previous employment exists",
+      "rule_ids": ["T13-PREVIOUS-EMPLOYMENT-001"]
+    },
+    {
+      "node_id": "CURRENT_EMPLOYMENT_EXISTS",
+      "label": "Current employment exists",
+      "rule_ids": ["T13-CURRENT-EMPLOYMENT-001"]
+    },
+    {
+      "node_id": "PREVIOUS_EXIT_DATE_PRESENT",
+      "label": "Previous employment exit date present",
+      "rule_ids": ["T13-DOE-001"]
+    },
+    {
+      "node_id": "NO_ACTIVE_TRANSFER",
+      "label": "No active transfer",
+      "rule_ids": ["T13-ACTIVE-TRANSFER-001"]
+    },
+    {
+      "node_id": "TRANSFER_NOT_ALREADY_COMPLETE",
+      "label": "Transfer not already complete",
+      "rule_ids": ["T13-ALREADY-COMPLETE-001"]
+    },
+    {
+      "node_id": "TRANSFER_ROUTE_AVAILABLE",
+      "label": "Official transfer route available",
+      "rule_ids": ["T13-ROUTE-001"]
+    }
+  ]
+}

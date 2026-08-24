@@ -99,3 +99,54 @@ The engine emits only safe scalar observations such as integer service months,
 booleans, and status codes. Monetary inputs, identifiers, dates, and record
 objects are omitted. Source-free readiness and capability checks retain a
 nullable `source_id` rather than fabricating government provenance.
+
+## Phase 3 — Prerequisite Graph Boundaries
+
+### Prerequisite graphs are configuration
+
+Journey prerequisite structure lives in immutable, versioned JSON under
+`journeys/epfo`, not in route handlers, frontend components, or policy-engine
+code. Loading rejects ambiguous nodes, broken references, cycles, orphan nodes,
+and duplicate rule bindings before evaluation.
+
+### Phase 3 supports `ALL_OF` only
+
+Every group is explicitly marked `ALL_OF`. There is no arbitrary boolean or
+Python expression language, `ANY_OF`, scoring, probability, confidence, or
+fuzzy aggregation. New aggregation semantics require a later explicit design
+decision and tests rather than an implicit default.
+
+### Graphs compose rule results but never evaluate policy
+
+The prerequisite evaluator accepts only a graph definition and supplied
+`RuleResult` objects. It does not accept citizen state or intent and does not
+import or call the policy engine. A future orchestrator will own calling both
+independent layers.
+
+### Missing rule results are invocation errors
+
+Every configured leaf requires a caller-supplied `RuleResult`. A missing result
+raises `MissingRuleResultError`; the graph must not manufacture
+`UNABLE_TO_VERIFY`, assume `PASS`, or confuse an incomplete engine invocation
+with uncertainty about a citizen fact.
+
+### Deterministic conclusions outrank unrelated unknown facts
+
+`ALL_OF` uses the explicit precedence `POLICY_REVIEW_REQUIRED`,
+`NOT_APPLICABLE`, `NOT_ELIGIBLE`, `ACTION_REQUIRED`, `UNABLE_TO_VERIFY`, then
+`PASS`. This differs from a naive "unknown always wins" rule: when a mandatory
+condition is definitely unsatisfied, an unrelated unverifiable prerequisite
+does not erase that known conclusion.
+
+### Every leaf state remains inspectable
+
+`PrerequisiteGraphEvaluation` returns all group and leaf states plus stable
+non-pass leaf identifiers. Consequently an `UNABLE_TO_VERIFY` leaf remains
+visible even when the root is `NOT_ELIGIBLE`. Node results do not copy raw
+observations or sensitive values from rule results.
+
+### Graph evaluation has no readiness score
+
+Phase 3 produces categorical states only. It does not calculate readiness
+percentages, confidence scores, eligibility probabilities, journey decisions,
+or claim outcomes.

@@ -25,6 +25,7 @@ from .enums import (
     PolicyRuleDisposition,
     PolicyRuleType,
     PolicySourceStatus,
+    PrerequisiteAggregation,
     ResolutionActor,
     ResolutionState,
     VerificationStatus,
@@ -32,7 +33,13 @@ from .enums import (
 from .intent import CitizenIntent
 from .journey import JourneyDefinition
 from .policy import IntegerRatio, PolicyRule, PolicySource, PolicyVersion
-from .prerequisite import PrerequisiteNode, RuleResult
+from .prerequisite import (
+    PrerequisiteGraphDefinition,
+    PrerequisiteGraphEvaluation,
+    PrerequisiteNode,
+    PrerequisiteNodeResult,
+    RuleResult,
+)
 from .resolution import ResolutionWorkflow
 
 __all__ = [
@@ -64,7 +71,11 @@ __all__ = [
     "PolicySource",
     "PolicySourceStatus",
     "PolicyVersion",
+    "PrerequisiteAggregation",
+    "PrerequisiteGraphDefinition",
+    "PrerequisiteGraphEvaluation",
     "PrerequisiteNode",
+    "PrerequisiteNodeResult",
     "ResolutionActor",
     "ResolutionState",
     "ResolutionWorkflow",

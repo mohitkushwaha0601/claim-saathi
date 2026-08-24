@@ -2,11 +2,11 @@
 
 from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
-from .enums import DecisionState
+from .enums import DecisionState, JourneyId, PrerequisiteAggregation
 
 
 class PrerequisiteNode(BaseModel):
-    """A future prerequisite graph node described only by identifiers."""
+    """A prerequisite leaf or group described only by identifiers."""
 
     model_config = ConfigDict(
         extra="forbid",
@@ -18,6 +18,54 @@ class PrerequisiteNode(BaseModel):
     label: str = Field(min_length=1)
     children: tuple[str, ...] = ()
     rule_ids: tuple[str, ...] = ()
+    aggregation: PrerequisiteAggregation | None = None
+
+
+class PrerequisiteGraphDefinition(BaseModel):
+    """Immutable configuration contract for one journey prerequisite graph."""
+
+    model_config = ConfigDict(
+        extra="forbid",
+        frozen=True,
+        str_strip_whitespace=True,
+    )
+
+    journey_id: JourneyId
+    graph_version: str = Field(min_length=1)
+    root_node_id: str = Field(min_length=1)
+    nodes: tuple[PrerequisiteNode, ...]
+
+
+class PrerequisiteNodeResult(BaseModel):
+    """State of one evaluated node without copying observed citizen values."""
+
+    model_config = ConfigDict(
+        extra="forbid",
+        frozen=True,
+        str_strip_whitespace=True,
+    )
+
+    node_id: str = Field(min_length=1)
+    state: DecisionState
+    child_node_ids: tuple[str, ...] = ()
+    rule_id: str | None = Field(default=None, min_length=1)
+
+
+class PrerequisiteGraphEvaluation(BaseModel):
+    """Complete deterministic evaluation of a prerequisite graph."""
+
+    model_config = ConfigDict(
+        extra="forbid",
+        frozen=True,
+        str_strip_whitespace=True,
+    )
+
+    journey_id: JourneyId
+    graph_version: str = Field(min_length=1)
+    root_node_id: str = Field(min_length=1)
+    root_state: DecisionState
+    node_results: tuple[PrerequisiteNodeResult, ...]
+    non_pass_leaf_node_ids: tuple[str, ...] = ()
 
 
 class RuleResult(BaseModel):

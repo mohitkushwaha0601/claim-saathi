@@ -14,6 +14,12 @@ class DecisionState(str, Enum):
     POLICY_REVIEW_REQUIRED = "POLICY_REVIEW_REQUIRED"
 
 
+class PrerequisiteAggregation(str, Enum):
+    """Closed aggregation vocabulary for prerequisite groups."""
+
+    ALL_OF = "ALL_OF"
+
+
 class JourneyId(str, Enum):
     """Stable domain identifiers for supported citizen journeys."""
 

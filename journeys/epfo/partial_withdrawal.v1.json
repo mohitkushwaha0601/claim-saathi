@@ -1,0 +1,48 @@
+{
+  "journey_id": "PF_PARTIAL_WITHDRAWAL",
+  "graph_version": "1.0.0",
+  "root_node_id": "PARTIAL_WITHDRAWAL_PREREQUISITES",
+  "nodes": [
+    {
+      "node_id": "PARTIAL_WITHDRAWAL_PREREQUISITES",
+      "label": "Partial withdrawal prerequisites",
+      "children": [
+        "ONLINE_ACCESS_READY",
+        "SERVICE_REQUIREMENT",
+        "REQUEST_AMOUNT_VALID"
+      ],
+      "aggregation": "ALL_OF"
+    },
+    {
+      "node_id": "ONLINE_ACCESS_READY",
+      "label": "Online access ready",
+      "children": ["UAN_READY", "AADHAAR_READY", "BANK_READY"],
+      "aggregation": "ALL_OF"
+    },
+    {
+      "node_id": "UAN_READY",
+      "label": "UAN ready",
+      "rule_ids": ["P31-UAN-001"]
+    },
+    {
+      "node_id": "AADHAAR_READY",
+      "label": "Aadhaar ready",
+      "rule_ids": ["P31-AADHAAR-001"]
+    },
+    {
+      "node_id": "BANK_READY",
+      "label": "Bank ready",
+      "rule_ids": ["P31-BANK-001"]
+    },
+    {
+      "node_id": "SERVICE_REQUIREMENT",
+      "label": "Service requirement",
+      "rule_ids": ["P31-SERVICE-001"]
+    },
+    {
+      "node_id": "REQUEST_AMOUNT_VALID",
+      "label": "Requested amount within configured policy limit",
+      "rule_ids": ["P31-AMOUNT-001"]
+    }
+  ]
+}

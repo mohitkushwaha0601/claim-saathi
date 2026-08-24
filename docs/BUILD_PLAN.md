@@ -21,10 +21,14 @@ Completed on 2026-08-24 after the full backend test suite passed. The engine
 evaluates one rule at a time and does not aggregate prerequisites or produce a
 `JourneyDecision`.
 
-## Phase 3 — Prerequisite Graph
+## Phase 3 — Prerequisite Graph (Complete)
 
 Represent prerequisite dependencies and evaluate them deterministically with
 structured blockers, reason codes, and uncertainty propagation.
+
+Completed on 2026-08-24 after the full backend test suite passed. Graphs compose
+supplied `RuleResult` states using the single documented `ALL_OF` precedence;
+they do not evaluate policy, route citizen intent, or create journey decisions.
 
 ## Phase 4 — Resolution Navigator
 

@@ -35,3 +35,16 @@ capability inputs, output sanitization, reproducibility, and the absence of AI,
 network, dynamic expression, journey aggregation, or final-settlement guesses.
 No prerequisite propagation, journey orchestration, resolution execution,
 routes, frontend, persistence, scraping, or AI integration was added.
+
+## 2026-08-24 — Phase 3 Prerequisite Graph
+
+Codex implemented immutable, external JSON prerequisite graphs; strict load-time
+validation for node shapes, topology, reachability, and unique rule bindings;
+and a pure deterministic evaluator that composes already-produced `RuleResult`
+states using the approved `ALL_OF` precedence. The evaluation preserves every
+node state and non-pass leaf identifier without copying observed citizen values.
+Tests cover malformed graphs, missing rule-result invocation errors,
+reproducibility, semantic precedence, dependency boundaries, and the Ravi,
+Priya, and Arjun MVP graph outcomes. No policy evaluation was moved into the
+graph layer, and no journey planning, `JourneyDecision`, resolution execution,
+routes, frontend, persistence, network access, or AI integration was added.
