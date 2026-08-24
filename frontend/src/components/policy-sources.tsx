@@ -26,7 +26,15 @@ function externalHttpUrl(value: string | null): string | null {
   }
 }
 
-export function PolicySources({ sourceIds }: { sourceIds: string[] }) {
+export function PolicySources({
+  sourceIds,
+  eyebrow = "Provenance",
+  heading = "Rules used for this check",
+}: {
+  sourceIds: string[];
+  eyebrow?: string;
+  heading?: string;
+}) {
   const [state, setState] = useState<SourceState>({ status: "loading" });
 
   useEffect(() => {
@@ -50,10 +58,10 @@ export function PolicySources({ sourceIds }: { sourceIds: string[] }) {
   return (
     <section aria-labelledby="sources-heading">
       <p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">
-        Provenance
+        {eyebrow}
       </p>
       <h2 id="sources-heading" className="mt-2 text-2xl font-bold tracking-[-0.025em] text-ink">
-        Rules used for this check
+        {heading}
       </h2>
       <div className="mt-5">
         {state.status === "loading" ? (

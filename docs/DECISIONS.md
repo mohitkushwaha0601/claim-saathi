@@ -446,3 +446,44 @@ raw records.
 React renders the backend's closed decision state and ordered prerequisite
 metadata. It contains no service-duration threshold, balance percentage,
 monetary cap calculation, graph aggregation, or eligibility condition.
+
+## Phase 7C — Priya Resolution Presentation Boundaries
+
+### Resolution state is always backend state
+
+React sends only the purpose-specific start, external-step confirmation, and
+recheck commands exposed by FastAPI. It replaces the displayed resolution state
+only with a validated backend response and never infers external completion,
+sets `RESOLVED`, patches a prerequisite, evaluates a waiting period, or accepts
+a client-selected resolution workflow identifier.
+
+### Demo mutation is visually and technically isolated
+
+The Priya correction control is contained in a conspicuous `DEMO ONLY` panel
+and calls only the allowlisted previous-exit-date synthetic event. The interface
+states that the change is journey-local, synthetic, and performs no real
+government action. Event success does not change the resolution display to
+`RESOLVED`; a later explicit backend recheck is still required.
+
+### Resolution success is not journey readiness
+
+`RESOLVED` means only that the resolution verifier found its trusted success
+condition satisfied. The frontend continues to show the existing
+`ACTION_REQUIRED` journey decision and explains that the whole transfer journey
+has not yet been checked again. Only an explicit full evaluation response with
+state `PASS` can render “Ready to proceed” and reveal Form 13.
+
+### Historical decisions are never rewritten
+
+After re-evaluation, the frontend reads the real ordered decision-history
+endpoint and presents the earlier `ACTION_REQUIRED` check beside the latest
+`PASS` check. No historical object is synthesized or mutated in browser state.
+
+### Refresh recovery is read-only
+
+The Phase 6 API could read a resolution only when the browser already knew its
+instance ID. Phase 7C adds a minimal read-only resolution-list endpoint so a
+refresh can rediscover existing backend instances. Loading a journey performs
+only journey, persona, decision, source, history, and resolution reads; it never
+starts a resolution, confirms an action, simulates a correction, rechecks a
+resolution, or evaluates a journey.

@@ -111,6 +111,72 @@ export interface DecisionDetailResponse extends JourneyEvaluationResponse {
   rule_results: RuleResultResponse[];
 }
 
+export interface DecisionHistoryResponse {
+  journey_instance_id: string;
+  decisions: DecisionSummary[];
+  demo: DemoMetadata;
+}
+
+export type ResolutionState =
+  | "CREATED"
+  | "CITIZEN_ACTION_REQUIRED"
+  | "EXTERNAL_ACTION_REQUIRED"
+  | "WAITING_FOR_UPDATE"
+  | "RECHECKING"
+  | "RESOLVED"
+  | "STILL_BLOCKED";
+
+export type ResolutionStepType =
+  | "INFORMATION"
+  | "EXTERNAL_ACTION"
+  | "WAIT"
+  | "SYSTEM_ACTION";
+
+export interface ApprovedResolutionStepResponse {
+  step_id: string;
+  step_type: ResolutionStepType;
+  title: string;
+  canonical_guidance: string;
+  official_route: string[];
+}
+
+export interface ResolutionResponse {
+  resolution_instance_id: string;
+  resolution_id: string;
+  issue_code: string;
+  state: ResolutionState;
+  title: string;
+  approved_steps: ApprovedResolutionStepResponse[];
+  official_sources: string[];
+  workflow_version: number;
+  created_at: string;
+  updated_at: string;
+  last_checked_citizen_state_version: string | null;
+  demo: DemoMetadata;
+}
+
+export interface ResolutionHistoryResponse {
+  journey_instance_id: string;
+  resolutions: ResolutionResponse[];
+  demo: DemoMetadata;
+}
+
+export interface StartResolutionRequest {
+  decision_id: string;
+  issue_code: string;
+}
+
+export interface DemoEventResponse {
+  journey_instance_id: string;
+  event_type: string;
+  synthetic_event: true;
+  real_government_action_performed: false;
+  changed: boolean;
+  citizen_state_version: string;
+  citizen_state_revision: number;
+  demo: DemoMetadata;
+}
+
 export type PolicySourceStatus =
   | "ACTIVE"
   | "INACTIVE"

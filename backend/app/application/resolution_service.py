@@ -126,6 +126,17 @@ class ResolutionService:
                 )
             )
 
+    def resolution_history(
+        self,
+        journey_instance_id: str,
+    ) -> tuple[ResolutionView, ...]:
+        """Return existing resolution instances without changing their state."""
+        with self._locked_session(journey_instance_id) as session:
+            return tuple(
+                self._view(instance)
+                for instance in session.resolutions.values()
+            )
+
     def _view(self, instance: ResolutionInstance) -> ResolutionView:
         return ResolutionView(
             instance=instance,

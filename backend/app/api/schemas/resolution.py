@@ -69,3 +69,9 @@ class ResolutionResponse(ApiModel):
                 instance.last_checked_citizen_state_version
             ),
         )
+
+
+class ResolutionHistoryResponse(ApiModel):
+    journey_instance_id: str
+    resolutions: tuple[ResolutionResponse, ...]
+    demo: DemoMetadata = DemoMetadata()

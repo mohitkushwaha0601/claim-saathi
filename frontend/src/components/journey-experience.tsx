@@ -12,11 +12,15 @@ import {
   evaluateJourney,
   getDecisionDetail,
   getJourney,
+  listDecisions,
 } from "@/lib/api/journeys";
+import { listResolutions } from "@/lib/api/resolutions";
 import type {
+  DecisionDetailResponse,
+  DecisionSummary,
   DemoPersona,
-  JourneyEvaluationResponse,
   JourneyResponse,
+  ResolutionResponse,
 } from "@/lib/api/types";
 import { DemoConfigurationError, intentForGoal } from "@/lib/demo-intents";
 
@@ -29,7 +33,9 @@ import { SafetyNotice } from "./safety-notice";
 interface LoadedJourney {
   journey: JourneyResponse;
   persona: DemoPersona;
-  decision: JourneyEvaluationResponse | null;
+  decision: DecisionDetailResponse | null;
+  decisionHistory: DecisionSummary[];
+  activeResolution: ResolutionResponse | null;
 }
 
 type JourneyLoadState =
@@ -57,9 +63,11 @@ export function JourneyExperience({
     let active = true;
     async function load() {
       try {
-        const [journey, personaResponse] = await Promise.all([
+        const [journey, personaResponse, resolutionHistory, decisionHistory] = await Promise.all([
           getJourney(journeyInstanceId),
           listDemoPersonas(),
+          listResolutions(journeyInstanceId),
+          listDecisions(journeyInstanceId),
         ]);
         const persona = personaResponse.personas.find(
           (item) => item.persona_id === journey.persona_id,
@@ -73,10 +81,27 @@ export function JourneyExperience({
               journey.latest_decision.decision_id,
             )
           : null;
+        const matchingResolutions = decision
+          ? resolutionHistory.resolutions.filter((resolution) =>
+              decision.rule_results.some(
+                (result) =>
+                  result.issue_code === resolution.issue_code &&
+                  result.resolution_id === resolution.resolution_id,
+              ),
+            )
+          : [];
+        const activeResolution =
+          matchingResolutions[matchingResolutions.length - 1] ?? null;
         if (active) {
           setLoadState({
             status: "ready",
-            value: { journey, persona, decision },
+            value: {
+              journey,
+              persona,
+              decision,
+              decisionHistory: decisionHistory.decisions,
+              activeResolution,
+            },
           });
         }
       } catch (error) {
@@ -100,18 +125,28 @@ export function JourneyExperience({
     };
   }, [journeyInstanceId]);
 
-  async function checkJourney() {
-    if (loadState.status !== "ready" || evaluating) return;
+  async function checkJourney(): Promise<boolean> {
+    if (loadState.status !== "ready" || evaluating) return false;
     setEvaluating(true);
     setEvaluationError(null);
     try {
-      const decision = await evaluateJourney(journeyInstanceId);
+      const evaluated = await evaluateJourney(journeyInstanceId);
+      const [decision, decisionHistory] = await Promise.all([
+        getDecisionDetail(journeyInstanceId, evaluated.decision_id),
+        listDecisions(journeyInstanceId),
+      ]);
       setLoadState({
         status: "ready",
-        value: { ...loadState.value, decision },
+        value: {
+          ...loadState.value,
+          decision,
+          decisionHistory: decisionHistory.decisions,
+        },
       });
+      return true;
     } catch {
       setEvaluationError("We couldn't check this journey right now.");
+      return false;
     } finally {
       setEvaluating(false);
     }
@@ -160,7 +195,13 @@ export function JourneyExperience({
     );
   }
 
-  const { journey, persona, decision } = loadState.value;
+  const {
+    journey,
+    persona,
+    decision,
+    decisionHistory,
+    activeResolution,
+  } = loadState.value;
   const intent = intentForGoal(journey.citizen_goal);
   if (!intent) {
     return (
@@ -210,10 +251,13 @@ export function JourneyExperience({
         <div className="mt-8">
           <JourneyDecision
             citizenGoal={journey.citizen_goal}
+            journeyInstanceId={journeyInstanceId}
             decision={decision}
+            decisionHistory={decisionHistory}
+            activeResolution={activeResolution}
             evaluating={evaluating}
             evaluationError={evaluationError}
-            onEvaluate={() => void checkJourney()}
+            onEvaluate={checkJourney}
           />
         </div>
       ) : (

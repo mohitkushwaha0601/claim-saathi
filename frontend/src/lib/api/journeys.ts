@@ -2,12 +2,14 @@ import { apiRequest, ClaimSaathiApiError } from "./client";
 import type {
   CreateJourneyRequest,
   DecisionDetailResponse,
+  DecisionHistoryResponse,
   DecisionSummary,
   DecisionState,
   JourneyCreatedResponse,
   JourneyEvaluationResponse,
   JourneyResponse,
   PrerequisiteResponse,
+  RuleResultResponse,
 } from "./types";
 
 const DECISION_STATES: readonly DecisionState[] = [
@@ -60,6 +62,19 @@ function isDecisionSummary(value: unknown): value is DecisionSummary {
     item.resolution_ids.every((id) => typeof id === "string") &&
     typeof item.citizen_state_revision === "number" &&
     typeof item.evaluated_at === "string"
+  );
+}
+
+function isRuleResult(value: unknown): value is RuleResultResponse {
+  if (!value || typeof value !== "object") return false;
+  const item = value as Record<string, unknown>;
+  return (
+    typeof item.rule_id === "string" &&
+    isDecisionState(item.state) &&
+    (item.issue_code === null || typeof item.issue_code === "string") &&
+    (item.resolution_id === null || typeof item.resolution_id === "string") &&
+    (item.source_id === null || typeof item.source_id === "string") &&
+    typeof item.policy_version === "string"
   );
 }
 
@@ -169,7 +184,10 @@ export async function getDecisionDetail(
     `/api/v1/journeys/${encodeURIComponent(journeyInstanceId)}/decisions/${encodeURIComponent(decisionId)}`,
   );
   const decision = assertDecision(response);
-  if (!Array.isArray(decision.rule_results)) {
+  if (
+    !Array.isArray(decision.rule_results) ||
+    !decision.rule_results.every(isRuleResult)
+  ) {
     throw new ClaimSaathiApiError(
       "INVALID_DECISION_RESPONSE",
       "The journey result could not be displayed safely.",
@@ -177,4 +195,26 @@ export async function getDecisionDetail(
     );
   }
   return decision;
+}
+
+export async function listDecisions(
+  journeyInstanceId: string,
+): Promise<DecisionHistoryResponse> {
+  const response = await apiRequest<DecisionHistoryResponse>(
+    `/api/v1/journeys/${encodeURIComponent(journeyInstanceId)}/decisions`,
+  );
+  if (
+    !response ||
+    response.journey_instance_id !== journeyInstanceId ||
+    !Array.isArray(response.decisions) ||
+    !response.decisions.every(isDecisionSummary) ||
+    !hasSafeDemoMetadata(response.demo)
+  ) {
+    throw new ClaimSaathiApiError(
+      "INVALID_DECISION_HISTORY_RESPONSE",
+      "The journey check history could not be displayed safely.",
+      200,
+    );
+  }
+  return response;
 }

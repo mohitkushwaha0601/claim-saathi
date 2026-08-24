@@ -43,6 +43,7 @@ credentials are disabled because this prototype has no authentication.
 | GET | `/api/v1/journeys/{journey_id}/decisions` | List ordered immutable decision summaries |
 | GET | `/api/v1/journeys/{journey_id}/decisions/{decision_id}` | Inspect safe rules, prerequisites, sources, and the no-AI audit flag |
 | POST | `/api/v1/journeys/{journey_id}/resolutions` | Start the approved resolution attached to a current issue |
+| GET | `/api/v1/journeys/{journey_id}/resolutions` | List existing resolution instances for read-only refresh recovery |
 | POST | `/api/v1/journeys/{journey_id}/resolutions/{resolution_id}/confirm-external-step-started` | Move an approved citizen-action workflow to its waiting state |
 | POST | `/api/v1/journeys/{journey_id}/resolutions/{resolution_id}/recheck` | Verify the workflow against current trusted synthetic facts |
 | GET | `/api/v1/journeys/{journey_id}/resolutions/{resolution_id}` | Read current resolution state and approved guidance |
@@ -107,8 +108,12 @@ POST /api/v1/journeys/{id}/resolutions
      → CITIZEN_ACTION_REQUIRED with approved source-backed steps
 POST /api/v1/journeys/{id}/resolutions/{resolution_instance_id}/confirm-external-step-started
      → WAITING_FOR_UPDATE
+POST /api/v1/journeys/{id}/resolutions/{resolution_instance_id}/recheck
+     → STILL_BLOCKED
 POST /api/v1/demo/journeys/{id}/events/previous-exit-date-updated
      → synthetic journey-local fact update only
+POST /api/v1/journeys/{id}/resolutions/{resolution_instance_id}/confirm-external-step-started
+     → WAITING_FOR_UPDATE
 POST /api/v1/journeys/{id}/resolutions/{resolution_instance_id}/recheck
      → RESOLVED
 POST /api/v1/journeys/{id}/evaluate

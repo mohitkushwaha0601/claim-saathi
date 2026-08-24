@@ -65,7 +65,7 @@ and reviewed policy-source metadata. Runtime state is process-local and no live
 government integration, database, frontend, authentication, or AI was added.
 The Python service now resides in the canonical top-level `backend/` directory.
 
-## Phase 7 — Frontend (In Progress — Phases 7A and 7B Complete)
+## Phase 7 — Frontend (In Progress — Phases 7A, 7B, and 7C Complete)
 
 Create the top-level `frontend/` directory and build the Next.js, TypeScript,
 and Tailwind presentation layer with accessible uncertainty, blocker,
@@ -83,7 +83,19 @@ production-build, and live browser checks passed. The Ravi experience now runs
 an explicit backend evaluation, renders the returned prerequisite states,
 reveals official process metadata only after evaluation, restores existing
 decision detail on refresh without re-evaluating, and shows reviewed source and
-no-AI audit metadata. Priya resolution interaction remains future Phase 7 work.
+no-AI audit metadata.
+
+Phase 7C completed on 2026-08-24 with Priya's complete backend-driven recovery
+experience. It renders every prerequisite, presents the missing Date of Exit in
+citizen-facing language, starts only the approved resolution attached to the
+decision, preserves backend guidance and sources, follows the legal state
+machine through waiting and still-blocked states, isolates the synthetic demo
+correction, and requires backend verification before `RESOLVED`. A separate
+explicit full journey evaluation creates a new `PASS` decision and reveals Form
+13 while preserving the earlier `ACTION_REQUIRED` history. A minimal read-only
+resolution-list endpoint supports refresh recovery without automatic side
+effects. Phase 7 remains in progress; Arjun's polished safety flow and any
+later explicitly authorized frontend work are not part of Phase 7C.
 
 ## Phase 8 — Safe AI Gateway
 

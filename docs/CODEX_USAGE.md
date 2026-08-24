@@ -152,3 +152,28 @@ flow and Form 31 reveal, explicit loading, duplicate-submit prevention, source
 links, refresh behavior, safe 404 handling, failure preservation, and generic
 non-PASS rendering. No policy threshold, resolution interaction, backend
 change, or runtime AI was added.
+
+## 2026-08-24 — Phase 7C Priya Resolution Navigator UI
+
+Codex implemented Priya's complete citizen-recovery experience against the real
+FastAPI contracts. The frontend now renders the generic `ACTION_REQUIRED`
+experience with every prerequisite, presents `EXIT_DATE_MISSING` using safe
+citizen wording, derives the approved `RES_EXIT` opportunity from backend rule
+results, and displays the backend's ordered steps, conditional Mark Exit
+guidance, official route, and distinct rule and resolution sources.
+
+The navigator follows explicit backend commands through
+`CITIZEN_ACTION_REQUIRED`, `WAITING_FOR_UPDATE`, `STILL_BLOCKED`, and
+backend-verified `RESOLVED`. Its visibly separate `DEMO ONLY` panel invokes only
+the allowlisted journey-local synthetic Date-of-Exit event and preserves the
+returned `real_government_action_performed: false` boundary. Resolution success
+does not patch the journey: the citizen must explicitly run the full evaluation
+again before a new backend `PASS` decision reveals Form 13, and the UI reads the
+immutable decision history to retain the earlier `ACTION_REQUIRED` check.
+
+Codex also added the smallest backend enhancement required for robust refresh
+recovery: a read-only endpoint that lists existing journey resolution instances
+without transitioning them. Frontend and FastAPI tests cover the complete flow,
+state restoration, command endpoints, safe failures, and absence of optimistic
+advancement. No policy logic, resolution semantics, live government
+integration, Arjun polished flow, or runtime AI was added.

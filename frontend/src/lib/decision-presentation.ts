@@ -24,7 +24,7 @@ export const DECISION_PRESENTATION: Record<
     label: "Action required",
     prerequisiteLabel: "Action required",
     supportingCopy:
-      "One or more configured prerequisites currently need attention.",
+      "One or more prerequisites need attention before this journey can proceed.",
     tone: "attention",
   },
   NOT_ELIGIBLE: {
@@ -63,16 +63,35 @@ const JOURNEY_LABELS: Record<JourneyId, string> = {
   PF_FINAL_SETTLEMENT: "Final PF settlement",
 };
 
-const ISSUE_WORDING: Readonly<Record<string, string>> = {
-  EXIT_DATE_MISSING: "A required employment detail needs attention.",
+export interface IssuePresentation {
+  title: string;
+  supportingCopy: string;
+  whyItMatters: string | null;
+}
+
+const ISSUE_PRESENTATION: Readonly<Record<string, IssuePresentation>> = {
+  EXIT_DATE_MISSING: {
+    title: "Previous employment Date of Exit is missing",
+    supportingCopy:
+      "This record needs attention before the transfer journey can continue.",
+    whyItMatters:
+      "The selected transfer journey requires the previous employment record to contain a Date of Exit.",
+  },
 };
 
 export function journeyLabel(journeyId: JourneyId): string {
   return JOURNEY_LABELS[journeyId];
 }
 
-export function issueWording(issueCode: string): string {
-  return ISSUE_WORDING[issueCode] ?? "Additional action is required.";
+export function issuePresentation(issueCode: string): IssuePresentation {
+  return (
+    ISSUE_PRESENTATION[issueCode] ?? {
+      title: "A journey prerequisite needs attention",
+      supportingCopy:
+        "ClaimSaathi found an issue that must be reviewed before this journey can continue.",
+      whyItMatters: null,
+    }
+  );
 }
 
 export function formatCheckedAt(value: string): string {

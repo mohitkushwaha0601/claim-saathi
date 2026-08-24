@@ -6,12 +6,31 @@ from fastapi import APIRouter, Depends, status
 
 from app.api.dependencies import get_resolution_service
 from app.api.schemas.resolution import (
+    ResolutionHistoryResponse,
     ResolutionResponse,
     StartResolutionRequest,
 )
 from app.application import ResolutionService
 
 router = APIRouter(prefix="/journeys", tags=["resolutions"])
+
+
+@router.get(
+    "/{journey_instance_id}/resolutions",
+    response_model=ResolutionHistoryResponse,
+    summary="List existing journey resolutions without side effects",
+)
+def list_resolutions(
+    journey_instance_id: str,
+    service: Annotated[ResolutionService, Depends(get_resolution_service)],
+) -> ResolutionHistoryResponse:
+    return ResolutionHistoryResponse(
+        journey_instance_id=journey_instance_id,
+        resolutions=tuple(
+            ResolutionResponse.from_view(view)
+            for view in service.resolution_history(journey_instance_id)
+        ),
+    )
 
 
 @router.post(

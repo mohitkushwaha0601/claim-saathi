@@ -119,6 +119,35 @@ def test_get_resolution_has_no_side_effects(
     assert first.json()["state"] == "CITIZEN_ACTION_REQUIRED"
 
 
+def test_list_resolutions_restores_existing_state_without_side_effects(
+    client: TestClient,
+    create_journey: Callable[..., dict],
+) -> None:
+    journey, evaluation = _priya_evaluation(client, create_journey)
+    journey_id = journey["journey_instance_id"]
+
+    empty = client.get(f"/api/v1/journeys/{journey_id}/resolutions")
+    created = client.post(
+        f"/api/v1/journeys/{journey_id}/resolutions",
+        json={
+            "decision_id": evaluation["decision_id"],
+            "issue_code": "EXIT_DATE_MISSING",
+        },
+    ).json()
+    first = client.get(f"/api/v1/journeys/{journey_id}/resolutions")
+    second = client.get(f"/api/v1/journeys/{journey_id}/resolutions")
+
+    assert empty.status_code == 200
+    assert empty.json()["resolutions"] == []
+    assert first.status_code == second.status_code == 200
+    assert first.json() == second.json()
+    assert first.json()["resolutions"] == [created]
+    assert first.json()["resolutions"][0]["state"] == (
+        "CITIZEN_ACTION_REQUIRED"
+    )
+    assert first.json()["demo"]["real_government_action_performed"] is False
+
+
 def test_invalid_resolution_transition_returns_safe_conflict(
     client: TestClient,
     create_journey: Callable[..., dict],
