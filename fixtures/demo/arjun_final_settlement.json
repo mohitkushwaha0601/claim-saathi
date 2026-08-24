@@ -24,6 +24,7 @@
         {
           "employment_id": "SYNTH-EMPLOYMENT-ARJUN-001",
           "employer_label": "Synthetic Demo Employer — Arjun Former",
+          "employment_type": "PREVIOUS",
           "start_date": "2017-01-01",
           "exit_date": "2025-12-31",
           "exit_record_status": "RECORDED"

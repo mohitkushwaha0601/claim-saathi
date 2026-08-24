@@ -11,11 +11,15 @@ uncertainty, and provenance contracts without encoding EPFO policy rules.
 Completed on 2026-08-24 after the full Phase 1 domain test suite passed. No
 policy registry, policy engine, or policy values were introduced.
 
-## Phase 2 — Policy Registry + Policy Engine
+## Phase 2 — Policy Registry + Policy Engine (Complete)
 
 Define the versioned, source-backed policy format and deterministic registry and
 evaluation engine, including explicit handling for unavailable and conflicting
 policy evidence.
+
+Completed on 2026-08-24 after the full backend test suite passed. The engine
+evaluates one rule at a time and does not aggregate prerequisites or produce a
+`JourneyDecision`.
 
 ## Phase 3 — Prerequisite Graph
 

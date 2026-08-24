@@ -24,6 +24,7 @@
         {
           "employment_id": "SYNTH-EMPLOYMENT-PRIYA-PREVIOUS-001",
           "employer_label": "Synthetic Demo Employer — Priya Previous",
+          "employment_type": "PREVIOUS",
           "start_date": "2018-06-01",
           "exit_date": null,
           "exit_record_status": "NOT_RECORDED"
@@ -31,6 +32,7 @@
         {
           "employment_id": "SYNTH-EMPLOYMENT-PRIYA-CURRENT-002",
           "employer_label": "Synthetic Demo Employer — Priya Current",
+          "employment_type": "CURRENT",
           "start_date": "2023-02-01",
           "exit_date": null,
           "exit_record_status": "NOT_APPLICABLE"

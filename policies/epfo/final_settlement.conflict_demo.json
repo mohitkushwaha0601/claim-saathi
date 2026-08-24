@@ -1,0 +1,20 @@
+{
+  "policy_id": "EPFO-FINAL-SETTLEMENT-CONFLICT-DEMO",
+  "version": "CONFLICT-DEMO-1",
+  "journey_id": "PF_FINAL_SETTLEMENT",
+  "status": "ACTIVE",
+  "is_conflict_demo": true,
+  "rules": [
+    {
+      "rule_id": "FINAL_SETTLEMENT_WAIT_PERIOD",
+      "version": "CONFLICT-DEMO-1",
+      "requirement_id": "FINAL_SETTLEMENT_WAIT_PERIOD",
+      "journeys": ["PF_FINAL_SETTLEMENT"],
+      "rule_type": "POLICY_RULE",
+      "status": "ACTIVE",
+      "disposition": "POLICY_REVIEW_REQUIRED",
+      "notes": "Intentionally unresolved demonstration. No wait-period value is selected or executable."
+    }
+  ],
+  "notes": "Demo-only active configuration proving that unresolved government policy fails closed."
+}

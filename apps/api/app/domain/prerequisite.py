@@ -38,5 +38,5 @@ class RuleResult(BaseModel):
     observed_value: JsonValue | None = None
     issue_code: str | None = None
     resolution_id: str | None = None
-    source_id: str = Field(min_length=1)
+    source_id: str | None = Field(default=None, min_length=1)
     policy_version: str = Field(min_length=1)

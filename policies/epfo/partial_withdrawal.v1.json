@@ -1,0 +1,84 @@
+{
+  "policy_id": "EPFO-PARTIAL-WITHDRAWAL",
+  "version": "1.0.0",
+  "journey_id": "PF_PARTIAL_WITHDRAWAL",
+  "status": "ACTIVE",
+  "rules": [
+    {
+      "rule_id": "P31-SERVICE-001",
+      "version": "1.0.0",
+      "requirement_id": "PARTIAL_WITHDRAWAL_MINIMUM_SERVICE",
+      "journeys": ["PF_PARTIAL_WITHDRAWAL"],
+      "rule_type": "POLICY_RULE",
+      "input_path": "service.total_service_months",
+      "trust_status_path": "service.status",
+      "operator": "gte",
+      "expected": 12,
+      "pass_state": "PASS",
+      "failure_state": "NOT_ELIGIBLE",
+      "issue_code": "SERVICE_PERIOD_NOT_MET",
+      "source_id": "SRC-EPFO-PARTIAL-2026",
+      "status": "ACTIVE"
+    },
+    {
+      "rule_id": "P31-AMOUNT-001",
+      "version": "1.0.0",
+      "requirement_id": "PARTIAL_WITHDRAWAL_AMOUNT_LIMIT",
+      "journeys": ["PF_PARTIAL_WITHDRAWAL"],
+      "rule_type": "POLICY_RULE",
+      "evaluator_id": "PARTIAL_WITHDRAWAL_75_PERCENT_LIMIT",
+      "expected": {
+        "numerator": 75,
+        "denominator": 100
+      },
+      "pass_state": "PASS",
+      "failure_state": "NOT_ELIGIBLE",
+      "issue_code": "REQUEST_AMOUNT_EXCEEDS_POLICY_LIMIT",
+      "source_id": "SRC-EPFO-PARTIAL-2026",
+      "status": "ACTIVE"
+    },
+    {
+      "rule_id": "P31-UAN-001",
+      "version": "1.0.0",
+      "requirement_id": "PARTIAL_WITHDRAWAL_UAN_READINESS",
+      "journeys": ["PF_PARTIAL_WITHDRAWAL"],
+      "rule_type": "DATA_CHECK",
+      "input_path": "access.uan_status",
+      "operator": "equals",
+      "expected": "VERIFIED",
+      "pass_state": "PASS",
+      "failure_state": "ACTION_REQUIRED",
+      "issue_code": "UAN_NOT_READY",
+      "status": "ACTIVE"
+    },
+    {
+      "rule_id": "P31-AADHAAR-001",
+      "version": "1.0.0",
+      "requirement_id": "PARTIAL_WITHDRAWAL_AADHAAR_READINESS",
+      "journeys": ["PF_PARTIAL_WITHDRAWAL"],
+      "rule_type": "DATA_CHECK",
+      "input_path": "identity.aadhaar_status",
+      "operator": "equals",
+      "expected": "VERIFIED",
+      "pass_state": "PASS",
+      "failure_state": "ACTION_REQUIRED",
+      "issue_code": "AADHAAR_NOT_READY",
+      "status": "ACTIVE"
+    },
+    {
+      "rule_id": "P31-BANK-001",
+      "version": "1.0.0",
+      "requirement_id": "PARTIAL_WITHDRAWAL_BANK_READINESS",
+      "journeys": ["PF_PARTIAL_WITHDRAWAL"],
+      "rule_type": "DATA_CHECK",
+      "input_path": "bank.verification_status",
+      "operator": "equals",
+      "expected": "VERIFIED",
+      "pass_state": "PASS",
+      "failure_state": "ACTION_REQUIRED",
+      "issue_code": "BANK_NOT_READY",
+      "status": "ACTIVE"
+    }
+  ],
+  "notes": "Only the prompt-supplied MVP policy values and readiness checks are encoded."
+}

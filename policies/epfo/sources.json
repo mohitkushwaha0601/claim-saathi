@@ -1,0 +1,41 @@
+[
+  {
+    "source_id": "SRC-EPFO-PARTIAL-2026",
+    "authority": "Ministry of Labour & Employment / PIB",
+    "title": "Current partial-withdrawal framework",
+    "document_type": "PIB_PRESS_RELEASE",
+    "reference_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2296601&lang=2&reg=48",
+    "corroborating_urls": [
+      "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2209767&lang=1&reg=6"
+    ],
+    "verified_at": "2026-08-24T00:00:00+05:30",
+    "status": "ACTIVE",
+    "scope": "Only the 12-month minimum service requirement, the 75-percent balance limit, and the stated balance composition for the MVP partial-withdrawal rules.",
+    "notes": "No other withdrawal limits, categories, conditions, or procedures are derived from these pages in Phase 2."
+  },
+  {
+    "source_id": "SRC-EPFO-TRANSFER-DOE",
+    "authority": "Employees' Provident Fund Organisation",
+    "title": "Online transfer Date-of-Exit prerequisite",
+    "document_type": "EPFO_TRANSFER_FAQ_PDF",
+    "reference_url": "https://www.epfindia.gov.in/site_docs/PDFs/Circulars/Y2020-2021/faq_transfer_claim.pdf",
+    "corroborating_urls": [
+      "https://www.epfindia.gov.in/site_en/FAQ.php"
+    ],
+    "verified_at": "2026-08-24T00:00:00+05:30",
+    "status": "ACTIVE",
+    "scope": "Only the requirement that Date of Exit for previous employment is mandatory for an online transfer application.",
+    "notes": "The broader FAQ contains legacy or stale guidance in unrelated sections and is not trusted wholesale."
+  },
+  {
+    "source_id": "SRC-EPFO-FORMS",
+    "authority": "Employees' Provident Fund Organisation",
+    "title": "Official EPFO form and process labels",
+    "document_type": "EPFO_INFORMATION_PAGE",
+    "reference_url": "https://www.epfindia.gov.in/site_en/AboutEPFO.php",
+    "verified_at": "2026-08-24T00:00:00+05:30",
+    "status": "ACTIVE",
+    "scope": "Only process-label mapping: Form 31 for withdrawal in certain cases, Form 13 for transfer of an old account to a new account, and Form 19 for final settlement.",
+    "notes": "These labels are metadata and do not establish eligibility."
+  }
+]

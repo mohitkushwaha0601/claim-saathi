@@ -50,32 +50,86 @@ class ExitRecordStatus(str, Enum):
     INCONSISTENT = "INCONSISTENT"
 
 
+class EmploymentRecordType(str, Enum):
+    """Explicit role of an employment record; never inferred from dates."""
+
+    PREVIOUS = "PREVIOUS"
+    CURRENT = "CURRENT"
+
+
+class PolicySourceStatus(str, Enum):
+    """Review status controlling whether a source can back active policy."""
+
+    ACTIVE = "ACTIVE"
+    INACTIVE = "INACTIVE"
+    SUPERSEDED = "SUPERSEDED"
+    REVIEW_REQUIRED = "REVIEW_REQUIRED"
+
+
 class PolicyLifecycleStatus(str, Enum):
-    """Lifecycle metadata for future policy sources and rules."""
+    """Immutable policy-version and rule lifecycle states."""
 
     DRAFT = "DRAFT"
-    VERIFIED = "VERIFIED"
+    REVIEWED = "REVIEWED"
+    TESTED = "TESTED"
+    APPROVED = "APPROVED"
     ACTIVE = "ACTIVE"
-    REVIEW_REQUIRED = "REVIEW_REQUIRED"
-    RETIRED = "RETIRED"
+    SUPERSEDED = "SUPERSEDED"
 
 
 class PolicyRuleType(str, Enum):
-    """Contract-level category for a future prerequisite rule."""
+    """Semantics of a deterministic policy-engine rule."""
 
-    PREREQUISITE = "PREREQUISITE"
+    DATA_CHECK = "DATA_CHECK"
+    POLICY_RULE = "POLICY_RULE"
+    AUTHORITATIVE_CAPABILITY = "AUTHORITATIVE_CAPABILITY"
+
+    # Phase 1 compatibility alias. Serialized policy configuration uses
+    # POLICY_RULE and no legacy PREREQUISITE value is accepted from JSON.
+    PREREQUISITE = "POLICY_RULE"
 
 
 class PolicyOperator(str, Enum):
-    """Declarative operators that a future policy engine may implement."""
+    """Closed deterministic operator vocabulary."""
 
-    EQUALS = "EQUALS"
-    NOT_EQUALS = "NOT_EQUALS"
-    GREATER_THAN_OR_EQUAL = "GREATER_THAN_OR_EQUAL"
-    LESS_THAN_OR_EQUAL = "LESS_THAN_OR_EQUAL"
-    IN = "IN"
-    IS_TRUE = "IS_TRUE"
-    IS_FALSE = "IS_FALSE"
+    EXISTS = "exists"
+    EQUALS = "equals"
+    NOT_EQUALS = "not_equals"
+    GTE = "gte"
+    LTE = "lte"
+    IN = "in"
+    NOT_IN = "not_in"
+
+    # Phase 1 attribute compatibility aliases.
+    GREATER_THAN_OR_EQUAL = "gte"
+    LESS_THAN_OR_EQUAL = "lte"
+
+
+class PolicyRuleDisposition(str, Enum):
+    """Whether a rule may execute or must fail closed for review."""
+
+    EXECUTABLE = "EXECUTABLE"
+    POLICY_REVIEW_REQUIRED = "POLICY_REVIEW_REQUIRED"
+
+
+class PolicyEvaluatorId(str, Enum):
+    """Allowlisted named evaluators; arbitrary expressions are forbidden."""
+
+    PARTIAL_WITHDRAWAL_75_PERCENT_LIMIT = (
+        "PARTIAL_WITHDRAWAL_75_PERCENT_LIMIT"
+    )
+    PREVIOUS_EMPLOYMENT_EXISTS = "PREVIOUS_EMPLOYMENT_EXISTS"
+    PREVIOUS_EMPLOYMENT_EXIT_DATE_EXISTS = (
+        "PREVIOUS_EMPLOYMENT_EXIT_DATE_EXISTS"
+    )
+
+
+class CapabilityValue(str, Enum):
+    """Trusted result supplied by an authoritative external capability."""
+
+    AVAILABLE = "AVAILABLE"
+    UNAVAILABLE = "UNAVAILABLE"
+    UNKNOWN = "UNKNOWN"
 
 
 class ResolutionActor(str, Enum):

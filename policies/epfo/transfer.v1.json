@@ -1,0 +1,88 @@
+{
+  "policy_id": "EPFO-TRANSFER",
+  "version": "1.0.0",
+  "journey_id": "PF_TRANSFER",
+  "status": "ACTIVE",
+  "rules": [
+    {
+      "rule_id": "T13-PREVIOUS-EMPLOYMENT-001",
+      "version": "1.0.0",
+      "requirement_id": "TRANSFER_PREVIOUS_EMPLOYMENT_EXISTS",
+      "journeys": ["PF_TRANSFER"],
+      "rule_type": "DATA_CHECK",
+      "evaluator_id": "PREVIOUS_EMPLOYMENT_EXISTS",
+      "pass_state": "PASS",
+      "failure_state": "NOT_APPLICABLE",
+      "issue_code": "NO_PREVIOUS_EMPLOYMENT",
+      "status": "ACTIVE"
+    },
+    {
+      "rule_id": "T13-CURRENT-EMPLOYMENT-001",
+      "version": "1.0.0",
+      "requirement_id": "TRANSFER_CURRENT_EMPLOYMENT_EXISTS",
+      "journeys": ["PF_TRANSFER"],
+      "rule_type": "DATA_CHECK",
+      "input_path": "employment.currently_employed",
+      "operator": "equals",
+      "expected": true,
+      "pass_state": "PASS",
+      "failure_state": "NOT_APPLICABLE",
+      "issue_code": "NO_CURRENT_EMPLOYMENT",
+      "status": "ACTIVE"
+    },
+    {
+      "rule_id": "T13-DOE-001",
+      "version": "1.0.0",
+      "requirement_id": "TRANSFER_PREVIOUS_EMPLOYMENT_DATE_OF_EXIT",
+      "journeys": ["PF_TRANSFER"],
+      "rule_type": "POLICY_RULE",
+      "evaluator_id": "PREVIOUS_EMPLOYMENT_EXIT_DATE_EXISTS",
+      "pass_state": "PASS",
+      "failure_state": "ACTION_REQUIRED",
+      "issue_code": "EXIT_DATE_MISSING",
+      "resolution_id": "RES_EXIT",
+      "source_id": "SRC-EPFO-TRANSFER-DOE",
+      "status": "ACTIVE"
+    },
+    {
+      "rule_id": "T13-ACTIVE-TRANSFER-001",
+      "version": "1.0.0",
+      "requirement_id": "TRANSFER_NOT_ALREADY_ACTIVE",
+      "journeys": ["PF_TRANSFER"],
+      "rule_type": "DATA_CHECK",
+      "input_path": "claims.active_transfer",
+      "operator": "equals",
+      "expected": false,
+      "pass_state": "PASS",
+      "failure_state": "NOT_APPLICABLE",
+      "issue_code": "TRANSFER_ALREADY_ACTIVE",
+      "status": "ACTIVE"
+    },
+    {
+      "rule_id": "T13-ALREADY-COMPLETE-001",
+      "version": "1.0.0",
+      "requirement_id": "TRANSFER_NOT_ALREADY_COMPLETED",
+      "journeys": ["PF_TRANSFER"],
+      "rule_type": "DATA_CHECK",
+      "input_path": "claims.transfer_already_completed",
+      "operator": "equals",
+      "expected": false,
+      "pass_state": "PASS",
+      "failure_state": "NOT_APPLICABLE",
+      "issue_code": "TRANSFER_ALREADY_COMPLETED",
+      "status": "ACTIVE"
+    },
+    {
+      "rule_id": "T13-ROUTE-001",
+      "version": "1.0.0",
+      "requirement_id": "TRANSFER_OFFICIAL_ROUTE_CAPABILITY",
+      "journeys": ["PF_TRANSFER"],
+      "rule_type": "AUTHORITATIVE_CAPABILITY",
+      "pass_state": "PASS",
+      "failure_state": "NOT_APPLICABLE",
+      "status": "ACTIVE",
+      "notes": "The official EPFO capability result is supplied by the caller and is never reconstructed locally."
+    }
+  ],
+  "notes": "No employer-attestation or internal EPFO routing logic is reconstructed locally."
+}

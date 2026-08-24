@@ -22,6 +22,7 @@ from app.domain import (
     PolicyRule,
     PolicyRuleType,
     PolicySource,
+    PolicySourceStatus,
     PrerequisiteNode,
     ResolutionActor,
     ResolutionState,
@@ -86,11 +87,12 @@ def build_configuration_contracts() -> tuple[BaseModel, ...]:
         authority="Synthetic Test Authority — Not Government",
         title="Synthetic Contract Source",
         document_type="SYNTHETIC_TEST_DOCUMENT",
-        status=PolicyLifecycleStatus.DRAFT,
+        status=PolicySourceStatus.ACTIVE,
     )
     rule = PolicyRule(
         rule_id="SYNTH-RULE-CONTRACT-001",
         version="SYNTH-RULE-V0",
+        requirement_id="SYNTH-REQUIREMENT-001",
         journeys=(JourneyId.PF_TRANSFER,),
         rule_type=PolicyRuleType.PREREQUISITE,
         input_path="synthetic_fact.status",

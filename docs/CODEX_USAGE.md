@@ -21,3 +21,17 @@ closed enum states, synthetic-only citizen data, integer-rupee constraints,
 stable JSON round trips, and the invariant that AI cannot participate in a
 government decision. No policy values, evaluation logic, routes, frontend code,
 persistence, integrations, or AI calls were added.
+
+## 2026-08-24 — Phase 2 Policy Registry and Deterministic Engine
+
+Codex implemented immutable reviewed-source and versioned-policy registries, a
+local JSON loader, strict deterministic operators, safe typed field-path
+resolution, allowlisted named evaluators, authoritative-capability handling, and
+one-rule-at-a-time `RuleResult` evaluation. It encoded only the prompt-supplied
+MVP partial-withdrawal and transfer values plus a non-executable final-settlement
+conflict demo. Tests cover policy immutability, source lifecycle, all operators,
+integer-only amount limits, missing-data uncertainty, source and rule conflicts,
+capability inputs, output sanitization, reproducibility, and the absence of AI,
+network, dynamic expression, journey aggregation, or final-settlement guesses.
+No prerequisite propagation, journey orchestration, resolution execution,
+routes, frontend, persistence, scraping, or AI integration was added.

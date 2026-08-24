@@ -5,7 +5,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from .enums import ExitRecordStatus, VerificationStatus
+from .enums import EmploymentRecordType, ExitRecordStatus, VerificationStatus
 
 NonNegativeInteger = Annotated[int, Field(ge=0, strict=True)]
 
@@ -45,6 +45,7 @@ class EmploymentRecord(BaseModel):
 
     employment_id: str = Field(min_length=1)
     employer_label: str = Field(min_length=1)
+    employment_type: EmploymentRecordType
     start_date: date
     exit_date: date | None = None
     exit_record_status: ExitRecordStatus
