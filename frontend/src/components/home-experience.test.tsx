@@ -1,0 +1,206 @@
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { ClaimSaathiApiError } from "@/lib/api/client";
+import { listDemoPersonas } from "@/lib/api/demo";
+import { createJourney } from "@/lib/api/journeys";
+import type {
+  DemoPersonaListResponse,
+  IntentGoal,
+  JourneyCreatedResponse,
+} from "@/lib/api/types";
+
+import { DemoBoundaryBar } from "./demo-boundary-bar";
+import { HomeExperience } from "./home-experience";
+
+const push = vi.fn();
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push }),
+}));
+
+vi.mock("@/lib/api/demo", () => ({
+  listDemoPersonas: vi.fn(),
+}));
+
+vi.mock("@/lib/api/journeys", () => ({
+  createJourney: vi.fn(),
+}));
+
+const listDemoPersonasMock = vi.mocked(listDemoPersonas);
+const createJourneyMock = vi.mocked(createJourney);
+
+const PERSONA_RESPONSE: DemoPersonaListResponse = {
+  personas: [
+    {
+      persona_id: "RAVI_PARTIAL_READY",
+      display_name: "Ravi",
+      scenario: "Synthetic funds-access scenario",
+      compatible_goal: "ACCESS_SOME_PF_FUNDS",
+    },
+    {
+      persona_id: "PRIYA_TRANSFER_MISSING_EXIT",
+      display_name: "Priya",
+      scenario: "Synthetic transfer scenario",
+      compatible_goal: "TRANSFER_PF_AFTER_EMPLOYMENT_CHANGE",
+    },
+    {
+      persona_id: "ARJUN_FINAL_SETTLEMENT",
+      display_name: "Arjun",
+      scenario: "Synthetic settlement scenario",
+      compatible_goal: "FINAL_PF_SETTLEMENT",
+    },
+  ],
+  demo: {
+    environment: "DEMO",
+    synthetic_data: true,
+    real_government_action_performed: false,
+  },
+};
+
+function journeyResponse(
+  goal: IntentGoal,
+  personaId: string,
+): JourneyCreatedResponse {
+  const journeyId =
+    goal === "ACCESS_SOME_PF_FUNDS"
+      ? "PF_PARTIAL_WITHDRAWAL"
+      : goal === "TRANSFER_PF_AFTER_EMPLOYMENT_CHANGE"
+        ? "PF_TRANSFER"
+        : "PF_FINAL_SETTLEMENT";
+  return {
+    journey_instance_id: "JRN-SYNTHETIC-TEST",
+    persona_id: personaId,
+    citizen_goal: goal,
+    journey_id: journeyId,
+    journey_definition_version: 1,
+    created_at: "2026-08-24T00:00:00Z",
+    official_process: {
+      label: "Backend process metadata",
+      source_id: "SRC-EPFO-FORMS",
+    },
+    citizen_state_revision: 1,
+    demo: PERSONA_RESPONSE.demo,
+  };
+}
+
+describe("intent-first landing experience", () => {
+  beforeEach(() => {
+    listDemoPersonasMock.mockResolvedValue(PERSONA_RESPONSE);
+    createJourneyMock.mockResolvedValue(
+      journeyResponse("ACCESS_SOME_PF_FUNDS", "RAVI_PARTIAL_READY"),
+    );
+  });
+
+  it("renders three backend-bound intents and the synthetic boundary", async () => {
+    render(
+      <>
+        <DemoBoundaryBar />
+        <HomeExperience />
+      </>,
+    );
+
+    expect(
+      screen.getByText(
+        "Independent prototype · Uses synthetic data · No real EPFO action",
+      ),
+    ).toBeTruthy();
+    expect(
+      await screen.findByRole("button", {
+        name: /I need some money from my PF/,
+      }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("button", {
+        name: /I changed jobs and want to move my old PF/,
+      }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("button", {
+        name: /I left my job and want my PF/,
+      }),
+    ).toBeTruthy();
+    expect(screen.queryByText(/Form (31|13|19)/)).toBeNull();
+    expect(listDemoPersonasMock).toHaveBeenCalledOnce();
+  });
+
+  it("validates Ravi's amount as positive integer rupees before creating", async () => {
+    render(<HomeExperience />);
+    fireEvent.click(
+      await screen.findByRole("button", {
+        name: /I need some money from my PF/,
+      }),
+    );
+    const amount = screen.getByLabelText("Amount in rupees");
+
+    fireEvent.change(amount, { target: { value: "12.5" } });
+    fireEvent.click(screen.getByRole("button", { name: "Prepare my journey" }));
+    expect(await screen.findByText("Use a positive whole-rupee amount.")).toBeTruthy();
+    expect(createJourneyMock).not.toHaveBeenCalled();
+
+    fireEvent.change(amount, { target: { value: "80,000" } });
+    fireEvent.click(screen.getByRole("button", { name: "Prepare my journey" }));
+
+    await waitFor(() => {
+      expect(createJourneyMock).toHaveBeenCalledWith({
+        persona_id: "RAVI_PARTIAL_READY",
+        goal: "ACCESS_SOME_PF_FUNDS",
+        requested_amount_rupees: 80_000,
+      });
+      expect(push).toHaveBeenCalledWith("/journey/JRN-SYNTHETIC-TEST");
+    });
+  });
+
+  it("creates Priya's real backend journey without an amount", async () => {
+    createJourneyMock.mockResolvedValue(
+      journeyResponse(
+        "TRANSFER_PF_AFTER_EMPLOYMENT_CHANGE",
+        "PRIYA_TRANSFER_MISSING_EXIT",
+      ),
+    );
+    render(<HomeExperience />);
+
+    fireEvent.click(
+      await screen.findByRole("button", {
+        name: /I changed jobs and want to move my old PF/,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(createJourneyMock).toHaveBeenCalledWith({
+        persona_id: "PRIYA_TRANSFER_MISSING_EXIT",
+        goal: "TRANSFER_PF_AFTER_EMPLOYMENT_CHANGE",
+      });
+      expect(push).toHaveBeenCalledWith("/journey/JRN-SYNTHETIC-TEST");
+    });
+  });
+
+  it("renders the backend safe message without raw error details", async () => {
+    listDemoPersonasMock.mockRejectedValue(
+      new ClaimSaathiApiError(
+        "DEMO_PERSONA_NOT_FOUND",
+        "Unknown demo persona.",
+        404,
+      ),
+    );
+    render(<HomeExperience />);
+
+    expect(await screen.findByText("Unknown demo persona.")).toBeTruthy();
+    expect(screen.queryByText("DEMO_PERSONA_NOT_FOUND")).toBeNull();
+  });
+
+  it("fails safely when the expected backend persona is absent", async () => {
+    listDemoPersonasMock.mockResolvedValue({
+      ...PERSONA_RESPONSE,
+      personas: PERSONA_RESPONSE.personas.slice(0, 2),
+    });
+    render(<HomeExperience />);
+
+    expect(
+      await screen.findByText(
+        "The synthetic demo is not configured correctly right now.",
+      ),
+    ).toBeTruthy();
+    expect(createJourneyMock).not.toHaveBeenCalled();
+  });
+});

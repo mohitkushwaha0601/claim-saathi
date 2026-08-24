@@ -368,3 +368,39 @@ system artifacts rather than private implementation details of either delivery
 application. Backend configuration discovery therefore resolves the repository
 as the parent of its own `backend/` directory and does not use an absolute
 developer-machine path.
+
+## Phase 7A — Frontend Foundation Boundaries
+
+### Citizen entry is intent-first
+
+The landing experience asks what the citizen wants to do and does not require
+government form knowledge. Form labels are intentionally withheld until a
+future journey evaluation returns reviewed process metadata.
+
+### The frontend contains no eligibility logic
+
+React validates transport-level input such as a required positive integer
+amount, but it does not calculate policy limits, service thresholds, readiness,
+or government outcomes. The backend API remains authoritative for every runtime
+journey decision.
+
+### Demo persona binding is explicit and validated
+
+Landing-card presentation is local configuration, while persona IDs and their
+compatible goals must be present in the backend persona response. Missing,
+duplicate, or mismatched personas fail visibly instead of being substituted or
+guessed.
+
+### Synthetic status is prominent
+
+The shared application shell and journey preparation view state that the
+prototype uses synthetic data, performs no real EPFO action, and submits no
+claim. Visual design deliberately avoids government emblems and official-portal
+imitation.
+
+### HTTP details stay behind a typed boundary
+
+Components call focused demo and journey API modules rather than constructing
+URLs or parsing error envelopes themselves. The central client preserves safe
+backend error codes, messages, and HTTP status while replacing malformed or
+unknown failures with a generic citizen-safe message.

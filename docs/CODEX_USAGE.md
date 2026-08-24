@@ -116,3 +116,20 @@ path-sensitive architecture tests while preserving the Python package name
 `app`, all government-policy configuration, and all application behavior. The
 reviewed policy, journey, resolution, and synthetic fixture directories remain
 top-level system artifacts. No frontend or runtime AI was added.
+
+## 2026-08-24 — Phase 7A Frontend Foundation
+
+Codex created the top-level Next.js, TypeScript, Tailwind, and npm frontend;
+established a typed API client from the inspected FastAPI OpenAPI contract; and
+built a mobile-first, intent-first citizen entry experience. The application
+loads synthetic persona identifiers from the real backend, validates its exact
+demo-persona bindings, accepts Ravi's requested amount as positive integer
+rupees, creates real in-memory journey instances, and stops at a truthful
+preparation page without evaluating a journey.
+
+The foundation includes visible synthetic/non-government boundaries, semantic
+structure, keyboard focus states, announced loading and error states, safe API
+error handling, and component tests for the three intents, amount validation,
+backend persona consumption, configuration drift, and journey creation. No
+eligibility calculation, policy value, government form label on the landing
+cards, journey-decision mock, runtime AI, or resolution UI was added.

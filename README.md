@@ -10,11 +10,12 @@ ClaimSaathi maps a citizen's intent to the appropriate EPFO process, checks prer
 
 ## Current Development Status
 
-Phases 1–6 are complete: the deterministic domain, reviewed policy engine,
-prerequisite graphs, resolution navigator, journey orchestration, immutable
-decision records, and synthetic FastAPI demo layer are implemented and tested.
-Frontend, real government integrations, persistence, and runtime AI have not
-been implemented.
+Phases 1–6 and frontend Phase 7A are complete: the deterministic domain,
+reviewed policy engine, prerequisite graphs, resolution navigator, journey
+orchestration, immutable decision records, synthetic FastAPI demo layer, and
+intent-first Next.js foundation are implemented and tested. Journey evaluation
+and resolution UI, real government integrations, persistence, and runtime AI
+have not been implemented.
 
 ## Run the Backend
 
@@ -25,3 +26,14 @@ uv run uvicorn app.main:app --reload
 
 - API docs: `http://localhost:8000/docs`
 - Health: `http://localhost:8000/health`
+
+## Run the Frontend
+
+```bash
+cd frontend
+cp .env.example .env.local
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000` while the backend is running.
