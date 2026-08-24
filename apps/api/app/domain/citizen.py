@@ -98,6 +98,7 @@ class CitizenState(BaseModel):
 
     citizen_id: str = Field(min_length=1)
     state_version: str = Field(min_length=1)
+    state_revision: NonNegativeInteger
     is_synthetic: Literal[True]
     access: AccessState
     identity: IdentityState

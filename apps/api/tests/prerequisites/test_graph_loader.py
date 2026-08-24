@@ -68,6 +68,8 @@ def test_graph_files_contain_only_rule_bindings_not_policy_conditions() -> None:
     }
 
     for path in GRAPH_DIRECTORY.glob("*.json"):
+        if path.name == "catalog.v1.json":
+            continue
         payload = json.loads(path.read_text(encoding="utf-8"))
         assert all(forbidden_keys.isdisjoint(node) for node in payload["nodes"])
 

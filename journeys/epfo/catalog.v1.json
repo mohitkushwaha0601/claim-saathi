@@ -1,0 +1,71 @@
+{
+  "catalog_id": "EPFO-MVP-JOURNEY-CATALOG",
+  "version": 1,
+  "status": "ACTIVE",
+  "journeys": [
+    {
+      "journey_id": "PF_PARTIAL_WITHDRAWAL",
+      "version": 1,
+      "catalog_version": 1,
+      "status": "ACTIVE",
+      "display_name": "Access some PF funds",
+      "citizen_goal": "ACCESS_SOME_PF_FUNDS",
+      "official_process_label": "Form 31",
+      "official_process_source_id": "SRC-EPFO-FORMS",
+      "policy_id": "EPFO-PARTIAL-WITHDRAWAL",
+      "policy_version": "1.0.0",
+      "prerequisite_graph_file": "partial_withdrawal.v1.json",
+      "prerequisite_graph_version": "1.0.0",
+      "prerequisite_root": "PARTIAL_WITHDRAWAL_PREREQUISITES",
+      "policy_rule_ids": [
+        "P31-UAN-001",
+        "P31-AADHAAR-001",
+        "P31-BANK-001",
+        "P31-SERVICE-001",
+        "P31-AMOUNT-001"
+      ],
+      "resolution_ids": []
+    },
+    {
+      "journey_id": "PF_TRANSFER",
+      "version": 1,
+      "catalog_version": 1,
+      "status": "ACTIVE",
+      "display_name": "Transfer PF after changing employment",
+      "citizen_goal": "TRANSFER_PF_AFTER_EMPLOYMENT_CHANGE",
+      "official_process_label": "Form 13",
+      "official_process_source_id": "SRC-EPFO-FORMS",
+      "policy_id": "EPFO-TRANSFER",
+      "policy_version": "1.0.0",
+      "prerequisite_graph_file": "transfer.v1.json",
+      "prerequisite_graph_version": "1.0.0",
+      "prerequisite_root": "TRANSFER_PREREQUISITES",
+      "policy_rule_ids": [
+        "T13-PREVIOUS-EMPLOYMENT-001",
+        "T13-CURRENT-EMPLOYMENT-001",
+        "T13-DOE-001",
+        "T13-ACTIVE-TRANSFER-001",
+        "T13-ALREADY-COMPLETE-001",
+        "T13-ROUTE-001"
+      ],
+      "resolution_ids": ["RES_EXIT"]
+    },
+    {
+      "journey_id": "PF_FINAL_SETTLEMENT",
+      "version": 1,
+      "catalog_version": 1,
+      "status": "ACTIVE",
+      "display_name": "Final PF settlement",
+      "citizen_goal": "FINAL_PF_SETTLEMENT",
+      "official_process_label": "Form 19",
+      "official_process_source_id": "SRC-EPFO-FORMS",
+      "policy_id": "EPFO-FINAL-SETTLEMENT-CONFLICT-DEMO",
+      "policy_version": "CONFLICT-DEMO-1",
+      "prerequisite_graph_file": "final_settlement.conflict_demo.json",
+      "prerequisite_graph_version": "CONFLICT-DEMO-1",
+      "prerequisite_root": "FINAL_SETTLEMENT_PREREQUISITES",
+      "policy_rule_ids": ["FINAL_SETTLEMENT_WAIT_PERIOD"],
+      "resolution_ids": []
+    }
+  ]
+}

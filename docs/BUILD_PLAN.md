@@ -40,10 +40,17 @@ maps exact issue codes to immutable approved workflows, applies explicit state
 transitions, and resolves only after an allowlisted verifier checks a fresh
 trusted `CitizenState`. It does not re-run policy or prerequisite graphs.
 
-## Phase 5 — Journey Orchestrator + Decision Records
+## Phase 5 — Journey Planner + Journey Orchestrator + Decision Records (Complete)
 
 Coordinate intent mapping, policy evaluation, prerequisites, and resolution
 guidance while producing reproducible, auditable decision records.
+
+Completed on 2026-08-24 after the full backend test suite passed. Reviewed
+configuration now maps typed citizen goals to journeys; the orchestrator runs
+all pinned policy rules and the full prerequisite graph from scratch and emits
+immutable `JourneyDecision` and `DecisionRecord` outputs. Resolution initiation
+is explicit and limited to the resolution attached to a current deterministic
+issue. No transport, persistence, government integration, or AI was added.
 
 ## Phase 6 — FastAPI
 

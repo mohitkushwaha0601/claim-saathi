@@ -14,6 +14,7 @@ _EXPECTED_JOURNEYS = {
     "transfer.v1.json": JourneyId.PF_TRANSFER,
     "final_settlement.conflict_demo.json": JourneyId.PF_FINAL_SETTLEMENT,
 }
+_NON_GRAPH_FILES = frozenset({"catalog.v1.json"})
 
 
 def load_graph(graph_path: Path) -> PrerequisiteGraphDefinition:
@@ -39,12 +40,17 @@ def load_graph_directory(
 ) -> tuple[PrerequisiteGraphDefinition, ...]:
     """Load the exact known MVP graph files in stable filename order."""
 
-    paths = tuple(sorted(graph_directory.glob("*.json")))
-    unknown_names = {path.name for path in paths} - set(_EXPECTED_JOURNEYS)
+    all_paths = tuple(sorted(graph_directory.glob("*.json")))
+    unknown_names = {
+        path.name for path in all_paths
+    } - set(_EXPECTED_JOURNEYS) - _NON_GRAPH_FILES
     if unknown_names:
         raise GraphConfigurationError(
             f"unknown graph files: {', '.join(sorted(unknown_names))}"
         )
+    paths = tuple(
+        path for path in all_paths if path.name in _EXPECTED_JOURNEYS
+    )
     missing_names = set(_EXPECTED_JOURNEYS) - {path.name for path in paths}
     if missing_names:
         raise GraphConfigurationError(

@@ -28,6 +28,14 @@ class JourneyId(str, Enum):
     PF_FINAL_SETTLEMENT = "PF_FINAL_SETTLEMENT"
 
 
+class JourneyDefinitionStatus(str, Enum):
+    """Lifecycle state for immutable journey catalog definitions."""
+
+    DRAFT = "DRAFT"
+    ACTIVE = "ACTIVE"
+    SUPERSEDED = "SUPERSEDED"
+
+
 class IntentGoal(str, Enum):
     """Citizen goals, kept distinct from government journey identifiers."""
 

@@ -8,6 +8,7 @@
   "citizen_state": {
     "citizen_id": "SYNTH-CITIZEN-RAVI-001",
     "state_version": "SYNTH-RAVI-STATE-V1",
+    "state_revision": 1,
     "is_synthetic": true,
     "access": {
       "uan_status": "VERIFIED"

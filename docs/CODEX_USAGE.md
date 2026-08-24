@@ -62,3 +62,23 @@ MVP transitions, missing/ambiguous/wrong employment records, deterministic
 replay, source scope, and forbidden dependencies. No policy or graph
 re-evaluation, journey decision, persistence, government integration, route,
 frontend, or AI functionality was added.
+
+## 2026-08-24 — Phase 5 Journey Planning and Orchestration
+
+Codex connected the previously independent deterministic layers while
+preserving their ownership boundaries. Specifically, Codex:
+
+- implemented exact, reviewed-config journey planning from typed citizen goals;
+- integrated Phase 2 policy execution for every rule pinned by a journey;
+- integrated Phase 3 full prerequisite-graph evaluation;
+- connected Phase 4 approved-resolution initiation only for a resolution linked
+  to an issue in the current decision;
+- implemented immutable journey instances, journey decisions, and auditable
+  decision records with citizen, policy, graph, and journey-definition versions;
+- wrote end-to-end deterministic tests for Ravi, Priya, Arjun, stale snapshots,
+  capability uncertainty, and historical decision immutability; and
+- preserved the no-AI government-decision boundary with
+  `ai_used_for_decision: Literal[False]` and dependency safety tests.
+
+No FastAPI route, frontend, database, external integration, policy change, graph
+aggregation change, or AI functionality was introduced.

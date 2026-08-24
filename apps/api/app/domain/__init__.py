@@ -11,13 +11,20 @@ from .citizen import (
     PFState,
     ServiceState,
 )
-from .decision import DecisionRecord, JourneyDecision
+from .decision import (
+    DecisionRecord,
+    EvaluationContext,
+    IssueResolutionLink,
+    JourneyDecision,
+    JourneyEvaluationResult,
+)
 from .enums import (
     CapabilityValue,
     DecisionState,
     EmploymentRecordType,
     ExitRecordStatus,
     IntentGoal,
+    JourneyDefinitionStatus,
     JourneyId,
     PolicyEvaluatorId,
     PolicyLifecycleStatus,
@@ -35,7 +42,11 @@ from .enums import (
     VerificationStatus,
 )
 from .intent import CitizenIntent
-from .journey import JourneyDefinition
+from .journey import (
+    JourneyCatalogDefinition,
+    JourneyDefinition,
+    JourneyInstance,
+)
 from .policy import IntegerRatio, PolicyRule, PolicySource, PolicyVersion
 from .prerequisite import (
     PrerequisiteGraphDefinition,
@@ -60,15 +71,21 @@ __all__ = [
     "ClaimsState",
     "DecisionRecord",
     "DecisionState",
+    "EvaluationContext",
     "EmploymentRecord",
     "EmploymentRecordType",
     "EmploymentState",
     "ExitRecordStatus",
     "IdentityState",
     "IntentGoal",
+    "IssueResolutionLink",
+    "JourneyCatalogDefinition",
     "JourneyDecision",
     "JourneyDefinition",
+    "JourneyDefinitionStatus",
+    "JourneyEvaluationResult",
     "JourneyId",
+    "JourneyInstance",
     "PFState",
     "IntegerRatio",
     "PolicyEvaluatorId",

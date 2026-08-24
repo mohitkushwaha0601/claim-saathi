@@ -16,6 +16,7 @@ from app.domain import (
     IntentGoal,
     JourneyDecision,
     JourneyDefinition,
+    JourneyDefinitionStatus,
     JourneyId,
     PolicyLifecycleStatus,
     PolicyOperator,
@@ -73,7 +74,10 @@ def build_decision_record() -> DecisionRecord:
         decision_id="SYNTH-DECISION-001",
         journey_instance_id="SYNTH-JOURNEY-INSTANCE-001",
         citizen_state_version="SYNTH-STATE-V1",
+        citizen_state_revision=1,
         policy_version="SYNTH-POLICY-V0",
+        graph_version="SYNTH-GRAPH-V0",
+        journey_definition_version=1,
         evaluated_at=datetime(2026, 8, 24, 12, 0, tzinfo=UTC),
         journey_id=JourneyId.PF_TRANSFER,
         journey_state=DecisionState.UNABLE_TO_VERIFY,
@@ -136,8 +140,17 @@ def build_configuration_contracts() -> tuple[BaseModel, ...]:
     )
     journey = JourneyDefinition(
         journey_id=JourneyId.PF_TRANSFER,
+        version=1,
+        catalog_version=1,
+        status=JourneyDefinitionStatus.DRAFT,
         display_name="Synthetic Transfer Contract",
         citizen_goal=IntentGoal.TRANSFER_PF_AFTER_EMPLOYMENT_CHANGE,
+        official_process_label="Synthetic Process",
+        official_process_source_id=source.source_id,
+        policy_id="SYNTH-POLICY",
+        policy_version="SYNTH-POLICY-V0",
+        prerequisite_graph_file="synthetic_graph.v1.json",
+        prerequisite_graph_version="SYNTH-GRAPH-V0",
         prerequisite_root=node.node_id,
         policy_rule_ids=(rule.rule_id,),
         resolution_ids=(resolution.resolution_id,),
@@ -211,6 +224,20 @@ def test_negative_pf_balance_is_rejected() -> None:
         CitizenState.model_validate(payload)
 
 
+@pytest.mark.parametrize("revision", [-1, None])
+def test_citizen_state_requires_non_negative_numeric_revision(
+    revision: int | None,
+) -> None:
+    payload = load_demo_payload("ravi_partial_ready.json")["citizen_state"]
+    if revision is None:
+        payload.pop("state_revision")
+    else:
+        payload["state_revision"] = revision
+
+    with pytest.raises(ValidationError):
+        CitizenState.model_validate(payload)
+
+
 @pytest.mark.parametrize(
     ("section", "field_name"),
     [
@@ -251,6 +278,8 @@ def test_invalid_domain_enum_value_is_rejected() -> None:
             journey_id=JourneyId.PF_TRANSFER,
             state="MAYBE",
             policy_version="SYNTH-POLICY-V0",
+            graph_version="SYNTH-GRAPH-V0",
+            journey_definition_version=1,
             decision_id="SYNTH-DECISION-001",
         )
 
@@ -274,6 +303,8 @@ def test_journey_decision_has_no_readiness_or_confidence_fields() -> None:
         journey_id=JourneyId.PF_TRANSFER,
         state=DecisionState.UNABLE_TO_VERIFY,
         policy_version="SYNTH-POLICY-V0",
+        graph_version="SYNTH-GRAPH-V0",
+        journey_definition_version=1,
         decision_id="SYNTH-DECISION-001",
     )
 
