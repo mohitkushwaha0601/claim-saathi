@@ -117,6 +117,105 @@ export interface DecisionHistoryResponse {
   demo: DemoMetadata;
 }
 
+export type TraceStageType =
+  | "INTENT"
+  | "JOURNEY_PLANNER"
+  | "POLICY_ENGINE"
+  | "PREREQUISITE_GRAPH"
+  | "DECISION_RECORD";
+
+export type TraceStageState = "RECORDED" | DecisionState;
+
+export interface TraceRuleResponse {
+  rule_id: string;
+  state: DecisionState;
+  issue_code: string | null;
+  source_id: string | null;
+}
+
+export interface TraceGraphNodeResponse {
+  node_id: string;
+  label: string;
+  state: DecisionState;
+  children_ids: string[];
+  rule_id: string | null;
+}
+
+export interface IntentTraceDetails {
+  detail_type: "INTENT";
+  citizen_goal: IntentGoal;
+  ai_used: false;
+}
+
+export interface PlannerTraceDetails {
+  detail_type: "JOURNEY_PLANNER";
+  citizen_goal: IntentGoal;
+  journey_id: JourneyId;
+  method: "EXACT_REVIEWED_CONFIGURATION";
+  ai_used: false;
+}
+
+export interface PolicyEngineTraceDetails {
+  detail_type: "POLICY_ENGINE";
+  policy_version: string;
+  rules: TraceRuleResponse[];
+  ai_used: false;
+}
+
+export interface PrerequisiteGraphTraceDetails {
+  detail_type: "PREREQUISITE_GRAPH";
+  graph_version: string;
+  root_node_id: string;
+  nodes: TraceGraphNodeResponse[];
+  ai_used: false;
+}
+
+export interface DecisionRecordTraceDetails {
+  detail_type: "DECISION_RECORD";
+  decision_id: string;
+  citizen_state_revision: number;
+  policy_version: string;
+  graph_version: string;
+  journey_definition_version: number;
+  evaluated_at: string;
+  ai_used_for_decision: false;
+}
+
+export type TraceStageDetails =
+  | IntentTraceDetails
+  | PlannerTraceDetails
+  | PolicyEngineTraceDetails
+  | PrerequisiteGraphTraceDetails
+  | DecisionRecordTraceDetails;
+
+export interface ExecutionTraceStage {
+  stage_id: TraceStageType;
+  stage_type: TraceStageType;
+  label: string;
+  state: TraceStageState;
+  state_display: string;
+  short_description: string;
+  input_summary: string;
+  output_summary: string;
+  details: TraceStageDetails;
+}
+
+export interface ExecutionTraceResponse {
+  journey_instance_id: string;
+  decision_id: string;
+  journey_id: JourneyId;
+  citizen_goal: IntentGoal;
+  official_process: OfficialProcess;
+  decision_state: DecisionState;
+  citizen_state_revision: number;
+  policy_version: string;
+  graph_version: string;
+  journey_definition_version: number;
+  ai_used_for_decision: false;
+  stages: ExecutionTraceStage[];
+  demo: DemoMetadata;
+}
+
 export type ResolutionState =
   | "CREATED"
   | "CITIZEN_ACTION_REQUIRED"

@@ -177,3 +177,39 @@ without transitioning them. Frontend and FastAPI tests cover the complete flow,
 state restoration, command endpoints, safe failures, and absence of optimistic
 advancement. No policy logic, resolution semantics, live government
 integration, Arjun polished flow, or runtime AI was added.
+
+## 2026-08-24 — Phase 7D Interactive System Explorer
+
+Codex implemented the dedicated `/how-it-works` product page for judges,
+reviewers, developers, and policy/product stakeholders while leaving the normal
+citizen entry flow simple. The page explains the intent-first product thesis,
+the safely scoped form-first comparison, the deterministic architecture,
+reviewed configuration artifacts, explicit uncertainty states, Priya's
+resolution and full re-evaluation boundary, immutable decision history, and the
+current no-AI decision boundary.
+
+Codex added a typed read-only execution-trace API whose service receives only
+the existing in-memory store and reviewed journey catalog. It projects an
+already stored evaluation into closed intent, planner, policy-engine,
+prerequisite-graph, and decision-record stages; it does not possess or invoke a
+planner, orchestrator, policy engine, graph evaluator, resolution navigator,
+demo mutator, or AI gateway. API tests compare journey, revision, decision, and
+resolution state before and after repeated trace reads and rig the deterministic
+evaluators to fail if a trace attempts to call them.
+
+The frontend adds runtime-validated trace contracts, explicit Ravi/Priya/Arjun
+synthetic create → evaluate → trace interactions, an accessible selectable
+pipeline, stored rule/source detail, a connected responsive prerequisite tree,
+Priya's separately labeled recovery architecture, and Arjun's backend-driven
+safe stop. No policy threshold, graph precedence, journey mapping, resolution
+or decision semantic, external government action, final-polish work, or runtime
+AI was added.
+
+Verification evidence: the backend suite passed with 260 tests and the offline
+lockfile check succeeded; the frontend passed typecheck, lint, 47 tests, and the
+Next.js production build. Live browser checks generated all three backend
+traces, inspected Ravi's rules, graph, and source metadata, confirmed Priya's
+live/architecture separation and Arjun's safe stop, exercised a stage with the
+keyboard, found no console or CORS errors, and confirmed a 390px viewport had
+no horizontal overflow. The existing home and Priya journey routes also
+remained operational.

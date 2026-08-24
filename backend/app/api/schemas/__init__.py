@@ -12,6 +12,7 @@ from .journey import (
 )
 from .policy import PolicySourceResponse
 from .resolution import ResolutionResponse, StartResolutionRequest
+from .trace import ExecutionTraceResponse
 
 __all__ = [
     "CreateJourneyRequest",
@@ -21,6 +22,7 @@ __all__ = [
     "DemoMetadata",
     "DemoPersonaListResponse",
     "ErrorEnvelope",
+    "ExecutionTraceResponse",
     "JourneyCreatedResponse",
     "JourneyEvaluationResponse",
     "JourneyResponse",

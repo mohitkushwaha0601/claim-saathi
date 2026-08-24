@@ -487,3 +487,51 @@ refresh can rediscover existing backend instances. Loading a journey performs
 only journey, persona, decision, source, history, and resolution reads; it never
 starts a resolution, confirms an action, simulates a correction, rechecks a
 resolution, or evaluates a journey.
+
+## Phase 7D — Interactive System Explorer Boundaries
+
+### The trace API is observational only
+
+The execution trace is built exclusively from an already stored journey
+evaluation, its immutable `DecisionRecord`, and pinned reviewed journey/graph
+metadata. Its application service receives no planner, orchestrator, policy
+engine, graph evaluator, resolution navigator, demo mutator, or AI dependency.
+Calling it cannot re-run decision logic, create a decision or resolution,
+change a state revision, transition a resolution, or execute a demo event.
+
+### Trace presentation is based on backend truth
+
+The frontend does not invent rule outcomes, graph node states, versions, or
+decision state for the interactive explorer. The live pipeline and detail panel
+use typed data from the trace endpoint, rule source links resolve through the
+existing source-metadata endpoint, and malformed or internally inconsistent
+trace structures fail safely rather than being visualized.
+
+### Live traces and recovery architecture are visibly distinct
+
+Ravi, Priya, and Arjun live examples explicitly create and evaluate a new
+isolated synthetic journey before reading its trace. Priya's subsequent
+resolution and full-re-evaluation sequence is a structural explanation labeled
+“Architecture · not the current live trace.” The interface never claims a
+second decision exists unless that citizen journey actually completed the
+separate recovery flow.
+
+### The System Explorer is a secondary reviewer experience
+
+Technical architecture remains on `/how-it-works` for judges, reviewers,
+developers, and policy/product stakeholders. A small secondary header link
+exposes it without moving package, class, or trace detail into the normal
+citizen entry journey.
+
+### AI remains outside the deterministic decision path
+
+Every stored trace records `ai_used_for_decision: false`. The explorer depicts
+only a possible future explanation layer downstream of a canonical result and
+states that optional AI explanation features are not currently enabled. No
+runtime AI dependency or fallback is present.
+
+### The current-process comparison is deliberately scoped
+
+The form-first side-by-side is a simplified citizen journey model used to
+explain orchestration. It is explicitly not an exhaustive audit of EPFO or a
+claim about every external government experience.

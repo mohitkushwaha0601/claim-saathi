@@ -4,7 +4,10 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, status
 
-from app.api.dependencies import get_journey_service
+from app.api.dependencies import (
+    get_execution_trace_service,
+    get_journey_service,
+)
 from app.api.schemas.journey import (
     CreateJourneyRequest,
     DecisionDetailResponse,
@@ -14,7 +17,8 @@ from app.api.schemas.journey import (
     JourneyEvaluationResponse,
     JourneyResponse,
 )
-from app.application import JourneyService
+from app.api.schemas.trace import ExecutionTraceResponse
+from app.application import ExecutionTraceService, JourneyService
 
 router = APIRouter(prefix="/journeys", tags=["journeys"])
 
@@ -94,4 +98,22 @@ def get_decision(
 ) -> DecisionDetailResponse:
     return DecisionDetailResponse.from_view(
         service.decision_detail(journey_instance_id, decision_id)
+    )
+
+
+@router.get(
+    "/{journey_instance_id}/decisions/{decision_id}/trace",
+    response_model=ExecutionTraceResponse,
+    summary="Describe one stored decision without re-running it",
+)
+def get_decision_trace(
+    journey_instance_id: str,
+    decision_id: str,
+    service: Annotated[
+        ExecutionTraceService,
+        Depends(get_execution_trace_service),
+    ],
+) -> ExecutionTraceResponse:
+    return ExecutionTraceResponse.from_view(
+        service.get_trace(journey_instance_id, decision_id)
     )

@@ -1,10 +1,17 @@
 # ClaimSaathi Frontend
 
-Phases 7A, 7B, and 7C provide a mobile-first Next.js App Router application at
+Phases 7A through 7D provide a mobile-first Next.js App Router application at
 `frontend/`. It asks citizens for their PF goal, loads the three synthetic
 personas from FastAPI, creates a real journey instance, supports explicit
 deterministic journey evaluation, and provides Priya's backend-driven recovery
 flow for a missing previous-employment Date of Exit.
+
+Phase 7D adds a separate judge/reviewer-facing System Explorer at
+`/how-it-works`. It keeps technical architecture out of the citizen home flow
+while making the intent mapping, deterministic rules, prerequisite graph,
+immutable decision record, resolution/reverification boundary, uncertainty
+states, and no-AI decision boundary inspectable in one product-native scroll
+narrative.
 
 ## Run locally
 
@@ -57,6 +64,17 @@ Open `http://localhost:3000`.
   never patched in React.
 - No frontend action contacts EPFO or submits a claim.
 - Demo and synthetic status remains visible in the shared application shell.
+- The header's secondary “How it works” link opens the System Explorer without
+  competing with the primary citizen journey.
+- Live explorer examples explicitly create and evaluate a fresh isolated demo
+  journey, then call the read-only decision trace endpoint. No scenario runs
+  automatically.
+- Pipeline stages, rule results, graph structure, versions, source identifiers,
+  and no-AI audit values are rendered from typed backend trace data.
+- The Priya recovery diagram is visibly labeled as architecture, separate from
+  the current live trace; it never invents a second decision record.
+- The Arjun example preserves `POLICY_REVIEW_REQUIRED` and states that no AI
+  fallback, numeric waiting period, or government outcome is supplied.
 
 ## Priya resolution flow
 
@@ -82,6 +100,25 @@ explicit Check journey again
 read-by-ID contract could not rediscover an active resolution after browser
 state was lost. The endpoint is read-only and returns existing instances in
 creation order; it does not change resolution or journey semantics.
+
+## System Explorer
+
+The `/how-it-works` route contains:
+
+1. the citizen product thesis and a safely scoped form-first comparison;
+2. a compact before/ClaimSaathi transformation;
+3. the technical architecture and reviewed-config boundaries;
+4. an interactive Ravi, Priya, and Arjun live execution trace;
+5. Priya's conceptual recovery/re-evaluation architecture and Arjun's safe stop;
+6. plain-language uncertainty states; and
+7. the deterministic decision path separated from a disabled optional future
+   AI explanation layer.
+
+Scenario and stage controls are real buttons with visible focus and accessible
+selected state. The stage pipeline and connected prerequisite tree reflow from
+horizontal/branched desktop layouts to vertical nested mobile layouts without
+requiring hover or horizontal scrolling. State is always communicated with
+text and an icon as well as visual treatment.
 
 ## Checks
 

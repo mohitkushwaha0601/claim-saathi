@@ -8,6 +8,7 @@ from fastapi import Request
 
 from app.application import (
     DemoService,
+    ExecutionTraceService,
     JourneyService,
     PolicyService,
     ResolutionService,
@@ -43,6 +44,7 @@ class ApplicationContainer:
     """Single process-local composition root for API services."""
 
     demo_service: DemoService
+    execution_trace_service: ExecutionTraceService
     journey_service: JourneyService
     resolution_service: ResolutionService
     policy_service: PolicyService
@@ -108,6 +110,10 @@ def create_application_container(
     )
     return ApplicationContainer(
         demo_service=DemoService(state_provider, store),
+        execution_trace_service=ExecutionTraceService(
+            catalog=journey_catalog,
+            store=store,
+        ),
         journey_service=journey_service,
         resolution_service=ResolutionService(
             orchestrator=journey_orchestrator,
@@ -124,6 +130,10 @@ def get_container(request: Request) -> ApplicationContainer:
 
 def get_demo_service(request: Request) -> DemoService:
     return get_container(request).demo_service
+
+
+def get_execution_trace_service(request: Request) -> ExecutionTraceService:
+    return get_container(request).execution_trace_service
 
 
 def get_journey_service(request: Request) -> JourneyService:

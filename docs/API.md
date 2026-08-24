@@ -42,6 +42,7 @@ credentials are disabled because this prototype has no authentication.
 | POST | `/api/v1/journeys/{journey_id}/evaluate` | Create a new full deterministic evaluation and decision record |
 | GET | `/api/v1/journeys/{journey_id}/decisions` | List ordered immutable decision summaries |
 | GET | `/api/v1/journeys/{journey_id}/decisions/{decision_id}` | Inspect safe rules, prerequisites, sources, and the no-AI audit flag |
+| GET | `/api/v1/journeys/{journey_id}/decisions/{decision_id}/trace` | Describe a stored deterministic decision without re-running it |
 | POST | `/api/v1/journeys/{journey_id}/resolutions` | Start the approved resolution attached to a current issue |
 | GET | `/api/v1/journeys/{journey_id}/resolutions` | List existing resolution instances for read-only refresh recovery |
 | POST | `/api/v1/journeys/{journey_id}/resolutions/{resolution_id}/confirm-external-step-started` | Move an approved citizen-action workflow to its waiting state |
@@ -53,6 +54,33 @@ credentials are disabled because this prototype has no authentication.
 The `{resolution_id}` path segment above is the generated resolution instance
 ID. Clients cannot select a workflow ID such as `RES_EXIT`; the server derives
 that mapping from the specified deterministic issue.
+
+## Observational execution trace
+
+The decision trace endpoint is a read-only projection for the judge-facing
+System Explorer. It joins an already stored `DecisionRecord` and its immutable
+evaluation artifacts with the pinned reviewed journey and graph metadata. It
+does not call the planner, policy engine, prerequisite evaluator, resolution
+navigator, demo event, or AI, and repeated GET requests create no new records or
+state revisions.
+
+`ExecutionTraceResponse` contains:
+
+- the journey instance, decision, typed citizen goal, journey, and applicable
+  official-process metadata;
+- the stored decision state and citizen-state revision;
+- the recorded policy, graph, and journey-definition versions;
+- `ai_used_for_decision: false`;
+- a closed ordered stage list: `INTENT`, `JOURNEY_PLANNER`, `POLICY_ENGINE`,
+  `PREREQUISITE_GRAPH`, and `DECISION_RECORD`; and
+- the standard conspicuous synthetic demo metadata.
+
+Stage details are typed rather than arbitrary blobs. Rule summaries are copied
+from stored `RuleResult` artifacts and include only rule ID, categorical state,
+issue code, and source ID already present in decision provenance. Graph nodes
+use reviewed labels and child IDs for structure while taking every state from
+the stored graph evaluation. No raw `CitizenState`, observed value, identity
+number, bank number, employment date, or monetary fact is returned.
 
 ## Demo metadata
 

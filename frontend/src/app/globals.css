@@ -49,6 +49,59 @@ input {
   color: var(--ink);
 }
 
+.trace-tree ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.trace-tree-children {
+  margin-top: 0.75rem !important;
+  margin-left: 1rem !important;
+  border-left: 2px solid var(--line-strong);
+  padding-left: 1rem !important;
+}
+
+.trace-tree-children > li {
+  position: relative;
+  margin-top: 0.75rem;
+}
+
+.trace-tree-children > li::before {
+  position: absolute;
+  top: 1.5rem;
+  left: -1rem;
+  width: 1rem;
+  border-top: 2px solid var(--line-strong);
+  content: "";
+}
+
+@media (min-width: 640px) {
+  .trace-tree-root > .trace-tree-children {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+    gap: 0.75rem;
+    margin-left: 0 !important;
+    border-top: 2px solid var(--line-strong);
+    border-left: 0;
+    padding-top: 1rem !important;
+    padding-left: 0 !important;
+  }
+
+  .trace-tree-root > .trace-tree-children > li {
+    margin-top: 0;
+  }
+
+  .trace-tree-root > .trace-tree-children > li::before {
+    top: -1rem;
+    left: 50%;
+    width: 0;
+    height: 1rem;
+    border-top: 0;
+    border-left: 2px solid var(--line-strong);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

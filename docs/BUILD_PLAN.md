@@ -65,7 +65,7 @@ and reviewed policy-source metadata. Runtime state is process-local and no live
 government integration, database, frontend, authentication, or AI was added.
 The Python service now resides in the canonical top-level `backend/` directory.
 
-## Phase 7 — Frontend (In Progress — Phases 7A, 7B, and 7C Complete)
+## Phase 7 — Frontend (In Progress — Phases 7A–7D Complete)
 
 Create the top-level `frontend/` directory and build the Next.js, TypeScript,
 and Tailwind presentation layer with accessible uncertainty, blocker,
@@ -96,6 +96,18 @@ explicit full journey evaluation creates a new `PASS` decision and reveals Form
 resolution-list endpoint supports refresh recovery without automatic side
 effects. Phase 7 remains in progress; Arjun's polished safety flow and any
 later explicitly authorized frontend work are not part of Phase 7C.
+
+Phase 7D completed on 2026-08-24 with a dedicated judge/reviewer-facing System
+Explorer at `/how-it-works`. A new observational FastAPI trace endpoint projects
+only already stored deterministic artifacts into typed intent, planner, policy,
+prerequisite-graph, and immutable-decision stages. The responsive frontend runs
+explicit Ravi, Priya, and Arjun synthetic create/evaluate/trace sequences and
+supports keyboard stage inspection, connected graph viewing, and reviewed
+source access. Static architecture sections distinguish the current live trace
+from Priya's conceptual recovery flow, explain explicit uncertainty, and keep a
+disabled optional future AI explanation layer outside the decision path. Phase
+7 remains in progress; Arjun's polished citizen safety flow and final polish
+were not started.
 
 ## Phase 8 — Safe AI Gateway
 
