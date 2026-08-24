@@ -10,30 +10,35 @@ ClaimSaathi maps a citizen's intent to the appropriate EPFO process, checks prer
 
 ## Current Development Status
 
-Phases 1–6 and frontend Phase 7A are complete: the deterministic domain,
-reviewed policy engine, prerequisite graphs, resolution navigator, journey
-orchestration, immutable decision records, synthetic FastAPI demo layer, and
-intent-first Next.js foundation are implemented and tested. Journey evaluation
-and resolution UI, real government integrations, persistence, and runtime AI
-have not been implemented.
+Phases 1–7 are complete. The repository includes the deterministic domain,
+reviewed policy engine, prerequisite graphs, resolution navigator, immutable
+decisions, synthetic FastAPI demo API, citizen journeys, System Explorer, and
+real-browser regression coverage. It has no live government integration,
+authentication, persistence, or runtime AI.
 
-## Run the Backend
+## Local quick start
+
+Terminal 1:
 
 ```bash
 cd backend
 uv run uvicorn app.main:app --reload
 ```
 
-- API docs: `http://localhost:8000/docs`
-- Health: `http://localhost:8000/health`
-
-## Run the Frontend
+Terminal 2:
 
 ```bash
 cd frontend
-cp .env.example .env.local
 npm install
 npm run dev
 ```
 
-Open `http://localhost:3000` while the backend is running.
+- Product: `http://localhost:3000`
+- API docs: `http://localhost:8000/docs`
+
+Run the real-browser regression suite from `frontend/` with:
+
+```bash
+npx playwright install chromium
+npm run test:e2e
+```

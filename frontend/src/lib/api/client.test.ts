@@ -13,6 +13,40 @@ afterEach(() => {
 });
 
 describe("typed API client errors", () => {
+  it("deduplicates only concurrent read requests", async () => {
+    let resolveResponse!: (response: Response) => void;
+    const fetchMock = vi.fn().mockReturnValue(
+      new Promise<Response>((resolve) => {
+        resolveResponse = resolve;
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const first = apiRequest<{ ok: true }>("/read-only");
+    const second = apiRequest<{ ok: true }>("/read-only");
+    expect(fetchMock).toHaveBeenCalledOnce();
+
+    resolveResponse(
+      new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    await expect(Promise.all([first, second])).resolves.toEqual([
+      { ok: true },
+      { ok: true },
+    ]);
+
+    fetchMock.mockResolvedValueOnce(
+      new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    await apiRequest<{ ok: true }>("/read-only");
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
   it("preserves the backend safe error code, message, and status", async () => {
     vi.stubGlobal(
       "fetch",

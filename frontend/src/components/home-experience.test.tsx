@@ -11,7 +11,10 @@ import type {
 } from "@/lib/api/types";
 
 import { DemoBoundaryBar } from "./demo-boundary-bar";
-import { HomeExperience } from "./home-experience";
+import {
+  demoServiceUnavailableMessage,
+  HomeExperience,
+} from "./home-experience";
 
 const push = vi.fn();
 
@@ -86,6 +89,7 @@ function journeyResponse(
 
 describe("intent-first landing experience", () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     listDemoPersonasMock.mockResolvedValue(PERSONA_RESPONSE);
     createJourneyMock.mockResolvedValue(
       journeyResponse("ACCESS_SOME_PF_FUNDS", "RAVI_PARTIAL_READY"),
@@ -132,6 +136,7 @@ describe("intent-first landing experience", () => {
       }),
     );
     const amount = screen.getByLabelText("Amount in rupees");
+    expect(document.activeElement).toBe(amount);
 
     fireEvent.change(amount, { target: { value: "12.5" } });
     fireEvent.click(screen.getByRole("button", { name: "Prepare my journey" }));
@@ -187,6 +192,57 @@ describe("intent-first landing experience", () => {
 
     expect(await screen.findByText("Unknown demo persona.")).toBeTruthy();
     expect(screen.queryByText("DEMO_PERSONA_NOT_FOUND")).toBeNull();
+  });
+
+  it("distinguishes an unavailable demo service from a policy result", async () => {
+    listDemoPersonasMock.mockRejectedValue(
+      new ClaimSaathiApiError(
+        "NETWORK_ERROR",
+        "We couldn't complete that request right now.",
+        0,
+      ),
+    );
+    render(<HomeExperience />);
+
+    expect(
+      await screen.findByText("ClaimSaathi's demo service is unavailable."),
+    ).toBeTruthy();
+    expect(screen.getByText("Start the backend service and try again.")).toBeTruthy();
+    expect(screen.queryByText("Unable to verify")).toBeNull();
+    expect(demoServiceUnavailableMessage("production")).toBe(
+      "The demo service is temporarily unavailable. Please try again shortly.",
+    );
+    expect(demoServiceUnavailableMessage("production")).not.toContain(
+      "backend",
+    );
+  });
+
+  it("retries a failed journey creation without changing its request", async () => {
+    createJourneyMock
+      .mockRejectedValueOnce(new Error("temporary network detail"))
+      .mockResolvedValueOnce(
+        journeyResponse(
+          "TRANSFER_PF_AFTER_EMPLOYMENT_CHANGE",
+          "PRIYA_TRANSFER_MISSING_EXIT",
+        ),
+      );
+    render(<HomeExperience />);
+
+    fireEvent.click(
+      await screen.findByRole("button", {
+        name: /I changed jobs and want to move my old PF/,
+      }),
+    );
+    fireEvent.click(await screen.findByRole("button", { name: "Try again" }));
+
+    await waitFor(() => {
+      expect(createJourneyMock).toHaveBeenCalledTimes(2);
+      expect(createJourneyMock).toHaveBeenLastCalledWith({
+        persona_id: "PRIYA_TRANSFER_MISSING_EXIT",
+        goal: "TRANSFER_PF_AFTER_EMPLOYMENT_CHANGE",
+      });
+      expect(push).toHaveBeenCalledWith("/journey/JRN-SYNTHETIC-TEST");
+    });
   });
 
   it("fails safely when the expected backend persona is absent", async () => {

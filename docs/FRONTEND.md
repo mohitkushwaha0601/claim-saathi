@@ -1,6 +1,6 @@
 # ClaimSaathi Frontend
 
-Phases 7A through 7E provide a mobile-first Next.js App Router application at
+Phases 7A through 7F provide a mobile-first Next.js App Router application at
 `frontend/`. It asks citizens for their PF goal, loads the three synthetic
 personas from FastAPI, creates a real journey instance, supports explicit
 deterministic journey evaluation, and provides Priya's backend-driven recovery
@@ -12,6 +12,12 @@ while making the intent mapping, deterministic rules, prerequisite graph,
 immutable decision record, resolution/reverification boundary, uncertainty
 states, and no-AI decision boundary inspectable in one product-native scroll
 narrative.
+
+Phase 7F hardens the existing flows without changing their semantics. It adds
+consistent status visuals and retry behavior, environment-aware demo-service
+errors, a frontend-only expired-journey restart path, application not-found and
+error boundaries, request deduplication for concurrent source metadata, result
+focus management, responsive regression coverage, and submission metadata.
 
 ## Run locally
 
@@ -145,6 +151,31 @@ System Explorer or start another journey. Refresh reconstructs the result using
 the existing journey, decision-detail, history, and source GETs and performs no
 evaluation or mutation.
 
+## Submission hardening and accessibility
+
+- Every POST action disables only its relevant controls while pending and keeps
+  the last confirmed backend decision or resolution visible on failure.
+- Result and resolution changes use text plus an icon and visual treatment;
+  major explicit changes move focus to the new result or state heading.
+- Async loading, command results, and errors use status or alert semantics.
+- Buttons, links styled as controls, expandable summaries, intent cards, and
+  trace stages provide visible keyboard focus and approximately 44px targets.
+- Source links have descriptive accessible names and accept only validated
+  HTTP(S) URLs returned through backend source metadata.
+- The horizontal trace and graph become vertical at narrow widths. Browser
+  regressions cover 320, 375, 390, and 430px mobile widths and 1280 and 1440px
+  desktop widths without page-level horizontal overflow.
+- Reduced-motion preferences disable nonessential transitions and animation;
+  no meaning depends on motion or color.
+- An unknown backend journey is presented as an expired in-memory demo with a
+  “Start a new journey” link. It is never converted into a policy state.
+- An unmatched Next.js route uses the separate “Page not found” experience;
+  unexpected render failures use a small retryable error boundary without
+  exposing stack traces.
+- The home page distinguishes demo-service unavailability from citizen-policy
+  uncertainty. Development copy explains how to start the local backend, while
+  production copy remains environment-neutral.
+
 ## Checks
 
 ```bash
@@ -153,4 +184,13 @@ npm run typecheck
 npm run lint
 npm test
 npm run build
+npm run test:e2e
 ```
+
+Playwright starts the real FastAPI and Next.js development servers, creates a
+fresh isolated synthetic journey per persona test, and never mocks the backend.
+Its Chromium suite covers Ravi, Priya, Arjun, the System Explorer, GET-only
+refresh behavior, responsive overflow, page-level not-found recovery, and
+expired in-memory journeys. Install the local browser once with
+`npx playwright install chromium`. Failure traces and screenshots are written
+under ignored `test-results/` paths.

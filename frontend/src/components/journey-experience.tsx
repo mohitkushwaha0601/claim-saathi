@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   ClaimSaathiApiError,
@@ -58,13 +58,16 @@ export function JourneyExperience({
   });
   const [evaluating, setEvaluating] = useState(false);
   const [evaluationError, setEvaluationError] = useState<string | null>(null);
+  const [reloadSequence, setReloadSequence] = useState(0);
+  const decisionRegionRef = useRef<HTMLDivElement>(null);
+  const focusDecisionAfterEvaluation = useRef(false);
 
   useEffect(() => {
     let active = true;
     async function load() {
       try {
-        const [journey, personaResponse, resolutionHistory, decisionHistory] = await Promise.all([
-          getJourney(journeyInstanceId),
+        const journey = await getJourney(journeyInstanceId);
+        const [personaResponse, resolutionHistory, decisionHistory] = await Promise.all([
           listDemoPersonas(),
           listResolutions(journeyInstanceId),
           listDecisions(journeyInstanceId),
@@ -123,7 +126,18 @@ export function JourneyExperience({
     return () => {
       active = false;
     };
-  }, [journeyInstanceId]);
+  }, [journeyInstanceId, reloadSequence]);
+
+  useEffect(() => {
+    if (
+      focusDecisionAfterEvaluation.current &&
+      loadState.status === "ready" &&
+      loadState.value.decision
+    ) {
+      focusDecisionAfterEvaluation.current = false;
+      decisionRegionRef.current?.focus();
+    }
+  }, [loadState]);
 
   async function checkJourney(): Promise<boolean> {
     if (loadState.status !== "ready" || evaluating) return false;
@@ -143,6 +157,7 @@ export function JourneyExperience({
           decisionHistory: decisionHistory.decisions,
         },
       });
+      focusDecisionAfterEvaluation.current = true;
       return true;
     } catch {
       setEvaluationError("We couldn't check this journey right now.");
@@ -165,7 +180,7 @@ export function JourneyExperience({
       <main id="main-content" className="py-12 sm:py-16">
         <section className="rounded-2xl border border-line bg-surface p-6 sm:p-8">
           <h1 className="text-3xl font-bold tracking-[-0.03em] text-ink">
-            Journey not found
+            Demo journey expired
           </h1>
           <p className="mt-3 max-w-xl leading-7 text-muted">
             Demo journeys reset when the backend restarts.
@@ -184,7 +199,15 @@ export function JourneyExperience({
   if (loadState.status === "error") {
     return (
       <main id="main-content" className="py-12 sm:py-16">
-        <ErrorState message={loadState.message} />
+        <ErrorState
+          title="We couldn't load this demo journey"
+          titleAsHeading
+          message={loadState.message}
+          onRetry={() => {
+            setLoadState({ status: "loading" });
+            setReloadSequence((current) => current + 1);
+          }}
+        />
         <Link
           className="mt-6 inline-flex min-h-11 items-center font-semibold text-brand underline underline-offset-4"
           href="/"
@@ -248,7 +271,12 @@ export function JourneyExperience({
       </dl>
 
       {decision ? (
-        <div className="mt-8">
+        <div
+          ref={decisionRegionRef}
+          tabIndex={-1}
+          aria-labelledby="decision-heading"
+          className="mt-8 outline-none"
+        >
           <JourneyDecision
             citizenGoal={journey.citizen_goal}
             journeyInstanceId={journeyInstanceId}

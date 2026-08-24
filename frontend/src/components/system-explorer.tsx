@@ -66,6 +66,14 @@ export function SystemExplorer() {
           ClaimSaathi identifies and explains the applicable process. It does
           not perform government actions.
         </p>
+        <nav className="mt-6" aria-label="System explorer shortcuts">
+          <a
+            href="#live-trace"
+            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-brand px-5 py-3 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand"
+          >
+            Explore a live trace
+          </a>
+        </nav>
       </section>
 
       <section className="mt-20" aria-labelledby="comparison-heading">
@@ -203,7 +211,7 @@ export function SystemExplorer() {
         </div>
       </section>
 
-      <section className="mt-20" aria-labelledby="live-trace-heading">
+      <section id="live-trace" className="mt-20 scroll-mt-24" aria-labelledby="live-trace-heading">
         <p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">
           Read-only execution trace
         </p>
@@ -228,14 +236,14 @@ export function SystemExplorer() {
           Safe systems need a way to say: we don&apos;t know.
         </h2>
         <div className="mt-7 grid gap-4 sm:grid-cols-2">
-          <article className="rounded-2xl border border-slate-300 bg-slate-50 p-5 sm:p-6">
-            <h3 className="text-xl font-bold text-slate-950">UNABLE_TO_VERIFY</h3>
+          <article className="min-w-0 rounded-2xl border border-slate-300 bg-slate-50 p-5 sm:p-6">
+            <h3 className="text-xl font-bold text-slate-950 [overflow-wrap:anywhere]">UNABLE_TO_VERIFY</h3>
             <p className="mt-2 text-sm leading-6 text-slate-800">
               Required trusted information is unavailable or cannot be verified.
             </p>
           </article>
-          <article className="rounded-2xl border border-violet-200 bg-violet-50 p-5 sm:p-6">
-            <h3 className="text-xl font-bold text-violet-950">POLICY_REVIEW_REQUIRED</h3>
+          <article className="min-w-0 rounded-2xl border border-violet-200 bg-violet-50 p-5 sm:p-6">
+            <h3 className="text-xl font-bold text-violet-950 [overflow-wrap:anywhere]">POLICY_REVIEW_REQUIRED</h3>
             <p className="mt-2 text-sm leading-6 text-violet-900">
               The configured authoritative policy is unresolved or requires review.
             </p>

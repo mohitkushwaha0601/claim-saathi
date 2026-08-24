@@ -1,9 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { safeApiErrorMessage } from "@/lib/api/client";
+import {
+  ClaimSaathiApiError,
+  safeApiErrorMessage,
+} from "@/lib/api/client";
 import { listDemoPersonas } from "@/lib/api/demo";
 import { createJourney } from "@/lib/api/journeys";
 import {
@@ -22,17 +25,43 @@ import { SafetyNotice } from "./safety-notice";
 type PersonaLoadState =
   | { status: "loading" }
   | { status: "ready"; intents: BoundIntent[] }
-  | { status: "error"; message: string };
+  | { status: "error"; title?: string; message: string };
+
+interface FailedCreation {
+  intent: BoundIntent;
+  requestedAmountRupees?: number;
+}
+
+export function demoServiceUnavailableMessage(environment?: string): string {
+  return environment === "production"
+    ? "The demo service is temporarily unavailable. Please try again shortly."
+    : "Start the backend service and try again.";
+}
 
 async function fetchBoundIntents(): Promise<BoundIntent[]> {
   const response = await listDemoPersonas();
   return bindPersonasToIntents(response.personas);
 }
 
-function personaLoadErrorMessage(error: unknown): string {
-  return error instanceof DemoConfigurationError
-    ? error.message
-    : safeApiErrorMessage(error);
+function personaLoadError(error: unknown): {
+  title?: string;
+  message: string;
+} {
+  if (
+    error instanceof ClaimSaathiApiError &&
+    error.code === "NETWORK_ERROR"
+  ) {
+    return {
+      title: "ClaimSaathi's demo service is unavailable.",
+      message: demoServiceUnavailableMessage(process.env.NODE_ENV),
+    };
+  }
+  return {
+    message:
+      error instanceof DemoConfigurationError
+        ? error.message
+        : safeApiErrorMessage(error),
+  };
 }
 
 export function HomeExperience() {
@@ -45,6 +74,10 @@ export function HomeExperience() {
   const [amountError, setAmountError] = useState<string | null>(null);
   const [creatingGoal, setCreatingGoal] = useState<string | null>(null);
   const [creationError, setCreationError] = useState<string | null>(null);
+  const [failedCreation, setFailedCreation] = useState<FailedCreation | null>(
+    null,
+  );
+  const amountInputRef = useRef<HTMLInputElement>(null);
 
   const loadPersonas = useCallback(async () => {
     try {
@@ -53,9 +86,10 @@ export function HomeExperience() {
         intents: await fetchBoundIntents(),
       });
     } catch (error) {
+      const presentation = personaLoadError(error);
       setLoadState({
         status: "error",
-        message: personaLoadErrorMessage(error),
+        ...presentation,
       });
     }
   }, []);
@@ -68,9 +102,10 @@ export function HomeExperience() {
       })
       .catch((error: unknown) => {
         if (active) {
+          const presentation = personaLoadError(error);
           setLoadState({
             status: "error",
-            message: personaLoadErrorMessage(error),
+            ...presentation,
           });
         }
       });
@@ -79,11 +114,16 @@ export function HomeExperience() {
     };
   }, []);
 
+  useEffect(() => {
+    if (selectedIntent) amountInputRef.current?.focus();
+  }, [selectedIntent]);
+
   async function prepareJourney(
     intent: BoundIntent,
     requestedAmountRupees?: number,
   ) {
     setCreationError(null);
+    setFailedCreation(null);
     setCreatingGoal(intent.goal);
     try {
       const journey = await createJourney({
@@ -98,6 +138,7 @@ export function HomeExperience() {
       );
     } catch (error) {
       setCreationError(safeApiErrorMessage(error));
+      setFailedCreation({ intent, requestedAmountRupees });
       setCreatingGoal(null);
     }
   }
@@ -147,6 +188,7 @@ export function HomeExperience() {
           ) : null}
           {loadState.status === "error" ? (
             <ErrorState
+              title={loadState.title}
               message={loadState.message}
               onRetry={() => {
                 setLoadState({ status: "loading" });
@@ -196,6 +238,7 @@ export function HomeExperience() {
                   ₹
                 </span>
                 <input
+                  ref={amountInputRef}
                   id="requested-amount"
                   name="requested_amount_rupees"
                   value={amount}
@@ -235,6 +278,8 @@ export function HomeExperience() {
                     setSelectedIntent(null);
                     setAmount("");
                     setAmountError(null);
+                    setCreationError(null);
+                    setFailedCreation(null);
                   }}
                   className="min-h-12 rounded-xl px-5 py-3 font-semibold text-brand underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                 >
@@ -256,7 +301,19 @@ export function HomeExperience() {
         ) : null}
         {creationError ? (
           <div className="mt-5">
-            <ErrorState message={creationError} />
+            <ErrorState
+              message={creationError}
+              retrying={creatingGoal !== null}
+              onRetry={
+                failedCreation
+                  ? () =>
+                      void prepareJourney(
+                        failedCreation.intent,
+                        failedCreation.requestedAmountRupees,
+                      )
+                  : undefined
+              }
+            />
           </div>
         ) : null}
       </section>

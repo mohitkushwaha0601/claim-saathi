@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
 import { AppHeader } from "@/components/app-header";
@@ -8,10 +8,19 @@ import { PageContainer } from "@/components/page-container";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ClaimSaathi · Understand your PF journey",
+  title: {
+    default: "ClaimSaathi — Guided PF journeys",
+    template: "%s — ClaimSaathi",
+  },
   description:
-    "A synthetic, independent prototype for understanding PF journey prerequisites and next steps.",
+    "An independent prototype that turns PF goals into deterministic, policy-backed journey checks and guided resolution.",
   icons: { icon: "/icon.svg" },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#f6f5ef",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

@@ -579,3 +579,49 @@ The frontend contains no numeric final-settlement waiting period and does not
 interpret the unresolved policy marker. The reviewed configuration remains
 unchanged and continues to return `POLICY_REVIEW_REQUIRED` until a separately
 authorized policy-review process supplies a safe versioned basis.
+
+## Phase 7F — Submission Hardening Boundaries
+
+### Browser regression tests use the real public demo API
+
+Playwright starts local FastAPI and Next.js processes and creates a fresh
+synthetic journey for every Ravi, Priya, and Arjun test. It does not mock API
+responses, reuse journey IDs from earlier tests, reset global backend state, or
+add a database. Failure traces and screenshots remain ignored local artifacts.
+
+### Infrastructure failures are not citizen-policy states
+
+A missing process-local journey is presented as an expired demo with a link to
+start again. A network-unavailable demo service and an unexpected page-render
+error receive separate transport/application recovery UI. None is converted to
+`UNABLE_TO_VERIFY`, `POLICY_REVIEW_REQUIRED`, or another domain result.
+
+### Demo restart is frontend-only
+
+“Start a new journey” and “Return to ClaimSaathi” are ordinary links to `/`.
+Journey isolation already makes a global reset unnecessary, so Phase 7F adds no
+backend reset endpoint and does not mutate another journey's synthetic state.
+
+### Explicit actions remain the only mutation boundary
+
+Create, evaluate, start resolution, confirm, recheck, simulate, and trace-demo
+actions disable only their relevant controls while pending. Refresh and page
+load remain GET-only. Failures preserve the last confirmed backend result and
+never advance a decision, resolution, or synthetic correction optimistically.
+
+### Accessibility is part of the presentation contract
+
+Valid states use consistent text, icon, and visual treatment rather than color
+alone. Major explicit state changes receive focus, asynchronous changes are
+announced, controls retain visible focus and practical touch targets, and the
+trace/graph remain operable as vertical structures at narrow widths. Motion is
+nonessential and respects reduced-motion preferences; this is a WCAG 2.1 AA
+fundamentals target, not a certification claim.
+
+### Frontend hardening remains non-authoritative
+
+Centralized state labels, icons, loading text, error recovery, metadata, and
+responsive CSS are presentation concerns only. They do not add policy
+thresholds, interpret eligibility, resolve uncertainty, mark a resolution
+complete, or reveal an official process before the corresponding backend
+decision permits it.

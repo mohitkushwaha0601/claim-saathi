@@ -9,6 +9,38 @@ export interface DecisionPresentation {
   tone: DecisionTone;
 }
 
+export interface DecisionVisual {
+  icon: string;
+  classes: string;
+}
+
+export const DECISION_VISUALS: Record<DecisionState, DecisionVisual> = {
+  PASS: {
+    icon: "✓",
+    classes: "border-emerald-200 bg-emerald-50 text-emerald-950",
+  },
+  ACTION_REQUIRED: {
+    icon: "!",
+    classes: "border-amber-200 bg-amber-50 text-amber-950",
+  },
+  NOT_ELIGIBLE: {
+    icon: "!",
+    classes: "border-amber-200 bg-amber-50 text-amber-950",
+  },
+  UNABLE_TO_VERIFY: {
+    icon: "?",
+    classes: "border-slate-300 bg-slate-50 text-slate-950",
+  },
+  NOT_APPLICABLE: {
+    icon: "–",
+    classes: "border-slate-300 bg-slate-50 text-slate-950",
+  },
+  POLICY_REVIEW_REQUIRED: {
+    icon: "?",
+    classes: "border-violet-200 bg-violet-50 text-violet-950",
+  },
+};
+
 export const DECISION_PRESENTATION: Record<
   DecisionState,
   DecisionPresentation

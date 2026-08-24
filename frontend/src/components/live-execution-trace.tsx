@@ -217,8 +217,9 @@ export function LiveExecutionTrace() {
               type="button"
               aria-label={`${item.name} — ${item.pathLabel}: ${item.subtitle}`}
               aria-pressed={selected}
+              disabled={pendingScenario !== null}
               onClick={() => selectScenario(item.id)}
-              className={`min-h-36 rounded-2xl border p-5 text-left transition focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand ${
+              className={`min-h-36 rounded-2xl border p-5 text-left transition focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-70 ${
                 selected
                   ? "border-brand bg-brand-soft shadow-sm"
                   : "border-line bg-white hover:border-brand/40"
@@ -236,7 +237,10 @@ export function LiveExecutionTrace() {
         })}
       </div>
 
-      <div className="mt-5 rounded-2xl border border-line bg-white p-5 sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-6">
+      <div
+        aria-busy={pendingScenario !== null}
+        className="mt-5 rounded-2xl border border-line bg-white p-5 sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-6"
+      >
         <div>
           <p className="text-sm font-bold text-ink">{scenario.name} · {scenario.pathLabel}</p>
           <p className="mt-1 text-sm leading-6 text-muted">
@@ -252,7 +256,9 @@ export function LiveExecutionTrace() {
         >
           {pendingScenario === selectedScenarioId
             ? "Generating synthetic trace…"
-            : "Generate synthetic trace"}
+            : error
+              ? "Try trace again"
+              : "Generate synthetic trace"}
         </button>
       </div>
 

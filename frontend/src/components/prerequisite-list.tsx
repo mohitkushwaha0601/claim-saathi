@@ -1,5 +1,8 @@
 import type { PrerequisiteResponse } from "@/lib/api/types";
-import { DECISION_PRESENTATION } from "@/lib/decision-presentation";
+import {
+  DECISION_PRESENTATION,
+  DECISION_VISUALS,
+} from "@/lib/decision-presentation";
 
 export function PrerequisiteList({
   prerequisites,
@@ -19,6 +22,7 @@ export function PrerequisiteList({
       <ul className="mt-5 overflow-hidden rounded-2xl border border-line bg-surface">
         {prerequisites.map((prerequisite) => {
           const presentation = DECISION_PRESENTATION[prerequisite.state];
+          const visual = DECISION_VISUALS[prerequisite.state];
           return (
             <li
               key={prerequisite.node_id}
@@ -26,13 +30,9 @@ export function PrerequisiteList({
             >
               <span
                 aria-hidden="true"
-                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${
-                  prerequisite.state === "PASS"
-                    ? "bg-emerald-100 text-emerald-800"
-                    : "bg-amber-100 text-amber-900"
-                }`}
+                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border font-bold ${visual.classes}`}
               >
-                {prerequisite.state === "PASS" ? "✓" : "!"}
+                {visual.icon}
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block font-semibold text-ink">

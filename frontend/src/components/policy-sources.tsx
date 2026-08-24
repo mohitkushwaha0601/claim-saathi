@@ -9,6 +9,22 @@ import type { PolicySourceResponse } from "@/lib/api/types";
 import { ErrorState } from "./error-state";
 import { LoadingState } from "./loading-state";
 
+const inFlightSourceRequests = new Map<
+  string,
+  Promise<PolicySourceResponse>
+>();
+
+function loadPolicySource(sourceId: string): Promise<PolicySourceResponse> {
+  const existing = inFlightSourceRequests.get(sourceId);
+  if (existing) return existing;
+
+  const request = getPolicySource(sourceId).finally(() => {
+    inFlightSourceRequests.delete(sourceId);
+  });
+  inFlightSourceRequests.set(sourceId, request);
+  return request;
+}
+
 type SourceState =
   | { status: "loading" }
   | { status: "ready"; sources: PolicySourceResponse[] }
@@ -38,11 +54,12 @@ export function PolicySources({
   description?: string;
 }) {
   const [state, setState] = useState<SourceState>({ status: "loading" });
+  const [requestSequence, setRequestSequence] = useState(0);
   const headingId = useId();
 
   useEffect(() => {
     let active = true;
-    Promise.all(sourceIds.map((sourceId) => getPolicySource(sourceId)))
+    Promise.all(sourceIds.map((sourceId) => loadPolicySource(sourceId)))
       .then((sources) => {
         if (active) setState({ status: "ready", sources });
       })
@@ -54,7 +71,7 @@ export function PolicySources({
     return () => {
       active = false;
     };
-  }, [sourceIds]);
+  }, [requestSequence, sourceIds]);
 
   if (sourceIds.length === 0) return null;
 
@@ -75,7 +92,15 @@ export function PolicySources({
         {state.status === "loading" ? (
           <LoadingState message="Loading reviewed source details…" />
         ) : null}
-        {state.status === "error" ? <ErrorState message={state.message} /> : null}
+        {state.status === "error" ? (
+          <ErrorState
+            message={state.message}
+            onRetry={() => {
+              setState({ status: "loading" });
+              setRequestSequence((current) => current + 1);
+            }}
+          />
+        ) : null}
         {state.status === "ready" ? (
           <ul className="grid gap-4">
             {state.sources.map((source) => {
@@ -103,6 +128,7 @@ export function PolicySources({
                       href={referenceUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={`View official source: ${source.title}`}
                       className="mt-4 inline-flex min-h-11 items-center font-semibold text-brand underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand"
                     >
                       View official source <span className="ml-1" aria-hidden="true">↗</span>

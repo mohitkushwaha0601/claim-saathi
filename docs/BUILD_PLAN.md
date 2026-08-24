@@ -65,7 +65,7 @@ and reviewed policy-source metadata. Runtime state is process-local and no live
 government integration, database, frontend, authentication, or AI was added.
 The Python service now resides in the canonical top-level `backend/` directory.
 
-## Phase 7 — Frontend (In Progress — Phases 7A–7E Complete)
+## Phase 7 — Frontend (Complete — Phases 7A–7F)
 
 Create the top-level `frontend/` directory and build the Next.js, TypeScript,
 and Tailwind presentation layer with accessible uncertainty, blocker,
@@ -118,14 +118,26 @@ waiting period or resolution is invented, and refresh restores the immutable
 backend decision using read-only requests. Phase 7 remains in progress; final
 polish, deployment, and runtime AI were not started.
 
+Phase 7F completed on 2026-08-24 after the complete backend suite, frontend
+type/lint/unit/build gates, and real-backend Chromium suite passed. The existing
+Ravi, Priya, Arjun, and System Explorer semantics remain frozen. Submission
+hardening adds consistent state visuals, accessible async focus and status
+feedback, retryable infrastructure errors, environment-aware API-offline copy,
+frontend-only demo-expiry and page-not-found recovery, source-request
+deduplication, metadata, responsive fixes from 320 through 1440px, and seven
+isolated Playwright regressions including GET-only refresh checks. No backend,
+policy, graph, resolution, decision, runtime-AI, persistence, authentication,
+analytics, or deployment change was made. Phase 7 is complete; deployment was
+not started.
+
 ## Phase 8 — Safe AI Gateway
 
 Optionally add an isolated gateway limited to simplifying, translating, or
 summarizing approved deterministic outputs, with a deterministic fallback and
 no path back into government decisions.
 
-## Phase 9 — E2E Tests, Accessibility, Deployment
+## Phase 9 — Deployment (Planned)
 
-Validate complete mocked citizen journeys, safety invariants, accessibility,
-operational configuration, and deployment behavior before any demonstration or
-release.
+Complete any separately authorized deployment and operational validation.
+Phase 7F already provides local real-backend E2E regression and accessibility
+fundamentals; no deployment work is included in Phase 7.

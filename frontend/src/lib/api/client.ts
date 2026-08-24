@@ -5,6 +5,8 @@ import type { ApiErrorEnvelope } from "./types";
 export const GENERIC_API_ERROR_MESSAGE =
   "We couldn't complete that request right now.";
 
+const inFlightReadRequests = new Map<string, Promise<unknown>>();
+
 export class ClaimSaathiApiError extends Error {
   readonly code: string;
   readonly status: number;
@@ -31,7 +33,7 @@ export function safeApiErrorMessage(error: unknown): string {
     : GENERIC_API_ERROR_MESSAGE;
 }
 
-export async function apiRequest<T>(
+async function executeApiRequest<T>(
   path: string,
   init: RequestInit = {},
 ): Promise<T> {
@@ -86,4 +88,27 @@ export async function apiRequest<T>(
       response.status,
     );
   }
+}
+
+export function apiRequest<T>(
+  path: string,
+  init: RequestInit = {},
+): Promise<T> {
+  const method = (init.method ?? "GET").toUpperCase();
+  const requestKey =
+    method === "GET" && !init.body && !init.headers ? path : null;
+  if (requestKey) {
+    const existing = inFlightReadRequests.get(requestKey);
+    if (existing) return existing as Promise<T>;
+  }
+
+  const request = executeApiRequest<T>(path, init);
+  if (requestKey) {
+    inFlightReadRequests.set(requestKey, request);
+    void request.then(
+      () => inFlightReadRequests.delete(requestKey),
+      () => inFlightReadRequests.delete(requestKey),
+    );
+  }
+  return request;
 }

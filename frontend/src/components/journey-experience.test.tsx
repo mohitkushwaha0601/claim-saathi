@@ -490,7 +490,9 @@ describe("journey evaluation experience", () => {
     expect((screen.getByRole("button", { name: "Checking your journey…" }) as HTMLButtonElement).disabled).toBe(true);
 
     resolveDecision(PASS_DECISION);
-    expect(await screen.findByRole("heading", { name: "Ready to proceed" })).toBeTruthy();
+    const resultHeading = await screen.findByRole("heading", { name: "Ready to proceed" });
+    expect(resultHeading).toBeTruthy();
+    expect(document.activeElement?.contains(resultHeading)).toBe(true);
   });
 
   it("renders backend PASS prerequisites, process, trust, and source metadata", async () => {
@@ -553,10 +555,28 @@ describe("journey evaluation experience", () => {
     );
     renderJourney();
 
-    expect(await screen.findByRole("heading", { name: "Journey not found" })).toBeTruthy();
+    expect(await screen.findByRole("heading", { name: "Demo journey expired" })).toBeTruthy();
     expect(screen.getByText("Demo journeys reset when the backend restarts.")).toBeTruthy();
     expect(screen.getByRole("link", { name: "Start a new journey" })).toBeTruthy();
     expect(screen.queryByText("Unable to verify")).toBeNull();
+  });
+
+  it("retries an infrastructure load failure without evaluating the journey", async () => {
+    getJourneyMock
+      .mockRejectedValueOnce(new Error("private network detail"))
+      .mockResolvedValueOnce(JOURNEY);
+    renderJourney();
+
+    expect(
+      await screen.findByText("We couldn't load this demo journey"),
+    ).toBeTruthy();
+    expect(screen.queryByText("private network detail")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
+
+    expect(
+      await screen.findByRole("heading", { name: "Your PF journey" }),
+    ).toBeTruthy();
+    expect(evaluateJourneyMock).not.toHaveBeenCalled();
   });
 
   it("preserves a successful decision if a later explicit check fails", async () => {

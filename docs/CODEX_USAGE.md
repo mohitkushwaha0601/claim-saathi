@@ -244,3 +244,41 @@ absent before evaluation and safely identified after
 `POLICY_REVIEW_REQUIRED`, observed a GET-only refresh, found no console or CORS
 errors, and measured a 390px viewport with no horizontal overflow. Ravi still
 reached backend `PASS`, and Priya still exposed her backend resolution action.
+
+## 2026-08-24 — Phase 7F Submission Hardening
+
+Codex hardened the existing frontend without changing citizen or government
+decision semantics. Shared decision visuals now keep labels, icons, and tones
+consistent across result headers, prerequisite lists, and execution traces.
+Explicit evaluation focuses the new backend result, amount entry receives focus
+when revealed, source links have descriptive names, and source metadata requests
+deduplicate while in flight and offer explicit retry. All mutation controls
+retain scoped pending guards and preserve the last confirmed backend state on
+failure.
+
+The home page now distinguishes an unavailable demo API from policy
+uncertainty, with environment-safe production wording. Expired in-memory
+journeys and unknown Next.js routes have separate restart paths, and an App
+Router error boundary avoids exposing raw render errors. Metadata, viewport,
+theme color, and the original lightweight icon are configured without adding
+fonts or runtime dependencies. A browser-found 320px safe-state overflow was
+fixed without hiding information.
+
+Playwright was added as development-only tooling. Seven Chromium tests start
+the real local FastAPI and Next.js servers and cover Ravi `PASS`/Form 31,
+Priya's complete resolution and explicit re-evaluation/Form 13 path, Arjun's
+policy-review/Form 19 safe stop, Ravi's interactive System Explorer trace,
+320/375/390/430px and 1280/1440px overflow checks, page-level not-found recovery,
+expired demo recovery, GET-only refresh behavior, keyboard action activation,
+and browser console/CORS failures. Every persona test creates a fresh synthetic
+journey and no backend response is mocked.
+
+Verification evidence: 260 backend tests passed; `uv lock --check --offline`
+passed; frontend typecheck and lint passed; 57 Vitest tests passed; the Next.js
+production build succeeded; and all 7 Playwright tests passed. A final live
+Playwright CLI check at 320px measured equal viewport and document widths,
+activated the Policy Engine stage with Enter, observed the real
+GET-personas/create/evaluate/trace/source network sequence, and found zero error
+console entries. No backend or policy artifact changed, and no runtime AI,
+authentication, database, analytics SDK, deployment, or government integration
+was added.

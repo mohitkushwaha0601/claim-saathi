@@ -4,7 +4,7 @@ import { PageContainer } from "@/components/page-container";
 import { SystemExplorer } from "@/components/system-explorer";
 
 export const metadata: Metadata = {
-  title: "How ClaimSaathi works · System Explorer",
+  title: "How it works",
   description:
     "Explore ClaimSaathi's deterministic journey, policy, prerequisite, resolution, and safety architecture.",
 };
