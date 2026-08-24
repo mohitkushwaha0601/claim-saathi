@@ -28,7 +28,7 @@ from app.policies import load_policy_registry
 from app.resolutions import ResolutionNavigator, load_resolution_catalog
 
 def _resolve_repository_root(start_path: Path) -> Path:
-    """Support both local repo layout and container deploy layout."""
+    """Support repo root layouts in local dev and in deploy containers."""
     candidates = [start_path.resolve(), *start_path.resolve().parents]
     for candidate in candidates:
         if (

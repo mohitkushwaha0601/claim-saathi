@@ -6,13 +6,17 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-COPY pyproject.toml uv.lock* ./
+COPY backend/pyproject.toml backend/uv.lock* ./
 
 RUN pip install --upgrade pip && \
     pip install uv && \
     uv sync --frozen --no-dev
 
-COPY . .
+COPY backend/app ./app
+COPY policies ./policies
+COPY journeys ./journeys
+COPY resolutions ./resolutions
+COPY fixtures ./fixtures
 
 EXPOSE 8000
 
