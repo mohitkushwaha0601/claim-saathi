@@ -85,6 +85,12 @@ const PERSONAS: DemoPersonaListResponse = {
       scenario: "Synthetic transfer scenario with a missing Date of Exit",
       compatible_goal: "TRANSFER_PF_AFTER_EMPLOYMENT_CHANGE",
     },
+    {
+      persona_id: "ARJUN_FINAL_SETTLEMENT",
+      display_name: "Arjun",
+      scenario: "Final PF settlement with unresolved policy configuration",
+      compatible_goal: "FINAL_PF_SETTLEMENT",
+    },
   ],
   demo: DEMO,
 };
@@ -232,6 +238,59 @@ const PRIYA_DECISION: DecisionDetailResponse = {
   ],
 };
 
+const ARJUN_JOURNEY: JourneyResponse = {
+  journey_instance_id: "JRN-ARJUN-TEST",
+  persona_id: "ARJUN_FINAL_SETTLEMENT",
+  citizen_goal: "FINAL_PF_SETTLEMENT",
+  journey_id: "PF_FINAL_SETTLEMENT",
+  journey_definition_version: 1,
+  created_at: "2026-08-24T06:00:00Z",
+  official_process: {
+    label: "Form 19",
+    source_id: "SRC-EPFO-FORMS",
+  },
+  citizen_state_revision: 1,
+  demo: DEMO,
+  latest_decision: null,
+};
+
+const ARJUN_DECISION: DecisionDetailResponse = {
+  journey_instance_id: ARJUN_JOURNEY.journey_instance_id,
+  decision_id: "DEC-ARJUN-REVIEW",
+  journey_id: "PF_FINAL_SETTLEMENT",
+  state: "POLICY_REVIEW_REQUIRED",
+  state_display: "Policy verification required",
+  official_process: ARJUN_JOURNEY.official_process,
+  issue_codes: [],
+  resolution_ids: [],
+  policy_version: "CONFLICT-DEMO-1",
+  graph_version: "CONFLICT-DEMO-1",
+  journey_definition_version: 1,
+  citizen_state_revision: 1,
+  evaluated_at: "2026-08-24T06:30:00Z",
+  prerequisites: [
+    {
+      node_id: "FINAL_SETTLEMENT_POLICY_READY",
+      label: "Final-settlement policy ready",
+      state: "POLICY_REVIEW_REQUIRED",
+      state_display: "Policy verification required",
+    },
+  ],
+  sources: [],
+  ai_used_for_decision: false,
+  demo: DEMO,
+  rule_results: [
+    {
+      rule_id: "FINAL_SETTLEMENT_WAIT_PERIOD",
+      state: "POLICY_REVIEW_REQUIRED",
+      issue_code: null,
+      resolution_id: null,
+      source_id: null,
+      policy_version: "CONFLICT-DEMO-1",
+    },
+  ],
+};
+
 const APPROVED_STEPS = [
   {
     step_id: "REVIEW_RECORD",
@@ -330,6 +389,16 @@ const SOURCE: PolicySourceResponse = {
   demo: DEMO,
 };
 
+const FORMS_SOURCE: PolicySourceResponse = {
+  ...SOURCE,
+  source_id: "SRC-EPFO-FORMS",
+  authority: "Employees' Provident Fund Organisation",
+  title: "EPFO process and form labels",
+  document_type: "OFFICIAL_WEB_PAGE",
+  reference_url: "https://www.epfindia.gov.in/example",
+  scope: "Form and process labels only; no eligibility rule.",
+};
+
 function decisionWithState(state: DecisionState): DecisionDetailResponse {
   return {
     ...PASS_DECISION,
@@ -380,11 +449,12 @@ describe("journey evaluation experience", () => {
       demo: DEMO,
     });
     getPolicySourceMock.mockImplementation(async (sourceId) => ({
-      ...SOURCE,
+      ...(sourceId === "SRC-EPFO-FORMS" ? FORMS_SOURCE : SOURCE),
       source_id: sourceId,
-      title:
-        sourceId === "SRC-EPFO-EXIT-RESOLUTION"
-          ? "EPFO Mark Exit guidance"
+      title: sourceId === "SRC-EPFO-EXIT-RESOLUTION"
+        ? "EPFO Mark Exit guidance"
+        : sourceId === "SRC-EPFO-FORMS"
+          ? FORMS_SOURCE.title
           : SOURCE.title,
     }));
   });
@@ -520,7 +590,7 @@ describe("journey evaluation experience", () => {
     expect(screen.queryByText("Form 31")).toBeNull();
   });
 
-  it("renders POLICY_REVIEW_REQUIRED without an AI fallback", async () => {
+  it("renders the generic POLICY_REVIEW_REQUIRED experience from backend state", async () => {
     const reviewRequired = decisionWithState("POLICY_REVIEW_REQUIRED");
     evaluateJourneyMock.mockResolvedValue(reviewRequired);
     getDecisionDetailMock.mockResolvedValue(reviewRequired);
@@ -530,8 +600,105 @@ describe("journey evaluation experience", () => {
     expect(
       await screen.findByRole("heading", { name: "Policy verification required" }),
     ).toBeTruthy();
-    expect(screen.getByText(/will not automate this result/)).toBeTruthy();
-    expect(screen.queryByText(/AI fallback/i)).toBeNull();
+    expect(screen.getByText("ClaimSaathi stopped instead of guessing.")).toBeTruthy();
+    expect(screen.getByText("AI was not used to fill the policy gap.")).toBeTruthy();
+  });
+
+  it("keeps Form 19 hidden until Arjun explicitly requests evaluation", async () => {
+    getJourneyMock.mockResolvedValue(ARJUN_JOURNEY);
+    render(<JourneyExperience journeyInstanceId={ARJUN_JOURNEY.journey_instance_id} />);
+
+    expect(await screen.findByText("Final PF settlement")).toBeTruthy();
+    expect(screen.getByText("Not checked yet")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Check my journey" })).toBeTruthy();
+    expect(screen.queryByText("Form 19")).toBeNull();
+    expect(evaluateJourneyMock).not.toHaveBeenCalled();
+  });
+
+  it("renders Arjun's backend policy-review safe stop without inventing readiness or resolution", async () => {
+    getJourneyMock.mockResolvedValue(ARJUN_JOURNEY);
+    evaluateJourneyMock.mockResolvedValue(ARJUN_DECISION);
+    getDecisionDetailMock.mockResolvedValue(ARJUN_DECISION);
+    listDecisionsMock.mockResolvedValue({
+      journey_instance_id: ARJUN_JOURNEY.journey_instance_id,
+      decisions: [ARJUN_DECISION],
+      demo: DEMO,
+    });
+
+    const view = render(
+      <JourneyExperience journeyInstanceId={ARJUN_JOURNEY.journey_instance_id} />,
+    );
+    fireEvent.click(await screen.findByRole("button", { name: "Check my journey" }));
+
+    expect(evaluateJourneyMock).toHaveBeenCalledOnce();
+    expect(evaluateJourneyMock).toHaveBeenCalledWith(ARJUN_JOURNEY.journey_instance_id);
+    expect(await screen.findByRole("heading", { name: "Policy verification required" })).toBeTruthy();
+    expect(screen.getByText("ClaimSaathi stopped instead of guessing.")).toBeTruthy();
+    expect(screen.getByText("Did not invent a waiting period")).toBeTruthy();
+    expect(screen.getByText(/Did not use AI to choose/)).toBeTruthy();
+    expect(screen.getByText("AI was not used to fill the policy gap.")).toBeTruthy();
+    expect(screen.getByText("AI used for decision")).toBeTruthy();
+    expect(screen.getByText("false")).toBeTruthy();
+    expect(screen.queryByRole("heading", { name: "Ready to proceed" })).toBeNull();
+    expect(screen.getByText("Form 19")).toBeTruthy();
+    expect(screen.getByText(/Process identification does not mean/)).toBeTruthy();
+    expect(screen.getByText(/No automated resolution is configured/)).toBeTruthy();
+    expect(screen.queryByRole("button", { name: /Start resolution/i })).toBeNull();
+    expect(screen.queryByRole("button", { name: /Check again/i })).toBeNull();
+    expect(screen.getByRole("link", { name: "Review how this decision was made" }).getAttribute("href")).toBe("/how-it-works#safe-stop");
+    expect(screen.getByRole("link", { name: "See how ClaimSaathi handles uncertainty" }).getAttribute("href")).toBe("/how-it-works#safe-stop");
+
+    const pageText = view.container.textContent ?? "";
+    expect(pageText).not.toMatch(/\b\d+\s*(?:days?|months?)\b/i);
+    expect(pageText).not.toMatch(/\b(?:approved|rejected|guaranteed)\b/i);
+
+    expect(await screen.findByText(FORMS_SOURCE.title)).toBeTruthy();
+    expect(getPolicySourceMock).toHaveBeenCalledTimes(1);
+    expect(getPolicySourceMock).toHaveBeenCalledWith("SRC-EPFO-FORMS");
+    expect(screen.getByText(/supports the Form 19 process label/)).toBeTruthy();
+    expect(screen.getByText(/No rule source is attached/)).toBeTruthy();
+  });
+
+  it("restores Arjun's policy-review result with read-only requests", async () => {
+    getJourneyMock.mockResolvedValue({
+      ...ARJUN_JOURNEY,
+      latest_decision: ARJUN_DECISION,
+    });
+    getDecisionDetailMock.mockResolvedValue(ARJUN_DECISION);
+    listDecisionsMock.mockResolvedValue({
+      journey_instance_id: ARJUN_JOURNEY.journey_instance_id,
+      decisions: [ARJUN_DECISION],
+      demo: DEMO,
+    });
+
+    render(<JourneyExperience journeyInstanceId={ARJUN_JOURNEY.journey_instance_id} />);
+
+    expect(await screen.findByRole("heading", { name: "Policy verification required" })).toBeTruthy();
+    expect(screen.getByText("Form 19")).toBeTruthy();
+    expect(getDecisionDetailMock).toHaveBeenCalledWith(
+      ARJUN_JOURNEY.journey_instance_id,
+      ARJUN_DECISION.decision_id,
+    );
+    expect(evaluateJourneyMock).not.toHaveBeenCalled();
+    expect(startResolutionMock).not.toHaveBeenCalled();
+  });
+
+  it("keeps the stored policy-review result visible when source metadata fails to load", async () => {
+    getJourneyMock.mockResolvedValue({
+      ...ARJUN_JOURNEY,
+      latest_decision: ARJUN_DECISION,
+    });
+    getDecisionDetailMock.mockResolvedValue(ARJUN_DECISION);
+    getPolicySourceMock.mockRejectedValueOnce(new Error("private network detail"));
+
+    render(<JourneyExperience journeyInstanceId={ARJUN_JOURNEY.journey_instance_id} />);
+
+    expect(await screen.findByRole("heading", { name: "Policy verification required" })).toBeTruthy();
+    expect(await screen.findByText("We couldn't complete that request right now.")).toBeTruthy();
+    expect(screen.getByText("ClaimSaathi stopped instead of guessing.")).toBeTruthy();
+    expect(screen.getByText("Form 19")).toBeTruthy();
+    expect(screen.queryByText("private network detail")).toBeNull();
+    expect(evaluateJourneyMock).not.toHaveBeenCalled();
   });
 
   it("renders Priya's complete backend-driven resolution and re-evaluation flow", async () => {

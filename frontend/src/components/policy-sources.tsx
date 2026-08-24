@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 import { safeApiErrorMessage } from "@/lib/api/client";
 import { getPolicySource } from "@/lib/api/policy";
@@ -30,12 +30,15 @@ export function PolicySources({
   sourceIds,
   eyebrow = "Provenance",
   heading = "Rules used for this check",
+  description,
 }: {
   sourceIds: string[];
   eyebrow?: string;
   heading?: string;
+  description?: string;
 }) {
   const [state, setState] = useState<SourceState>({ status: "loading" });
+  const headingId = useId();
 
   useEffect(() => {
     let active = true;
@@ -56,13 +59,18 @@ export function PolicySources({
   if (sourceIds.length === 0) return null;
 
   return (
-    <section aria-labelledby="sources-heading">
+    <section aria-labelledby={headingId}>
       <p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">
         {eyebrow}
       </p>
-      <h2 id="sources-heading" className="mt-2 text-2xl font-bold tracking-[-0.025em] text-ink">
+      <h2 id={headingId} className="mt-2 text-2xl font-bold tracking-[-0.025em] text-ink">
         {heading}
       </h2>
+      {description ? (
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">
+          {description}
+        </p>
+      ) : null}
       <div className="mt-5">
         {state.status === "loading" ? (
           <LoadingState message="Loading reviewed source details…" />

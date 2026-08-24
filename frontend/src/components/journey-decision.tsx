@@ -12,6 +12,7 @@ import { JourneyIssues } from "./journey-issues";
 import { JourneyDecisionHeader } from "./journey-decision-header";
 import { OfficialProcessCard } from "./official-process-card";
 import { PolicySources } from "./policy-sources";
+import { PolicyReviewRequiredExperience } from "./policy-review-required-experience";
 import { PrerequisiteList } from "./prerequisite-list";
 import { PrimaryButton } from "./primary-button";
 import { ResolutionNavigator } from "./resolution-navigator";
@@ -36,6 +37,16 @@ export function JourneyDecision({
   evaluationError: string | null;
   onEvaluate: () => Promise<boolean>;
 }) {
+  if (decision.state === "POLICY_REVIEW_REQUIRED") {
+    return (
+      <PolicyReviewRequiredExperience
+        citizenGoal={citizenGoal}
+        decision={decision}
+        decisionHistory={decisionHistory}
+      />
+    );
+  }
+
   const hasResolutionOpportunity = decision.rule_results.some(
     (result) =>
       result.issue_code !== null &&

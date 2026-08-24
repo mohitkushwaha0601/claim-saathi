@@ -213,3 +213,34 @@ live/architecture separation and Arjun's safe stop, exercised a stage with the
 keyboard, found no console or CORS errors, and confirmed a 390px viewport had
 no horizontal overflow. The existing home and Priya journey routes also
 remained operational.
+
+## 2026-08-24 — Phase 7E Arjun Safety Experience
+
+Codex implemented a reusable `POLICY_REVIEW_REQUIRED` citizen renderer selected
+only from the backend decision state. Before evaluation, Arjun's journey keeps
+Form 19 and all policy-review detail hidden. After the explicit real API check,
+the page presents a calm safe-stop hero, distinguishes what the journey mapping
+identified from what the reviewed policy cannot safely determine, and states
+that ClaimSaathi stopped instead of guessing.
+
+The experience shows the backend-provided Form 19 label only as an identified
+official process, explicitly separates its metadata source from rule evidence,
+and exposes policy, graph, journey-definition, and no-AI audit fields in
+technical details. It provides no resolution start, readiness action, numeric
+waiting period, eligibility conclusion, or government outcome. Refresh remains
+read-only and source-request failures leave the stored decision visible.
+
+Frontend boundary coverage verifies pre-evaluation withholding, explicit
+evaluation, the policy-review hero and safety facts, Form 19's non-readiness
+semantics, backend-only source IDs, absence of resolution controls, read-only
+refresh restoration, safe network failure behavior, and the System Explorer
+link. No backend, policy, graph, journey, resolution, decision-semantic, runtime
+AI, deployment, or final-polish change was made.
+
+Verification evidence: frontend typecheck and lint passed, all 51 frontend tests
+passed, the Next.js production build succeeded, and `git diff --check` passed.
+Live browser verification used the real FastAPI sequence, confirmed Form 19 was
+absent before evaluation and safely identified after
+`POLICY_REVIEW_REQUIRED`, observed a GET-only refresh, found no console or CORS
+errors, and measured a 390px viewport with no horizontal overflow. Ravi still
+reached backend `PASS`, and Priya still exposed her backend resolution action.

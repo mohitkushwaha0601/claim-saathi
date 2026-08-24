@@ -52,7 +52,7 @@ export const DECISION_PRESENTATION: Record<
     label: "Policy verification required",
     prerequisiteLabel: "Policy verification required",
     supportingCopy:
-      "ClaimSaathi will not automate this result while the reviewed policy configuration is unresolved.",
+      "We found the relevant journey, but the reviewed policy configuration does not support a safe automated determination.",
     tone: "review",
   },
 };

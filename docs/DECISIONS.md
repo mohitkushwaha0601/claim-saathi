@@ -535,3 +535,47 @@ runtime AI dependency or fallback is present.
 The form-first side-by-side is a simplified citizen journey model used to
 explain orchestration. It is explicitly not an exhaustive audit of EPFO or a
 claim about every external government experience.
+
+## Phase 7E — Policy-Review Presentation Boundaries
+
+### `POLICY_REVIEW_REQUIRED` is a first-class citizen UI state
+
+The citizen renderer selects the policy-review experience from the backend
+decision state, not from a persona identifier. It presents an intentional safe
+stop and never reframes the state as rejection, ineligibility, system failure,
+or a transport error.
+
+### Official process identification is not readiness
+
+Form 19 may be shown after the backend identifies the evaluated journey, but it
+is labeled only as the identified official process. The page does not reuse the
+`PASS` process card and explicitly states that the process label does not mean
+the journey is verified as ready.
+
+### Process metadata and rule evidence remain distinct
+
+The form-label source is fetched only from the backend-provided official-process
+source ID and is described as process metadata. Sources used by evaluated rules
+remain a separate decision-provenance section. An absent source on the
+policy-review marker is surfaced honestly rather than attributing the unresolved
+rule to the form-label source.
+
+### No resolution is invented without reviewed configuration
+
+When a policy-review decision carries no approved resolution, the frontend
+offers no resolution start, form submission, wait instruction, or government
+action. It provides only product-explanation and start-another-journey links.
+
+### AI cannot bridge unresolved policy
+
+The structural backend value `ai_used_for_decision: false` remains visible, and
+the citizen copy states that AI was not used to fill the policy gap. Any future
+optional explanation capability remains unable to change the deterministic
+decision state.
+
+### The final-settlement waiting period remains unresolved
+
+The frontend contains no numeric final-settlement waiting period and does not
+interpret the unresolved policy marker. The reviewed configuration remains
+unchanged and continues to return `POLICY_REVIEW_REQUIRED` until a separately
+authorized policy-review process supplies a safe versioned basis.

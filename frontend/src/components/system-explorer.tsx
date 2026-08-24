@@ -220,7 +220,7 @@ export function SystemExplorer() {
         </div>
       </section>
 
-      <section className="mt-20" aria-labelledby="uncertainty-heading">
+      <section id="safe-stop" className="mt-20 scroll-mt-24" aria-labelledby="uncertainty-heading">
         <p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">
           Honest uncertainty
         </p>

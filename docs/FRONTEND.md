@@ -1,6 +1,6 @@
 # ClaimSaathi Frontend
 
-Phases 7A through 7D provide a mobile-first Next.js App Router application at
+Phases 7A through 7E provide a mobile-first Next.js App Router application at
 `frontend/`. It asks citizens for their PF goal, loads the three synthetic
 personas from FastAPI, creates a real journey instance, supports explicit
 deterministic journey evaluation, and provides Priya's backend-driven recovery
@@ -75,6 +75,12 @@ Open `http://localhost:3000`.
   the current live trace; it never invents a second decision record.
 - The Arjun example preserves `POLICY_REVIEW_REQUIRED` and states that no AI
   fallback, numeric waiting period, or government outcome is supplied.
+- The citizen decision renderer treats `POLICY_REVIEW_REQUIRED` as a dedicated
+  valid safe-stop state based on backend state alone. It is not a persona check,
+  error, rejection, eligibility result, or resolution opportunity.
+- For that state, an identified official process is displayed separately from
+  readiness. The process source supports only the backend-provided process
+  label, while any rule evidence remains a distinct provenance section.
 
 ## Priya resolution flow
 
@@ -119,6 +125,25 @@ selected state. The stage pipeline and connected prerequisite tree reflow from
 horizontal/branched desktop layouts to vertical nested mobile layouts without
 requiring hover or horizontal scrolling. State is always communicated with
 text and an icon as well as visual treatment.
+
+## Arjun policy-review flow
+
+Before evaluation, Arjun's page shows only the citizen goal, “Not checked yet,”
+and the explicit “Check my journey” action. It deliberately withholds Form 19
+and policy-review details until the citizen runs the backend evaluation.
+
+When the stored result is `POLICY_REVIEW_REQUIRED`, the generic state-driven
+renderer explains that ClaimSaathi identified the final-settlement journey but
+stopped because the reviewed policy basis cannot support a safe automated
+determination. It shows that no waiting period, AI fallback, eligibility, or
+government outcome was invented. Form 19 appears only as an identified process,
+with an explicit statement that process identification is not readiness.
+
+No resolution-start or government-process action is offered because the
+backend decision contains no reviewed resolution. The citizen can inspect the
+System Explorer or start another journey. Refresh reconstructs the result using
+the existing journey, decision-detail, history, and source GETs and performs no
+evaluation or mutation.
 
 ## Checks
 

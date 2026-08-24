@@ -65,7 +65,7 @@ and reviewed policy-source metadata. Runtime state is process-local and no live
 government integration, database, frontend, authentication, or AI was added.
 The Python service now resides in the canonical top-level `backend/` directory.
 
-## Phase 7 — Frontend (In Progress — Phases 7A–7D Complete)
+## Phase 7 — Frontend (In Progress — Phases 7A–7E Complete)
 
 Create the top-level `frontend/` directory and build the Next.js, TypeScript,
 and Tailwind presentation layer with accessible uncertainty, blocker,
@@ -108,6 +108,15 @@ from Priya's conceptual recovery flow, explain explicit uncertainty, and keep a
 disabled optional future AI explanation layer outside the decision path. Phase
 7 remains in progress; Arjun's polished citizen safety flow and final polish
 were not started.
+
+Phase 7E completed on 2026-08-24 with a reusable citizen-facing
+`POLICY_REVIEW_REQUIRED` safe-stop experience. Arjun's journey now withholds
+Form 19 until the explicit backend check, presents policy uncertainty as a
+valid deliberate stop, distinguishes identified process metadata from
+readiness and rule evidence, and makes the no-guess/no-AI boundary visible. No
+waiting period or resolution is invented, and refresh restores the immutable
+backend decision using read-only requests. Phase 7 remains in progress; final
+polish, deployment, and runtime AI were not started.
 
 ## Phase 8 — Safe AI Gateway
 
