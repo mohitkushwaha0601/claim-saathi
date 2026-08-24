@@ -29,6 +29,16 @@ def create_app(
             "services. No real government action is performed."
         ),
     )
+
+    @application.get("/")
+    def root() -> dict[str, str]:
+        return {
+            "status": "ok",
+            "service": "claimsaathi-api",
+            "message": "Server is running.",
+            "environment": active_settings.environment,
+        }
+
     application.state.container = container or create_application_container()
     application.dependency_overrides[health.get_settings] = (
         lambda: active_settings
