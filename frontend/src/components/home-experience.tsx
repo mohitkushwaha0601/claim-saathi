@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -77,6 +78,7 @@ export function HomeExperience() {
     null,
   );
   const amountInputRef = useRef<HTMLInputElement>(null);
+
   const loadPersonas = useCallback(async () => {
     if (!navigator.onLine) {
       setLoadState({ status: "error", kind: "network" });
@@ -126,6 +128,30 @@ export function HomeExperience() {
     if (selectedIntent) amountInputRef.current?.focus();
   }, [selectedIntent]);
 
+  const serviceCards = [
+    {
+      eyebrow: t("serviceCards.start.eyebrow"),
+      title: t("serviceCards.start.title"),
+      copy: t("serviceCards.start.copy"),
+      cta: t("serviceCards.start.cta"),
+      href: "/#start-a-task",
+    },
+    {
+      eyebrow: t("serviceCards.guide.eyebrow"),
+      title: t("serviceCards.guide.title"),
+      copy: t("serviceCards.guide.copy"),
+      cta: t("serviceCards.guide.cta"),
+      href: "/how-it-works",
+    },
+    {
+      eyebrow: t("serviceCards.safety.eyebrow"),
+      title: t("serviceCards.safety.title"),
+      copy: t("serviceCards.safety.copy"),
+      cta: t("serviceCards.safety.cta"),
+      href: "/how-it-works#safe-stop",
+    },
+  ] as const;
+
   async function prepareJourney(
     intent: BoundIntent,
     requestedAmountRupees?: number,
@@ -146,9 +172,7 @@ export function HomeExperience() {
           ? {}
           : { requested_amount_rupees: requestedAmountRupees }),
       });
-      router.push(
-        `/journey/${encodeURIComponent(journey.journey_instance_id)}`,
-      );
+      router.push(`/journey/${encodeURIComponent(journey.journey_instance_id)}`);
     } catch {
       setCreationError(errorT("generic"));
       setFailedCreation({ intent, requestedAmountRupees });
@@ -183,22 +207,129 @@ export function HomeExperience() {
   }
 
   return (
-    <main id="main-content" className="pb-16 pt-12 sm:pb-24 sm:pt-16">
-      <section aria-labelledby="intent-heading">
-        <p className="text-sm font-bold tracking-[0.16em] text-brand uppercase">
-          {t("eyebrow")}
-        </p>
-        <h1
-          id="intent-heading"
-          className="mt-3 max-w-3xl text-4xl font-bold tracking-[-0.045em] text-ink sm:text-5xl sm:leading-[1.08]"
-        >
-          {t("title")}
-        </h1>
-        <p className="mt-4 max-w-2xl text-base leading-7 text-muted sm:text-lg">
-          {t("intro")}
-        </p>
+    <main id="main-content" className="pb-16 pt-10 sm:pb-24 sm:pt-14">
+      <section
+        aria-labelledby="service-hub-heading"
+        className="grid gap-6 rounded-[2rem] border border-line bg-[linear-gradient(180deg,#fffef8_0%,#f1f6f2_100%)] p-5 sm:p-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8"
+      >
+        <div>
+          <p className="text-sm font-bold tracking-[0.16em] text-brand uppercase">
+            {t("hubEyebrow")}
+          </p>
+          <h1
+            id="service-hub-heading"
+            className="mt-3 max-w-3xl text-4xl font-bold tracking-[-0.045em] text-ink sm:text-5xl sm:leading-[1.08]"
+          >
+            {t("title")}
+          </h1>
+          <p className="mt-4 max-w-2xl text-base leading-7 text-muted sm:text-lg">
+            {t("intro")}
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              href="/#start-a-task"
+              prefetch={false}
+              className="inline-flex min-h-12 items-center justify-center rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            >
+              {t("hubPrimaryCta")}
+            </Link>
+            <Link
+              href="/how-it-works"
+              prefetch={false}
+              className="inline-flex min-h-12 items-center justify-center rounded-xl border border-line bg-surface px-5 py-3 text-sm font-semibold text-ink transition hover:border-brand/40 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            >
+              {t("hubSecondaryCta")}
+            </Link>
+          </div>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-2xl border border-line bg-surface/90 p-4">
+              <p className="text-xs font-bold tracking-[0.12em] text-brand uppercase">
+                {t("hubPointOneTitle")}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                {t("hubPointOneCopy")}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-brand/25 bg-brand-soft p-4">
+              <p className="text-xs font-bold tracking-[0.12em] text-brand uppercase">
+                {t("hubPointTwoTitle")}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                {t("hubPointTwoCopy")}
+              </p>
+            </div>
+          </div>
+        </div>
 
-        <div className="mt-9" aria-busy={loadState.status === "loading"}>
+        <aside className="rounded-[1.75rem] border border-line bg-surface p-5 shadow-[0_16px_40px_rgba(31,45,38,0.05)] sm:p-6">
+          <p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">
+            {t("servicePanelEyebrow")}
+          </p>
+          <h2 className="mt-2 text-xl font-bold tracking-[-0.02em] text-ink">
+            {t("servicePanelTitle")}
+          </h2>
+          <div className="mt-4 grid gap-3">
+            {serviceCards.map((card) => (
+              <Link
+                key={card.title}
+                href={card.href}
+                prefetch={false}
+                className="group rounded-2xl border border-line bg-canvas p-4 transition hover:border-brand/40 hover:bg-brand-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              >
+                <p className="text-xs font-bold tracking-[0.12em] text-muted uppercase">
+                  {card.eyebrow}
+                </p>
+                <div className="mt-2 flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="text-base font-bold leading-6 text-ink">
+                      {card.title}
+                    </h3>
+                    <p className="mt-1 text-sm leading-6 text-muted">
+                      {card.copy}
+                    </p>
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    className="mt-1 text-lg font-bold text-brand transition group-hover:translate-x-0.5"
+                  >
+                    →
+                  </span>
+                </div>
+                <p className="mt-3 text-sm font-semibold text-brand underline-offset-4 group-hover:underline">
+                  {card.cta}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </aside>
+      </section>
+
+      <section
+        id="start-a-task"
+        aria-labelledby="task-heading"
+        className="mt-16 sm:mt-20"
+      >
+        <p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">
+          {t("taskEyebrow")}
+        </p>
+        <div className="mt-2 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h2
+              id="task-heading"
+              className="text-3xl font-bold tracking-[-0.035em] text-ink sm:text-4xl"
+            >
+              {t("taskTitle")}
+            </h2>
+            <p className="mt-3 max-w-3xl leading-7 text-muted">
+              {t("taskCopy")}
+            </p>
+          </div>
+          <p className="max-w-xl text-sm leading-6 text-muted">
+            {t("taskNote")}
+          </p>
+        </div>
+
+        <div className="mt-8" aria-busy={loadState.status === "loading"}>
           {loadState.status === "loading" ? (
             <LoadingState message={t("loading")} />
           ) : null}
@@ -349,29 +480,30 @@ export function HomeExperience() {
         ) : null}
       </section>
 
-      <section aria-labelledby="how-it-works" className="mt-16 sm:mt-20">
+      <section
+        aria-labelledby="how-it-works-heading"
+        className="mt-16 sm:mt-20"
+      >
         <h2
-          id="how-it-works"
+          id="how-it-works-heading"
           className="text-2xl font-bold tracking-[-0.025em] text-ink sm:text-3xl"
         >
           {t("worksTitle")}
         </h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-4">
-          {(t.raw("steps") as string[]).map(
-            (step, index) => (
-              <div
-                key={step}
-                className="flex items-center gap-3 rounded-xl border border-line bg-surface p-4 sm:block"
-              >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm font-bold text-brand">
-                  {index + 1}
-                </span>
-                <span className="text-sm font-semibold text-ink sm:mt-3 sm:block">
-                  {step}
-                </span>
-              </div>
-            ),
-          )}
+          {(t.raw("steps") as string[]).map((step, index) => (
+            <div
+              key={step}
+              className="flex items-center gap-3 rounded-xl border border-line bg-surface p-4 sm:block"
+            >
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm font-bold text-brand">
+                {index + 1}
+              </span>
+              <span className="text-sm font-semibold text-ink sm:mt-3 sm:block">
+                {step}
+              </span>
+            </div>
+          ))}
         </div>
         <p className="mt-5 max-w-3xl text-base leading-7 text-muted">
           {t("worksCopy")}
@@ -383,9 +515,25 @@ export function HomeExperience() {
         ) : null}
       </section>
 
-      <div className="mt-10">
-        <SafetyNotice />
-      </div>
+      <section aria-labelledby="trust-heading" className="mt-16 sm:mt-20">
+        <div className="grid gap-5 lg:grid-cols-[1fr_0.95fr]">
+          <div>
+            <p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">
+              {t("trustEyebrow")}
+            </p>
+            <h2
+              id="trust-heading"
+              className="mt-2 text-2xl font-bold tracking-[-0.025em] text-ink sm:text-3xl"
+            >
+              {t("trustTitle")}
+            </h2>
+            <p className="mt-4 max-w-3xl text-base leading-7 text-muted">
+              {t("trustCopy")}
+            </p>
+          </div>
+          <SafetyNotice />
+        </div>
+      </section>
     </main>
   );
 }

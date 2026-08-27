@@ -2,6 +2,9 @@
   "Common": {
     "skipToContent": "Skip to main content",
     "tagline": "Understand your PF journey before entering the process.",
+    "primaryNavigation": "Primary navigation",
+    "startATask": "Start a task",
+    "safety": "Safety",
     "howItWorks": "How it works",
     "demo": "Demo",
     "demoBoundary": "Independent prototype · Uses synthetic data · No real EPFO action",
@@ -60,6 +63,39 @@
     "eyebrow": "Start with your goal",
     "title": "What do you want to do with your PF?",
     "intro": "Choose the outcome you understand. ClaimSaathi will connect it to the right synthetic journey without asking you to know a government form.",
+    "hubEyebrow": "Service hub",
+    "hubPrimaryCta": "Start a task",
+    "hubSecondaryCta": "Learn how it works",
+    "hubPointOneTitle": "Task-first navigation",
+    "hubPointOneCopy": "Start with the outcome you want instead of hunting for a form number.",
+    "hubPointTwoTitle": "Safety built in",
+    "hubPointTwoCopy": "See where ClaimSaathi stops, explains uncertainty, and stays synthetic.",
+    "servicePanelEyebrow": "Quick entry points",
+    "servicePanelTitle": "Pick a place to begin",
+    "serviceCards": {
+      "start": {
+        "eyebrow": "Guided tasks",
+        "title": "Open the PF journey chooser",
+        "copy": "Move straight to the main task cards for transfer, withdrawal, or settlement.",
+        "cta": "Open tasks"
+      },
+      "guide": {
+        "eyebrow": "Explore",
+        "title": "See how ClaimSaathi works",
+        "copy": "Understand the deterministic flow before you choose a journey.",
+        "cta": "Open explainer"
+      },
+      "safety": {
+        "eyebrow": "Trust",
+        "title": "Review safety and uncertainty",
+        "copy": "See where the system stops instead of guessing.",
+        "cta": "Review safety"
+      }
+    },
+    "taskEyebrow": "Choose a task",
+    "taskTitle": "Pick the PF goal you already understand",
+    "taskCopy": "These are the main paths this prototype can guide today. Each card connects to a synthetic demo persona and a reviewed journey.",
+    "taskNote": "The site keeps the task cards visible because the user is deciding what they want to do, not reading system internals first.",
     "loading": "Loading synthetic demo profiles…",
     "syntheticExample": "Synthetic example · {name}",
     "amountTitle": "How much do you want to access?",
@@ -74,6 +110,9 @@
     "worksTitle": "How ClaimSaathi works",
     "worksCopy": "ClaimSaathi checks reviewed rules and your synthetic demo records before showing the applicable next step.",
     "steps": ["Your goal", "Reviewed checks", "Clear action", "Official process"],
+    "trustEyebrow": "Trust and boundary",
+    "trustTitle": "The service should feel helpful without pretending to be EPFO",
+    "trustCopy": "ClaimSaathi is an independent prototype. It keeps synthetic data, reviewed rules, and uncertainty states visible so citizens can trust the guidance without mistaking it for a live government action.",
     "intents": {
       "ACCESS_SOME_PF_FUNDS": {
         "title": "I need some money from my PF",

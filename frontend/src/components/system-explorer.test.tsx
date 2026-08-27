@@ -352,6 +352,8 @@ describe("Phase 7D system explorer", () => {
 
     renderWithProviders(<AppHeader />);
     expect(screen.getByRole("link", { name: "How it works" }).getAttribute("href")).toBe("/how-it-works");
+    expect(screen.getByRole("link", { name: "Start a task" }).getAttribute("href")).toBe("/#start-a-task");
+    expect(screen.getByRole("link", { name: "Safety" }).getAttribute("href")).toBe("/how-it-works#safe-stop");
   });
 
   it("runs the real demo API sequence and renders Ravi's backend trace", async () => {

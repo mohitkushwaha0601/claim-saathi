@@ -111,6 +111,17 @@ describe("intent-first landing experience", () => {
       ),
     ).toBeTruthy();
     expect(
+      screen.getByRole("link", { name: "Start a task" }).getAttribute("href"),
+    ).toBe("/#start-a-task");
+    expect(
+      screen
+        .getByRole("link", { name: "Learn how it works" })
+        .getAttribute("href"),
+    ).toBe("/how-it-works");
+    expect(
+      screen.getByRole("link", { name: "Review safety" }).getAttribute("href"),
+    ).toBe("/how-it-works#safe-stop");
+    expect(
       await screen.findByRole("button", {
         name: /I need some money from my PF/,
       }),
