@@ -1,5 +1,11 @@
 {
   "Common": {
+    "close": "Close",
+    "prototypeBoundary": "Prototype boundary",
+    "accessibilityControls": "Accessibility controls",
+    "loading": "Loading",
+    "stepOf": "Step {current} of {total}",
+    "amountPlaceholder": "80,000",
     "skipToContent": "Skip to main content",
     "tagline": "Understand your PF journey before entering the process.",
     "primaryNavigation": "Primary navigation",
@@ -75,6 +81,7 @@
     "notFoundCopy": "This page is not part of the ClaimSaathi demo."
   },
   "Home": {
+    "amountPlaceholder": "80,000",
     "eyebrow": "Start with your goal",
     "title": "What do you want to do with your PF?",
     "intro": "Choose the outcome you understand. ClaimSaathi will connect it to the right synthetic journey without asking you to know a government form.",

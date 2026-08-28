@@ -155,7 +155,7 @@ export function JourneyFamilyExperience({ slug }: { slug: string }) {
             {intent.requiresAmount ? (
               <form onSubmit={submit} className="mt-6 rounded-[10px] border border-brand/25 bg-brand-soft p-5" noValidate>
                 <label htmlFor="journey-amount" className="block font-semibold text-ink">{homeT("amountLabel")}</label>
-                <input id="journey-amount" value={amount} onChange={(event) => { setAmount(event.target.value); setAmountError(null); }} inputMode="numeric" placeholder="80,000" className="mt-2 min-h-12 w-full rounded-lg border border-line-strong bg-surface px-4 text-lg font-semibold text-ink outline-none focus-visible:outline-2 focus-visible:outline-brand" aria-invalid={amountError ? true : undefined} />
+                <input id="journey-amount" value={amount} onChange={(event) => { setAmount(event.target.value); setAmountError(null); }} inputMode="numeric" placeholder={homeT("amountPlaceholder")} className="mt-2 min-h-12 w-full rounded-lg border border-line-strong bg-surface px-4 text-lg font-semibold text-ink outline-none focus-visible:outline-2 focus-visible:outline-brand" aria-invalid={amountError ? true : undefined} />
                 {amountError ? <p role="alert" className="mt-2 text-sm font-semibold text-rust">{amountError}</p> : null}
                 <PrimaryButton type="submit" className="mt-5">{busy ? t("starting") : t("start")}</PrimaryButton>
               </form>

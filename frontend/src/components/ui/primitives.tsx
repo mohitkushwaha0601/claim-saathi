@@ -3,6 +3,7 @@ import type {
   InputHTMLAttributes,
   ReactNode,
 } from "react";
+import { useTranslations } from "next-intl";
 
 const buttonVariants = {
   primary:
@@ -203,9 +204,11 @@ export function StatusTimeline({
 }
 
 export function StepIndicator({ current, total, label }: { current: number; total: number; label?: string }) {
+  const t = useTranslations("Common");
+  const stepLabel = label ?? t("stepOf", { current, total });
   return (
-    <div aria-label={label ?? `Step ${current} of ${total}`} className="flex items-center gap-3">
-      <span className="text-sm font-semibold text-ink">Step {current} of {total}</span>
+    <div aria-label={stepLabel} className="flex items-center gap-3">
+      <span className="text-sm font-semibold text-ink">{stepLabel}</span>
       <ProgressBar value={(current / total) * 100} className="flex-1" />
     </div>
   );
@@ -228,14 +231,17 @@ export function EmptyState({ title, children, action }: { title: string; childre
   return <div className="rounded-2xl border border-dashed border-line-strong bg-surface p-8 text-center"><h2 className="text-lg font-bold text-ink">{title}</h2>{children ? <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted">{children}</p> : null}{action ? <div className="mt-5">{action}</div> : null}</div>;
 }
 
-export function Skeleton({ className = "", label = "Loading" }: { className?: string; label?: string }) {
-  return <div role="status" aria-label={label} className={`animate-pulse rounded-xl bg-line motion-reduce:animate-none ${className}`} />;
+export function Skeleton({ className = "", label }: { className?: string; label?: string }) {
+  const t = useTranslations("Common");
+  return <div role="status" aria-label={label ?? t("loading")} className={`animate-pulse rounded-xl bg-line motion-reduce:animate-none ${className}`} />;
 }
 
 export function PrototypeBoundary({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <aside className={`rounded-xl border border-gold/60 bg-[#fff8e8] p-4 text-sm leading-6 text-ink ${className}`}><p className="font-bold">Prototype boundary</p><div className="mt-1">{children}</div></aside>;
+  const t = useTranslations("Common");
+  return <aside className={`rounded-xl border border-gold/60 bg-[#fff8e8] p-4 text-sm leading-6 text-ink ${className}`}><p className="font-bold">{t("prototypeBoundary")}</p><div className="mt-1">{children}</div></aside>;
 }
 
 export function AccessibilityControls({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <section aria-label="Accessibility controls" className={className}>{children}</section>;
+  const t = useTranslations("Common");
+  return <section aria-label={t("accessibilityControls")} className={className}>{children}</section>;
 }

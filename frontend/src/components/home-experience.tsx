@@ -414,7 +414,7 @@ export function HomeExperience() {
                   }}
                   inputMode="numeric"
                   autoComplete="off"
-                  placeholder="80,000"
+                  placeholder={t("amountPlaceholder")}
                   aria-describedby={amountError ? "amount-error" : "amount-help"}
                   aria-invalid={amountError ? true : undefined}
                   className="min-h-12 w-full bg-transparent text-lg font-semibold text-ink outline-none placeholder:font-normal placeholder:text-slate-400"
