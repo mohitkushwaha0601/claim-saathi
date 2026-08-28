@@ -21,6 +21,10 @@
     "returnHome": "Return to ClaimSaathi"
     ,"journeyMode": "Journey mode"
     ,"modes": {"guided": "Guided mode", "quick": "Quick mode"}
+    ,"reducedMotion": "Reduced motion"
+    ,"reducedMotionHelp": "Limit animation and movement"
+    ,"readableSpacing": "Comfortable spacing"
+    ,"readableSpacingHelp": "Use more space between lines of text"
   },
   "Accessibility": {
     "open": "Accessibility settings",
@@ -35,7 +39,11 @@
     "currentScale": "Current text size: {scale}%",
     "highContrast": "High contrast",
     "highContrastHelp": "Use stronger colors and borders",
-    "close": "Close accessibility settings"
+    "close": "Close accessibility settings",
+    "reducedMotion": "Reduced motion",
+    "reducedMotionHelp": "Limit animation and movement",
+    "readableSpacing": "Comfortable spacing",
+    "readableSpacingHelp": "Use more space between lines of text"
   },
   "Network": {
     "offlineNotice": "Offline — journey checks require a connection.",

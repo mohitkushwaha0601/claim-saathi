@@ -20,7 +20,11 @@
     "tryingAgain": "फिर कोशिश हो रही है…",
     "returnHome": "ClaimSaathi पर लौटें",
     "journeyMode": "यात्रा मोड",
-    "modes": {"guided": "निर्देशित मोड", "quick": "त्वरित मोड"}
+    "modes": {"guided": "निर्देशित मोड", "quick": "त्वरित मोड"},
+    "reducedMotion": "कम गति",
+    "reducedMotionHelp": "एनीमेशन और गति सीमित करें",
+    "readableSpacing": "सुविधाजनक अंतराल",
+    "readableSpacingHelp": "पंक्तियों के बीच अधिक जगह रखें"
   },
   "Accessibility": {
     "open": "सुलभता सेटिंग",
@@ -35,7 +39,11 @@
     "currentScale": "मौजूदा टेक्स्ट आकार: {scale}%",
     "highContrast": "उच्च कंट्रास्ट",
     "highContrastHelp": "अधिक स्पष्ट रंग और बॉर्डर इस्तेमाल करें",
-    "close": "सुलभता सेटिंग बंद करें"
+    "close": "सुलभता सेटिंग बंद करें",
+    "reducedMotion": "कम गति",
+    "reducedMotionHelp": "एनीमेशन और गति सीमित करें",
+    "readableSpacing": "सुविधाजनक अंतराल",
+    "readableSpacingHelp": "पंक्तियों के बीच अधिक जगह रखें"
   },
   "Network": {
     "offlineNotice": "ऑफ़लाइन — यात्रा जाँच के लिए कनेक्शन चाहिए।",

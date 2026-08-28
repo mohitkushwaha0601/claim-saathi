@@ -21,6 +21,8 @@ const STORAGE_KEYS = {
   textScale: "claimsaathi.textScale",
   highContrast: "claimsaathi.highContrast",
   journeyMode: "claimsaathi.journeyMode",
+  reducedMotion: "claimsaathi.reducedMotion",
+  readableSpacing: "claimsaathi.readableSpacing",
 } as const;
 
 export type JourneyMode = "quick" | "guided";
@@ -30,6 +32,8 @@ interface PreferencesContextValue {
   textScale: TextScale;
   highContrast: boolean;
   journeyMode: JourneyMode;
+  reducedMotion: boolean;
+  readableSpacing: boolean;
   online: boolean;
   saveData: boolean;
   setLocale: (locale: AppLocale) => void;
@@ -38,6 +42,8 @@ interface PreferencesContextValue {
   increaseTextScale: () => void;
   toggleHighContrast: () => void;
   setJourneyMode: (mode: JourneyMode) => void;
+  toggleReducedMotion: () => void;
+  toggleReadableSpacing: () => void;
 }
 
 const PreferencesContext = createContext<PreferencesContextValue | null>(null);
@@ -84,6 +90,8 @@ export function AppProviders({ children }: { children: ReactNode }) {
   const [textScale, updateTextScale] = useState<TextScale>(100);
   const [highContrast, updateHighContrast] = useState(false);
   const [journeyMode, updateJourneyMode] = useState<JourneyMode>("guided");
+  const [reducedMotion, updateReducedMotion] = useState(false);
+  const [readableSpacing, updateReadableSpacing] = useState(false);
   const [online, setOnline] = useState(true);
   const [saveData, setSaveData] = useState(false);
 
@@ -95,6 +103,8 @@ export function AppProviders({ children }: { children: ReactNode }) {
     );
     const storedContrast = readStoredPreference(STORAGE_KEYS.highContrast);
     const storedJourneyMode = readStoredPreference(STORAGE_KEYS.journeyMode);
+    const storedReducedMotion = readStoredPreference(STORAGE_KEYS.reducedMotion);
+    const storedReadableSpacing = readStoredPreference(STORAGE_KEYS.readableSpacing);
 
     const updateNetworkStatus = () => setOnline(navigator.onLine);
     const updateSaveData = () => setSaveData(readSaveDataPreference());
@@ -121,6 +131,8 @@ export function AppProviders({ children }: { children: ReactNode }) {
       if (isTextScale(storedTextScale)) updateTextScale(storedTextScale);
       if (storedContrast === "true") updateHighContrast(true);
       if (storedJourneyMode === "quick" || storedJourneyMode === "guided") updateJourneyMode(storedJourneyMode);
+      if (storedReducedMotion === "true") updateReducedMotion(true);
+      if (storedReadableSpacing === "true") updateReadableSpacing(true);
       updateNetworkStatus();
       updateSaveData();
     });
@@ -140,7 +152,9 @@ export function AppProviders({ children }: { children: ReactNode }) {
     root.lang = locale;
     root.dataset.textScale = String(textScale);
     root.dataset.contrast = highContrast ? "high" : "standard";
-  }, [highContrast, locale, textScale]);
+    root.dataset.motion = reducedMotion ? "reduced" : "standard";
+    root.dataset.spacing = readableSpacing ? "readable" : "standard";
+  }, [highContrast, locale, readableSpacing, reducedMotion, textScale]);
 
   const value = useMemo<PreferencesContextValue>(
     () => ({
@@ -148,6 +162,8 @@ export function AppProviders({ children }: { children: ReactNode }) {
       textScale,
       highContrast,
       journeyMode,
+      reducedMotion,
+      readableSpacing,
       online,
       saveData,
       setLocale(nextLocale) {
@@ -194,8 +210,22 @@ export function AppProviders({ children }: { children: ReactNode }) {
         updateJourneyMode(nextMode);
         setStoredPreference(STORAGE_KEYS.journeyMode, nextMode);
       },
+      toggleReducedMotion() {
+        updateReducedMotion((current) => {
+          const next = !current;
+          setStoredPreference(STORAGE_KEYS.reducedMotion, String(next));
+          return next;
+        });
+      },
+      toggleReadableSpacing() {
+        updateReadableSpacing((current) => {
+          const next = !current;
+          setStoredPreference(STORAGE_KEYS.readableSpacing, String(next));
+          return next;
+        });
+      },
     }),
-    [highContrast, journeyMode, locale, online, saveData, textScale],
+    [highContrast, journeyMode, locale, online, readableSpacing, reducedMotion, saveData, textScale],
   );
 
   return (

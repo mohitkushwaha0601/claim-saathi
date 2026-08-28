@@ -75,4 +75,15 @@ describe("accessibility preferences", () => {
     expect(fetchSpy).not.toHaveBeenCalled();
     fetchSpy.mockRestore();
   });
+
+  it("toggles and persists reduced motion and readable spacing", () => {
+    renderToolbar();
+    openToolbar();
+    fireEvent.click(screen.getByRole("button", { name: "Reduced motion" }));
+    fireEvent.click(screen.getByRole("button", { name: "Comfortable spacing" }));
+    expect(document.documentElement.dataset.motion).toBe("reduced");
+    expect(document.documentElement.dataset.spacing).toBe("readable");
+    expect(window.localStorage.getItem("claimsaathi.reducedMotion")).toBe("true");
+    expect(window.localStorage.getItem("claimsaathi.readableSpacing")).toBe("true");
+  });
 });

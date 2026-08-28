@@ -15,6 +15,10 @@ export function AccessibilityToolbar() {
     resetTextScale,
     increaseTextScale,
     toggleHighContrast,
+    reducedMotion,
+    readableSpacing,
+    toggleReducedMotion,
+    toggleReadableSpacing,
   } = useAppPreferences();
 
   return (
@@ -112,6 +116,14 @@ export function AccessibilityToolbar() {
           <span aria-hidden="true" className="font-bold text-brand">
             {highContrast ? "✓" : "○"}
           </span>
+        </button>
+        <button type="button" aria-label={t("reducedMotion")} aria-pressed={reducedMotion} onClick={toggleReducedMotion} className="mt-3 flex min-h-11 w-full items-center justify-between gap-3 rounded-lg border border-line-strong px-3 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+          <span><span className="block font-semibold text-ink">{t("reducedMotion")}</span><span className="block text-xs leading-5 text-muted">{t("reducedMotionHelp")}</span></span>
+          <span aria-hidden="true" className="font-bold text-brand">{reducedMotion ? "✓" : "○"}</span>
+        </button>
+        <button type="button" aria-label={t("readableSpacing")} aria-pressed={readableSpacing} onClick={toggleReadableSpacing} className="mt-3 flex min-h-11 w-full items-center justify-between gap-3 rounded-lg border border-line-strong px-3 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+          <span><span className="block font-semibold text-ink">{t("readableSpacing")}</span><span className="block text-xs leading-5 text-muted">{t("readableSpacingHelp")}</span></span>
+          <span aria-hidden="true" className="font-bold text-brand">{readableSpacing ? "✓" : "○"}</span>
         </button>
       </div>
     </details>
