@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 
 import { AccessibilityToolbar } from "./accessibility-toolbar";
 import { DemoBadge } from "./demo-badge";
+import { DemoProfileSelector } from "./demo-profile-selector";
 import { JourneyModeToggle } from "./journey-mode-toggle";
 import { PageContainer } from "./page-container";
 
@@ -44,6 +45,7 @@ export function AppHeader() {
               </Link>
               <div className="flex min-w-0 flex-wrap items-center justify-end gap-2 sm:gap-3">
                 <DemoBadge />
+                <DemoProfileSelector />
                 <JourneyModeToggle />
                 <AccessibilityToolbar />
               </div>

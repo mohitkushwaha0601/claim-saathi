@@ -1,5 +1,10 @@
 {
   "Common": {
+    "demoProfile": {
+      "label": "Demo profile",
+      "shortLabel": "Profile",
+      "all": "All profiles"
+    },
     "close": "Close",
     "prototypeBoundary": "Prototype boundary",
     "accessibilityControls": "Accessibility controls",
@@ -81,6 +86,7 @@
     "notFoundCopy": "This page is not part of the ClaimSaathi demo."
   },
   "Home": {
+    "noProfileJourneys": "This synthetic profile has no compatible journey in the current demo catalogue.",
     "amountPlaceholder": "80,000",
     "eyebrow": "Start with your goal",
     "title": "What do you want to do with your PF?",

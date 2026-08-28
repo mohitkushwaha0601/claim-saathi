@@ -44,9 +44,12 @@ export function demoServiceUnavailableMessage(
     : developmentMessage;
 }
 
-async function fetchBoundIntents(): Promise<BoundIntent[]> {
+async function fetchBoundIntents(selectedPersonaId?: string | null): Promise<BoundIntent[]> {
   const response = await listDemoPersonas();
-  return bindPersonasToIntents(response.personas);
+  const intents = bindPersonasToIntents(response.personas);
+  return selectedPersonaId
+    ? intents.filter((intent) => intent.persona.persona_id === selectedPersonaId)
+    : intents;
 }
 
 function personaLoadErrorKind(
@@ -67,7 +70,7 @@ export function HomeExperience() {
   const journeyT = useTranslations("JourneyPages");
   const errorT = useTranslations("Errors");
   const networkT = useTranslations("Network");
-  const { online, saveData } = useAppPreferences();
+  const { demoPersonaId, online, saveData } = useAppPreferences();
   const [loadState, setLoadState] = useState<PersonaLoadState>({
     status: "loading",
   });
@@ -89,7 +92,7 @@ export function HomeExperience() {
     try {
       setLoadState({
         status: "ready",
-        intents: await fetchBoundIntents(),
+        intents: await fetchBoundIntents(demoPersonaId),
       });
     } catch (error) {
       setLoadState({
@@ -97,7 +100,7 @@ export function HomeExperience() {
         kind: personaLoadErrorKind(error),
       });
     }
-  }, []);
+  }, [demoPersonaId]);
 
   useEffect(() => {
     let active = true;
@@ -109,7 +112,7 @@ export function HomeExperience() {
         active = false;
       };
     }
-    fetchBoundIntents()
+    fetchBoundIntents(demoPersonaId)
       .then((intents) => {
         if (active) setLoadState({ status: "ready", intents });
       })
@@ -124,7 +127,7 @@ export function HomeExperience() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [demoPersonaId]);
 
   useEffect(() => {
     if (selectedIntent) amountInputRef.current?.focus();
@@ -376,6 +379,11 @@ export function HomeExperience() {
                   onSelect={() => selectIntent(intent)}
                 />
               ))}
+              {loadState.intents.length === 0 ? (
+                <p className="rounded-xl border border-dashed border-line-strong bg-surface p-4 text-sm text-muted lg:col-span-3">
+                  {t("noProfileJourneys")}
+                </p>
+              ) : null}
             </div>
           ) : null}
         </div>

@@ -23,6 +23,7 @@ const STORAGE_KEYS = {
   journeyMode: "claimsaathi.journeyMode",
   reducedMotion: "claimsaathi.reducedMotion",
   readableSpacing: "claimsaathi.readableSpacing",
+  demoPersona: "claimsaathi.demoPersona",
 } as const;
 
 export type JourneyMode = "quick" | "guided";
@@ -34,6 +35,7 @@ interface PreferencesContextValue {
   journeyMode: JourneyMode;
   reducedMotion: boolean;
   readableSpacing: boolean;
+  demoPersonaId: string | null;
   online: boolean;
   saveData: boolean;
   setLocale: (locale: AppLocale) => void;
@@ -44,6 +46,7 @@ interface PreferencesContextValue {
   setJourneyMode: (mode: JourneyMode) => void;
   toggleReducedMotion: () => void;
   toggleReadableSpacing: () => void;
+  setDemoPersonaId: (personaId: string | null) => void;
 }
 
 const PreferencesContext = createContext<PreferencesContextValue | null>(null);
@@ -92,6 +95,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
   const [journeyMode, updateJourneyMode] = useState<JourneyMode>("guided");
   const [reducedMotion, updateReducedMotion] = useState(false);
   const [readableSpacing, updateReadableSpacing] = useState(false);
+  const [demoPersonaId, updateDemoPersonaId] = useState<string | null>(null);
   const [online, setOnline] = useState(true);
   const [saveData, setSaveData] = useState(false);
 
@@ -105,6 +109,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
     const storedJourneyMode = readStoredPreference(STORAGE_KEYS.journeyMode);
     const storedReducedMotion = readStoredPreference(STORAGE_KEYS.reducedMotion);
     const storedReadableSpacing = readStoredPreference(STORAGE_KEYS.readableSpacing);
+    const storedDemoPersona = readStoredPreference(STORAGE_KEYS.demoPersona);
 
     const updateNetworkStatus = () => setOnline(navigator.onLine);
     const updateSaveData = () => setSaveData(readSaveDataPreference());
@@ -133,6 +138,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
       if (storedJourneyMode === "quick" || storedJourneyMode === "guided") updateJourneyMode(storedJourneyMode);
       if (storedReducedMotion === "true") updateReducedMotion(true);
       if (storedReadableSpacing === "true") updateReadableSpacing(true);
+      if (storedDemoPersona) updateDemoPersonaId(storedDemoPersona);
       updateNetworkStatus();
       updateSaveData();
     });
@@ -164,6 +170,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
       journeyMode,
       reducedMotion,
       readableSpacing,
+      demoPersonaId,
       online,
       saveData,
       setLocale(nextLocale) {
@@ -224,8 +231,15 @@ export function AppProviders({ children }: { children: ReactNode }) {
           return next;
         });
       },
+      setDemoPersonaId(nextPersonaId) {
+        updateDemoPersonaId(nextPersonaId);
+        if (nextPersonaId) setStoredPreference(STORAGE_KEYS.demoPersona, nextPersonaId);
+        else {
+          try { window.localStorage.removeItem(STORAGE_KEYS.demoPersona); } catch { /* optional preference */ }
+        }
+      },
     }),
-    [highContrast, journeyMode, locale, online, readableSpacing, reducedMotion, saveData, textScale],
+    [demoPersonaId, highContrast, journeyMode, locale, online, readableSpacing, reducedMotion, saveData, textScale],
   );
 
   return (
