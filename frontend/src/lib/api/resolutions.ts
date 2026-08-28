@@ -1,4 +1,5 @@
 import { apiRequest, ClaimSaathiApiError } from "./client";
+import { hasSafeDemoMetadata } from "./contracts";
 import type {
   ApprovedResolutionStepResponse,
   ResolutionHistoryResponse,
@@ -24,16 +25,6 @@ const STEP_TYPES: readonly ResolutionStepType[] = [
   "WAIT",
   "SYSTEM_ACTION",
 ];
-
-function hasSafeDemoMetadata(value: unknown): boolean {
-  if (!value || typeof value !== "object") return false;
-  const demo = value as Record<string, unknown>;
-  return (
-    demo.environment === "DEMO" &&
-    demo.synthetic_data === true &&
-    demo.real_government_action_performed === false
-  );
-}
 
 function isApprovedStep(value: unknown): value is ApprovedResolutionStepResponse {
   if (!value || typeof value !== "object") return false;

@@ -1,4 +1,5 @@
 import { apiRequest, ClaimSaathiApiError } from "./client";
+import { hasSafeDemoMetadata } from "./contracts";
 import type {
   CreateJourneyRequest,
   DecisionDetailResponse,
@@ -25,16 +26,6 @@ function isDecisionState(value: unknown): value is DecisionState {
   return (
     typeof value === "string" &&
     DECISION_STATES.includes(value as DecisionState)
-  );
-}
-
-function hasSafeDemoMetadata(value: unknown): boolean {
-  if (!value || typeof value !== "object") return false;
-  const demo = value as Record<string, unknown>;
-  return (
-    demo.environment === "DEMO" &&
-    demo.synthetic_data === true &&
-    demo.real_government_action_performed === false
   );
 }
 

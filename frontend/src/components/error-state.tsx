@@ -22,7 +22,7 @@ export function ErrorState({
   return (
     <div
       role="alert"
-      className="rounded-2xl border border-rose-200 bg-rose-50 p-5 text-rose-950"
+      className="rounded-[10px] border border-rust/40 bg-[#fff4f2] p-5 text-rust"
     >
       {titleAsHeading ? (
         <h1 className="text-2xl font-bold tracking-[-0.025em]">{resolvedTitle}</h1>

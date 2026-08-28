@@ -23,4 +23,12 @@ describe("journey family entry pages", () => {
     expect(screen.getByRole("heading", { name: "UAN and account recovery help" })).toBeTruthy();
     expect(screen.getByText("This lookup is not configured")).toBeTruthy();
   });
+
+  it("keeps the focused entry page available in the committed Hindi catalogue", async () => {
+    window.localStorage.setItem("claimsaathi.locale", "hi");
+    renderWithProviders(<JourneyFamilyExperience slug="claim-status" />);
+
+    expect(await screen.findByRole("heading", { name: "क्लेम स्थिति सहायता" })).toBeTruthy();
+    expect(screen.getByText("यह जाँच कॉन्फ़िगर नहीं है")).toBeTruthy();
+  });
 });

@@ -1,4 +1,5 @@
 import { apiRequest, ClaimSaathiApiError } from "./client";
+import { hasSafeDemoMetadata } from "./contracts";
 import type {
   DemoEventResponse,
   DemoPersona,
@@ -22,9 +23,7 @@ function assertPersonaResponse(
   if (
     !Array.isArray(value?.personas) ||
     !value.personas.every(isDemoPersona) ||
-    value.demo?.environment !== "DEMO" ||
-    value.demo.synthetic_data !== true ||
-    value.demo.real_government_action_performed !== false
+    !hasSafeDemoMetadata(value.demo)
   ) {
     throw new ClaimSaathiApiError(
       "INVALID_DEMO_RESPONSE",
@@ -58,9 +57,7 @@ export async function simulatePreviousExitDateUpdate(
     typeof response.changed !== "boolean" ||
     typeof response.citizen_state_version !== "string" ||
     typeof response.citizen_state_revision !== "number" ||
-    response.demo?.environment !== "DEMO" ||
-    response.demo.synthetic_data !== true ||
-    response.demo.real_government_action_performed !== false
+    !hasSafeDemoMetadata(response.demo)
   ) {
     throw new ClaimSaathiApiError(
       "INVALID_DEMO_EVENT_RESPONSE",

@@ -461,6 +461,24 @@ test("unknown pages have a distinct product-level not-found recovery", async ({
   await expect(page.getByRole("link", { name: "Return to ClaimSaathi" })).toBeVisible();
 });
 
+test("unsupported service lookups remain clearly informational", async ({
+  page,
+}) => {
+  await page.goto("/services/claim-status");
+  await expect(
+    page.getByRole("heading", { name: "Claim status help", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("This lookup is not configured", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/does not have a live claim-status/),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Learn how ClaimSaathi works" }),
+  ).toHaveAttribute("href", "/how-it-works");
+});
+
 test("expired in-memory journeys have a frontend-only restart path", async ({
   page,
 }) => {

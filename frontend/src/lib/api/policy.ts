@@ -1,4 +1,5 @@
 import { apiRequest, ClaimSaathiApiError } from "./client";
+import { hasSafeDemoMetadata } from "./contracts";
 import type { PolicySourceResponse } from "./types";
 
 function assertPolicySource(value: PolicySourceResponse): PolicySourceResponse {
@@ -25,9 +26,7 @@ function assertPolicySource(value: PolicySourceResponse): PolicySourceResponse {
     !["ACTIVE", "INACTIVE", "SUPERSEDED", "REVIEW_REQUIRED"].includes(
       value.status,
     ) ||
-    value.demo?.environment !== "DEMO" ||
-    value.demo.synthetic_data !== true ||
-    value.demo.real_government_action_performed !== false
+    !hasSafeDemoMetadata(value.demo)
   ) {
     throw new ClaimSaathiApiError(
       "INVALID_POLICY_SOURCE_RESPONSE",

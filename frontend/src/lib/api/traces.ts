@@ -1,4 +1,5 @@
 import { apiRequest, ClaimSaathiApiError } from "./client";
+import { hasSafeDemoMetadata } from "./contracts";
 import type {
   DecisionState,
   ExecutionTraceResponse,
@@ -202,9 +203,7 @@ function assertTrace(value: ExecutionTraceResponse): ExecutionTraceResponse {
     stages.length !== STAGE_TYPES.length ||
     !stages.every(isStage) ||
     !STAGE_TYPES.every((type, index) => stages[index]?.stage_type === type) ||
-    value.demo?.environment !== "DEMO" ||
-    value.demo.synthetic_data !== true ||
-    value.demo.real_government_action_performed !== false
+    !hasSafeDemoMetadata(value.demo)
   ) {
     throw new ClaimSaathiApiError(
       "INVALID_EXECUTION_TRACE_RESPONSE",

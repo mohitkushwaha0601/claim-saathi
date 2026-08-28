@@ -46,6 +46,7 @@ const COPY_BY_SLUG: Record<string, { kind: PageKind; titleKey: string; descripti
 export function JourneyFamilyExperience({ slug }: { slug: string }) {
   const t = useTranslations("JourneyPages");
   const homeT = useTranslations("Home");
+  const commonT = useTranslations("Common");
   const errorT = useTranslations("Errors");
   const router = useRouter();
   const page = COPY_BY_SLUG[slug];
@@ -113,9 +114,9 @@ export function JourneyFamilyExperience({ slug }: { slug: string }) {
   return (
     <main id="main-content" className="pb-16 pt-10 sm:pb-24 sm:pt-14">
       <div className="mb-6 text-sm font-semibold text-muted">
-        <Link href="/" className="text-brand underline-offset-4 hover:underline">{homeT("home")}</Link>
+        <Link href="/" className="text-brand underline-offset-4 hover:underline">{commonT("home")}</Link>
         <span aria-hidden="true" className="px-2">/</span>
-        <span>{page.kind === "journey" ? homeT("startATask") : t("help")}</span>
+        <span>{page.kind === "journey" ? commonT("startATask") : t("help")}</span>
       </div>
       <section className="max-w-3xl rounded-[14px] border border-line bg-surface p-6 sm:p-9">
         <p className="text-sm font-bold uppercase tracking-[0.14em] text-brand">{page.kind === "journey" ? t("journeyEyebrow") : t("helpEyebrow")}</p>

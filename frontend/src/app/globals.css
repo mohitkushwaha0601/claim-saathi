@@ -58,6 +58,8 @@ html[data-contrast="high"] {
   --color-brand-strong: var(--brand-strong);
   --color-brand-soft: var(--brand-soft);
   --color-gold-soft: var(--gold-soft);
+  --color-gold: var(--gold);
+  --color-rust: var(--rust);
   --font-sans: "Noto Sans", "Noto Sans Devanagari", "Noto Sans Tamil", "Noto Sans Bengali", "Segoe UI", Arial, sans-serif;
 }
 
@@ -99,6 +101,17 @@ h3 {
 button,
 input {
   font: inherit;
+}
+
+:is(a, button, input, summary):focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+@media (prefers-contrast: more) {
+  :is(a, button, input, summary):focus-visible {
+    outline-width: 4px;
+  }
 }
 
 .accessibility-menu summary::-webkit-details-marker {

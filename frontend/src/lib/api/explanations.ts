@@ -1,4 +1,5 @@
 import { apiRequest, ClaimSaathiApiError } from "./client";
+import { hasSafeDemoMetadata } from "./contracts";
 import type { ExplanationMode, ExplanationResponse } from "./types";
 
 const EXPLANATION_MODES: readonly ExplanationMode[] = [
@@ -10,16 +11,6 @@ function isExplanationMode(value: unknown): value is ExplanationMode {
   return (
     typeof value === "string" &&
     EXPLANATION_MODES.includes(value as ExplanationMode)
-  );
-}
-
-function hasSafeDemoMetadata(value: unknown): boolean {
-  if (!value || typeof value !== "object") return false;
-  const demo = value as Record<string, unknown>;
-  return (
-    demo.environment === "DEMO" &&
-    demo.synthetic_data === true &&
-    demo.real_government_action_performed === false
   );
 }
 
