@@ -269,6 +269,37 @@
       "support": {"title": "Support", "copy": "Employer support guidance is an informational preview."}
     }
   },
+  "Pensioner": {
+    "eyebrow": "Pensioner service hub",
+    "title": "Find pension information and support",
+    "intro": "Use a simpler view to browse pension-related service areas. This prototype does not connect to pension records or payments.",
+    "boundary": "Synthetic pensioner view only. No PPO, pension, bank, payment, or government record is connected.",
+    "overviewEyebrow": "Synthetic overview",
+    "overviewTitle": "Your demo pension view",
+    "notConnected": "Synthetic only",
+    "overview": {
+      "pension": {"label": "Pension status", "detail": "No pension status record is connected."},
+      "ppo": {"label": "PPO details", "detail": "No PPO details are collected or displayed."},
+      "payment": {"label": "Pension payment", "detail": "No payment record is connected."},
+      "documents": {"label": "Documents", "detail": "No pension documents are stored here."}
+    },
+    "servicesEyebrow": "Service areas",
+    "servicesTitle": "Pension services",
+    "servicesIntro": "Choose an area to understand what this prototype can show today.",
+    "preview": "Informational preview",
+    "services": {
+      "status": {"title": "Pension status", "copy": "Status guidance is an informational preview."},
+      "ppo": {"title": "PPO details", "copy": "PPO lookup is not connected to a pension record."},
+      "payment": {"title": "Pension payment", "copy": "Payment information is not connected."},
+      "bank": {"title": "Bank details", "copy": "Bank details are not collected or displayed."},
+      "jeevan": {"title": "Jeevan Pramaan", "copy": "Jeevan Pramaan guidance is an informational preview."},
+      "documents": {"title": "Documents", "copy": "Document storage and retrieval are not available."},
+      "forms": {"title": "Forms", "copy": "Forms information is an informational preview."},
+      "support": {"title": "Support", "copy": "Pension support guidance is an informational preview."}
+    },
+    "supportTitle": "Need a clearer next step?",
+    "supportCopy": "ClaimSaathi does not submit pension requests or contact a government service. Use the official service for any account-specific action."
+  },
   "Safety": {
     "label": "Prototype safety information",
     "title": "A safe demonstration",
