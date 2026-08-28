@@ -153,6 +153,58 @@
       }
     }
   },
+  "Employee": {
+    "eyebrow": "Employee service hub",
+    "title": "Manage your PF",
+    "intro": "Use this synthetic overview to choose a PF task. No personal or government record is connected.",
+    "boundary": "Synthetic employee view only. Values are placeholders for demonstration and do not represent your EPFO account.",
+    "overviewEyebrow": "Synthetic account overview",
+    "overviewTitle": "Your demo account",
+    "notConnected": "Synthetic only",
+    "overview": {
+      "uan": {"label": "UAN", "detail": "No real UAN is collected or displayed."},
+      "employer": {"label": "Current employer", "detail": "No employer record is connected."},
+      "balance": {"label": "PF balance", "detail": "Live balance data is not connected."},
+      "kyc": {"label": "KYC status", "detail": "No identity or KYC check is performed here."}
+    },
+    "quickEyebrow": "Quick actions",
+    "quickTitle": "Choose a task",
+    "attentionEyebrow": "Attention examples",
+    "attentionTitle": "Things that may need attention",
+    "attentionIntro": "These are synthetic examples, not findings about your records.",
+    "exampleState": "Example state",
+    "openPreview": "Open informational preview",
+    "catalogueEyebrow": "Service catalogue",
+    "catalogueTitle": "Browse by category",
+    "preview": "Informational preview",
+    "attention": {
+      "nomination": {"title": "Incomplete nomination", "copy": "Synthetic example: nomination guidance is not connected to a live record."},
+      "kyc": {"title": "Incomplete KYC", "copy": "Synthetic example: no Aadhaar, PAN, bank, or other identity data is requested."},
+      "claim": {"title": "Pending claim", "copy": "Synthetic example: claim status is informational and does not access a government record."}
+    },
+    "categories": {
+      "money": {"title": "Money"},
+      "profile": {"title": "Profile"},
+      "claims": {"title": "Claims"},
+      "employment": {"title": "Employment"}
+    },
+    "services": {
+      "withdraw": {"title": "Withdraw PF", "copy": "Open the reviewed synthetic withdrawal journey."},
+      "transfer": {"title": "Transfer PF", "copy": "Open the reviewed synthetic transfer journey."},
+      "balance": {"title": "PF balance", "copy": "Live balance data is not connected in this prototype."},
+      "passbook": {"title": "Passbook", "copy": "Passbook viewing is an informational preview."},
+      "kyc": {"title": "Update KYC", "copy": "KYC guidance is an informational preview."},
+      "personal": {"title": "Personal details", "copy": "Personal details are not collected in this prototype."},
+      "nomination": {"title": "Nomination", "copy": "Nomination guidance is an informational preview."},
+      "uan": {"title": "Find UAN", "copy": "UAN guidance is not yet implemented in this prototype."},
+      "submitClaim": {"title": "Submit claim", "copy": "Claim submission is not available; no transaction is submitted."},
+      "claim": {"title": "Track claim", "copy": "Open the current informational claim-status preview."},
+      "claimHistory": {"title": "Claim history", "copy": "Claim history is not connected to a government record."},
+      "currentEmployment": {"title": "Current employment", "copy": "Employment records are not connected."},
+      "previousEmployers": {"title": "Previous employers", "copy": "Previous-employer data is not connected."},
+      "memberIds": {"title": "Member IDs", "copy": "Member IDs are not collected or displayed."}
+    }
+  },
   "Safety": {
     "label": "Prototype safety information",
     "title": "A safe demonstration",
