@@ -82,7 +82,7 @@ export function SystemExplorer() {
         </p>
 
         <div className="mt-8 grid overflow-hidden rounded-3xl border border-line bg-line lg:grid-cols-2 lg:gap-px">
-          <div className="bg-ink p-6 text-white sm:p-8">
+          <div className="bg-deep p-6 text-white sm:p-8">
             <p className="text-xs font-bold tracking-[0.14em] text-white/70 uppercase">
               {t("traditional")}
             </p>
@@ -150,7 +150,7 @@ export function SystemExplorer() {
             ))}
           </div>
           <div aria-hidden="true" className="py-2 text-center font-bold text-brand">↓</div>
-          <div className="rounded-xl bg-ink p-4 text-center font-bold text-white">{t("immutable")}</div>
+          <div className="rounded-xl bg-deep p-4 text-center font-bold text-white">{t("immutable")}</div>
         </div>
 
         <div className="mt-5 grid gap-5 lg:grid-cols-[1.25fr_0.75fr]">
@@ -262,7 +262,7 @@ export function SystemExplorer() {
         </div>
       </section>
 
-      <section className="mt-20 rounded-3xl bg-ink p-6 text-white sm:p-10" aria-labelledby="explorer-cta-heading">
+      <section className="mt-20 rounded-3xl bg-deep p-6 text-white sm:p-10" aria-labelledby="explorer-cta-heading">
         <h2 id="explorer-cta-heading" className="text-3xl font-bold tracking-[-0.035em]">
           {t("ctaTitle")}
         </h2>

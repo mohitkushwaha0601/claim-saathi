@@ -14,12 +14,12 @@ export function AppHeader() {
     <>
       <a
         href="#main-content"
-        className="fixed left-3 top-3 z-50 -translate-y-24 rounded-lg bg-ink px-4 py-3 font-semibold text-white focus:translate-y-0"
+        className="fixed left-3 top-3 z-50 -translate-y-24 rounded-lg bg-deep px-4 py-3 font-semibold text-white focus:translate-y-0"
       >
         {t("skipToContent")}
       </a>
       <header className="border-b border-line bg-surface">
-        <div className="bg-ink text-white">
+        <div className="bg-deep text-white">
           <PageContainer>
             <div className="flex min-h-9 items-center justify-end gap-3 text-xs font-semibold sm:text-sm">
               <span className="hidden text-white/75 sm:inline">{t("demo")}</span>

@@ -39,7 +39,7 @@ export function AccessibilityToolbar() {
 
         <fieldset className="mt-4">
           <legend className="text-sm font-semibold text-muted">{t("appearance")}</legend>
-          <div className="mt-2 grid grid-cols-3 gap-2">
+          <div className="mt-2 grid grid-cols-1 gap-2 min-[24rem]:grid-cols-3">
             {(["system", "light", "dark"] as const).map((mode) => (
               <button key={mode} type="button" aria-pressed={theme === mode} onClick={() => setTheme(mode)} className="min-h-11 rounded-lg border border-line-strong px-2 text-sm font-semibold text-ink aria-pressed:border-brand aria-pressed:bg-brand-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
                 {t(`themes.${mode}`)}

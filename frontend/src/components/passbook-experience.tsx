@@ -53,7 +53,7 @@ export function PassbookExperience() {
         <p className="mt-4 max-w-3xl text-lg leading-8 text-muted">{t("intro")}</p>
         <PrototypeBoundary className="mt-6">{t("syntheticBoundary")}</PrototypeBoundary>
 
-        <section className="mt-8 rounded-2xl bg-ink p-5 text-white sm:p-7" aria-labelledby="passbook-account-heading">
+        <section className="mt-8 rounded-2xl bg-deep p-5 text-white sm:p-7" aria-labelledby="passbook-account-heading">
           <p className="text-xs font-bold tracking-[0.14em] text-gold-soft uppercase">{t("accountEyebrow")}</p>
           <h2 id="passbook-account-heading" className="mt-2 text-2xl font-bold">{account.displayName} · {t("syntheticAccount")}</h2>
           <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

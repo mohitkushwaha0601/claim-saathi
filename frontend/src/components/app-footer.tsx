@@ -8,7 +8,7 @@ import { PageContainer } from "./page-container";
 export function AppFooter() {
   const common = useTranslations("Common");
   return (
-    <footer className="border-t border-line bg-ink text-white">
+    <footer className="border-t border-line bg-deep text-white">
       <PageContainer>
         <div className="grid gap-8 py-10 lg:grid-cols-[1.3fr_0.85fr_0.85fr]">
           <div>

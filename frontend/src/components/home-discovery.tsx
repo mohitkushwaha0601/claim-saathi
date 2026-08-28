@@ -17,7 +17,7 @@ export function HomeDiscovery() {
   const matches = useMemo(() => searchServices(query, (key) => t(key)), [query, t]);
 
   return (
-    <section aria-labelledby="discovery-heading" className="mb-12 grid gap-8 rounded-[18px] bg-ink p-5 sm:mb-16 sm:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:p-10">
+    <section aria-labelledby="discovery-heading" className="mb-12 grid gap-8 rounded-[18px] bg-deep p-5 sm:mb-16 sm:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:p-10">
       <div>
         <p className="text-sm font-bold tracking-[0.16em] text-gold uppercase">{t("eyebrow")}</p>
         <h1 id="discovery-heading" className="mt-3 max-w-3xl text-4xl font-bold tracking-[-0.045em] text-white sm:text-6xl sm:leading-[1.05]">{t("title")}</h1>

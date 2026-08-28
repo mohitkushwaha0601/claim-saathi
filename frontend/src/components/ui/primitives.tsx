@@ -238,7 +238,7 @@ export function Skeleton({ className = "", label }: { className?: string; label?
 
 export function PrototypeBoundary({ children, className = "" }: { children: ReactNode; className?: string }) {
   const t = useTranslations("Common");
-  return <aside className={`rounded-xl border border-gold/60 bg-[#fff8e8] p-4 text-sm leading-6 text-ink ${className}`}><p className="font-bold">{t("prototypeBoundary")}</p><div className="mt-1">{children}</div></aside>;
+  return <aside className={`prototype-surface rounded-xl border border-gold/60 p-4 text-sm leading-6 text-ink ${className}`}><p className="font-bold">{t("prototypeBoundary")}</p><div className="mt-1">{children}</div></aside>;
 }
 
 export function AccessibilityControls({ children, className = "" }: { children: ReactNode; className?: string }) {
