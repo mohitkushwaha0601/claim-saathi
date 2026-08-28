@@ -20,12 +20,16 @@ const STORAGE_KEYS = {
   locale: "claimsaathi.locale",
   textScale: "claimsaathi.textScale",
   highContrast: "claimsaathi.highContrast",
+  journeyMode: "claimsaathi.journeyMode",
 } as const;
+
+export type JourneyMode = "quick" | "guided";
 
 interface PreferencesContextValue {
   locale: AppLocale;
   textScale: TextScale;
   highContrast: boolean;
+  journeyMode: JourneyMode;
   online: boolean;
   saveData: boolean;
   setLocale: (locale: AppLocale) => void;
@@ -33,6 +37,7 @@ interface PreferencesContextValue {
   resetTextScale: () => void;
   increaseTextScale: () => void;
   toggleHighContrast: () => void;
+  setJourneyMode: (mode: JourneyMode) => void;
 }
 
 const PreferencesContext = createContext<PreferencesContextValue | null>(null);
@@ -78,6 +83,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
   const [messages, setMessages] = useState<AppMessages>(englishMessages);
   const [textScale, updateTextScale] = useState<TextScale>(100);
   const [highContrast, updateHighContrast] = useState(false);
+  const [journeyMode, updateJourneyMode] = useState<JourneyMode>("guided");
   const [online, setOnline] = useState(true);
   const [saveData, setSaveData] = useState(false);
 
@@ -88,6 +94,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
       readStoredPreference(STORAGE_KEYS.textScale),
     );
     const storedContrast = readStoredPreference(STORAGE_KEYS.highContrast);
+    const storedJourneyMode = readStoredPreference(STORAGE_KEYS.journeyMode);
 
     const updateNetworkStatus = () => setOnline(navigator.onLine);
     const updateSaveData = () => setSaveData(readSaveDataPreference());
@@ -113,6 +120,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
       }
       if (isTextScale(storedTextScale)) updateTextScale(storedTextScale);
       if (storedContrast === "true") updateHighContrast(true);
+      if (storedJourneyMode === "quick" || storedJourneyMode === "guided") updateJourneyMode(storedJourneyMode);
       updateNetworkStatus();
       updateSaveData();
     });
@@ -139,6 +147,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
       locale,
       textScale,
       highContrast,
+      journeyMode,
       online,
       saveData,
       setLocale(nextLocale) {
@@ -181,8 +190,12 @@ export function AppProviders({ children }: { children: ReactNode }) {
           return next;
         });
       },
+      setJourneyMode(nextMode) {
+        updateJourneyMode(nextMode);
+        setStoredPreference(STORAGE_KEYS.journeyMode, nextMode);
+      },
     }),
-    [highContrast, locale, online, saveData, textScale],
+    [highContrast, journeyMode, locale, online, saveData, textScale],
   );
 
   return (

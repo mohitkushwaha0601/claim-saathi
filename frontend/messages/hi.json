@@ -18,7 +18,9 @@
     "no": "नहीं",
     "tryAgain": "फिर कोशिश करें",
     "tryingAgain": "फिर कोशिश हो रही है…",
-    "returnHome": "ClaimSaathi पर लौटें"
+    "returnHome": "ClaimSaathi पर लौटें",
+    "journeyMode": "यात्रा मोड",
+    "modes": {"guided": "निर्देशित मोड", "quick": "त्वरित मोड"}
   },
   "Accessibility": {
     "open": "सुलभता सेटिंग",

@@ -19,6 +19,8 @@
     "tryAgain": "Try again",
     "tryingAgain": "Trying again…",
     "returnHome": "Return to ClaimSaathi"
+    ,"journeyMode": "Journey mode"
+    ,"modes": {"guided": "Guided mode", "quick": "Quick mode"}
   },
   "Accessibility": {
     "open": "Accessibility settings",
