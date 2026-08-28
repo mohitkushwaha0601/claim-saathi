@@ -97,6 +97,14 @@ h1,
 h2,
 h3 {
   font-family: "Manrope", "Noto Sans", "Noto Sans Devanagari", sans-serif;
+  text-wrap: balance;
+}
+
+p,
+li,
+dd,
+dt {
+  text-wrap: pretty;
 }
 
 .data-number {
@@ -153,7 +161,7 @@ input {
 
 @media (max-width: 53.75rem) {
   body {
-    padding-bottom: 4.5rem;
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
   }
 
   .mobile-tab-bar {
@@ -167,6 +175,7 @@ input {
     border-top: 1px solid var(--line);
     background: rgb(255 255 255 / 96%);
     box-shadow: 0 -8px 24px rgb(11 37 69 / 8%);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   .mobile-tab-bar a {
