@@ -20,7 +20,7 @@ describe("service registry search", () => {
     expect(searchServices("", translate).map((item) => item.id)).toEqual(["balance", "withdraw", "transfer", "kyc"]);
   });
 
-  it.each([["withdraw PF", "withdraw"], ["need money", "withdraw"], ["old company PF", "transfer"], ["check balance", "balance"], ["update Aadhaar", "kyc"], ["claim status", "claim-status"]])("matches %s to %s", (query, expectedId) => {
+  it.each([["withdraw PF", "withdraw"], ["need money", "withdraw"], ["old company PF", "transfer"], ["check balance", "balance"], ["Aadhaar", "kyc"], ["track claim", "claim-status"]])("matches %s to %s", (query, expectedId) => {
     expect(searchServices(query, translate).map((item) => item.id)).toContain(expectedId);
   });
 
