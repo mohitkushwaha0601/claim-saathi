@@ -8,6 +8,7 @@ import { searchServices, type ServiceRegistryItem } from "../lib/service-registr
 import { Card, SearchInput } from "./ui";
 
 const ROLE_IDS = ["employee", "employer", "pensioner"] as const;
+const ROLE_HREFS = { employee: "/employee", employer: "/employer", pensioner: "/pensioner" } as const;
 
 export function HomeDiscovery() {
   const t = useTranslations("Home.discovery");
@@ -32,8 +33,7 @@ export function HomeDiscovery() {
       </div>
       <div className="grid gap-4">
         <div><p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">{t("rolesEyebrow")}</p><h2 className="mt-2 text-2xl font-bold tracking-[-0.025em] text-ink">{t("rolesTitle")}</h2></div>
-        <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">{ROLE_IDS.map((role) => <Card key={role} className="p-4"><p className="font-bold text-ink">{t(`roles.${role}.title`)}</p><p className="mt-1 text-sm leading-6 text-muted">{t(`roles.${role}.copy`)}</p></Card>)}</div>
-        <div className="mt-2"><p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">{t("updatesEyebrow")}</p><div className="mt-3 grid gap-3">{(["boundary", "uncertainty"] as const).map((key) => <Card key={key} className="p-4"><p className="font-bold text-ink">{t(`updates.${key}.title`)}</p><p className="mt-1 text-sm leading-6 text-muted">{t(`updates.${key}.copy`)}</p></Card>)}</div></div>
+        <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">{ROLE_IDS.map((role) => <Link key={role} href={ROLE_HREFS[role]} prefetch={false} className="block rounded-[14px] focus-visible:outline-2 focus-visible:outline-brand"><Card className="h-full p-4 transition hover:border-brand hover:bg-brand-soft"><p className="font-bold text-ink">{t(`roles.${role}.title`)}</p><p className="mt-1 text-sm leading-6 text-muted">{t(`roles.${role}.copy`)}</p><span className="mt-3 inline-flex text-sm font-bold text-brand">{t("exploreRole")} →</span></Card></Link>)}</div>
       </div>
     </section>
   );

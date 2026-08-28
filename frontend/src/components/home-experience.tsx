@@ -21,7 +21,6 @@ import { HomeDiscovery } from "./home-discovery";
 import { IntentCard } from "./intent-card";
 import { LoadingState } from "./loading-state";
 import { PrimaryButton } from "./primary-button";
-import { SafetyNotice } from "./safety-notice";
 
 type PersonaLoadState =
   | { status: "loading" }
@@ -555,7 +554,6 @@ export function HomeExperience() {
               {t("trustCopy")}
             </p>
           </div>
-          <SafetyNotice />
         </div>
       </section>
     </main>

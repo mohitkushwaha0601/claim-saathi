@@ -15,7 +15,9 @@ describe("homepage service discovery", () => {
     expect(screen.getByText("Explore passbook →")).toBeTruthy();
     expect(screen.getByText("Explore KYC →")).toBeTruthy();
     expect(screen.getByText("Employee")).toBeTruthy();
-    expect(screen.getByText("Independent prototype")).toBeTruthy();
+    expect(screen.getByRole("link", { name: /Employee.*Explore services/ }).getAttribute("href")).toBe("/employee");
+    expect(screen.getByRole("link", { name: /Employer.*Explore services/ }).getAttribute("href")).toBe("/employer");
+    expect(screen.getByRole("link", { name: /Pensioner.*Explore services/ }).getAttribute("href")).toBe("/pensioner");
   });
 
   it("matches natural phrases and links interactive services", () => {

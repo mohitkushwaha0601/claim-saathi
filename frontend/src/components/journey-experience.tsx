@@ -28,7 +28,6 @@ import { ExplanationPanel } from "./explanation-panel";
 import { JourneyDecision } from "./journey-decision";
 import { LoadingState } from "./loading-state";
 import { PrimaryButton } from "./primary-button";
-import { SafetyNotice } from "./safety-notice";
 
 interface LoadedJourney {
   journey: JourneyResponse;
@@ -380,11 +379,6 @@ export function JourneyExperience({
         </section>
       )}
 
-      {!decision ? (
-        <div className="mt-8">
-          <SafetyNotice compact />
-        </div>
-      ) : null}
     </main>
   );
 }

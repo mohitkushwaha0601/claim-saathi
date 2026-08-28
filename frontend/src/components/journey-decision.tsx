@@ -19,7 +19,6 @@ import { PolicyReviewRequiredExperience } from "./policy-review-required-experie
 import { PrerequisiteList } from "./prerequisite-list";
 import { PrimaryButton } from "./primary-button";
 import { ResolutionNavigator } from "./resolution-navigator";
-import { SafetyNotice } from "./safety-notice";
 
 export function JourneyDecision({
   citizenGoal,
@@ -119,9 +118,6 @@ export function JourneyDecision({
       </div>
       ) : null}
 
-      <div className="mt-8">
-        <SafetyNotice compact />
-      </div>
     </div>
   );
 }

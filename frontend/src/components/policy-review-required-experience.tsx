@@ -14,7 +14,6 @@ import { DecisionHistory } from "./decision-history";
 import { JourneyDecisionHeader } from "./journey-decision-header";
 import { PolicySources } from "./policy-sources";
 import { PrerequisiteList } from "./prerequisite-list";
-import { SafetyNotice } from "./safety-notice";
 
 export function PolicyReviewRequiredExperience({
   citizenGoal,
@@ -166,9 +165,6 @@ export function PolicyReviewRequiredExperience({
         </Link>
       </nav>
 
-      <div className="mt-8">
-        <SafetyNotice compact />
-      </div>
     </div>
   );
 }

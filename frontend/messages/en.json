@@ -155,6 +155,7 @@
       "preview": "Informational preview",
       "rolesEyebrow": "Choose your perspective",
       "rolesTitle": "I'm a…",
+      "exploreRole": "Explore services",
       "roles": {"employee": {"title": "Employee", "copy": "Manage your PF and employment records."}, "employer": {"title": "Employer", "copy": "Explore establishment and contribution services."}, "pensioner": {"title": "Pensioner", "copy": "Find pension information and support."}},
       "updatesEyebrow": "Important to know",
       "updates": {"boundary": {"title": "Independent prototype", "copy": "This hub uses synthetic data and does not submit transactions to EPFO."}, "uncertainty": {"title": "Some journeys may stop", "copy": "When required facts or policy evidence cannot be verified, ClaimSaathi shows a safe stop instead of guessing."}},
