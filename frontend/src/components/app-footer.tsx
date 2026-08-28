@@ -48,9 +48,6 @@ export function AppFooter() {
               <li lang="en">{common("english")}</li>
               <li lang="hi">{common("hindi")}</li>
             </ul>
-            <p className="mt-4 text-xs leading-5 text-white/60">
-              {common("languageCoverage")}
-            </p>
           </div>
         </div>
         <div className="border-t border-white/15 py-4 text-xs leading-5 text-white/75">
