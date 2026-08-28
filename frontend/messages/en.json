@@ -223,6 +223,52 @@
     "safetyCopy": "Face authentication is an external, consent-based identity process. Review the official UIDAI information before using an external service.",
     "faceAuthSource": "Read UIDAI face authentication information"
   },
+  "Employer": {
+    "eyebrow": "Employer service hub",
+    "title": "Manage your establishment",
+    "intro": "Browse employer service areas in one place. This prototype does not connect to an establishment or employee record.",
+    "boundary": "Synthetic employer view only. No establishment ID, employee record, contribution, ECR, or government action is connected.",
+    "overviewEyebrow": "Synthetic establishment overview",
+    "overviewTitle": "Your demo establishment",
+    "notConnected": "Synthetic only",
+    "overview": {
+      "establishment": {"label": "Establishment ID", "detail": "No establishment record is connected."},
+      "employees": {"label": "Employee count", "detail": "No employee records are loaded."},
+      "cycle": {"label": "Contribution cycle", "detail": "No contribution schedule is configured."},
+      "ecr": {"label": "ECR status", "detail": "No filing status is available."}
+    },
+    "attentionEyebrow": "Attention examples",
+    "attentionTitle": "Potential employer tasks",
+    "attentionIntro": "Synthetic examples, not establishment findings.",
+    "exampleState": "Example state",
+    "catalogueEyebrow": "Employer services",
+    "catalogueTitle": "Browse by category",
+    "preview": "Informational preview",
+    "attention": {
+      "ecr": {"title": "ECR filing", "copy": "Synthetic example: filing status is not connected to an establishment."},
+      "employees": {"title": "Employee records", "copy": "Synthetic example: no employee data is collected or displayed."},
+      "establishment": {"title": "Establishment details", "copy": "Synthetic example: establishment information is not connected."}
+    },
+    "categories": {
+      "establishment": {"title": "Establishment"},
+      "employees": {"title": "Employees"},
+      "contributions": {"title": "Contributions"},
+      "resources": {"title": "Forms and support"}
+    },
+    "services": {
+      "register": {"title": "Register establishment", "copy": "Registration guidance is an informational preview."},
+      "update": {"title": "Update establishment", "copy": "Establishment updates are not available in this prototype."},
+      "forms": {"title": "Forms", "copy": "Forms information is an informational preview."},
+      "manageEmployees": {"title": "Manage employees", "copy": "Employee management is not connected."},
+      "manageUan": {"title": "Manage UAN", "copy": "UAN management is not available in this prototype."},
+      "employeeRecords": {"title": "Employee records", "copy": "Employee records are not collected or displayed."},
+      "fileEcr": {"title": "File ECR", "copy": "ECR filing is not available; no filing is submitted."},
+      "makeContribution": {"title": "Make contribution", "copy": "Contribution actions are not available; no payment is initiated."},
+      "contributionCycle": {"title": "Contribution cycle", "copy": "Contribution-cycle information is not connected."},
+      "circulars": {"title": "Forms and circulars", "copy": "Official document browsing is not implemented here."},
+      "support": {"title": "Support", "copy": "Employer support guidance is an informational preview."}
+    }
+  },
   "Safety": {
     "label": "Prototype safety information",
     "title": "A safe demonstration",
