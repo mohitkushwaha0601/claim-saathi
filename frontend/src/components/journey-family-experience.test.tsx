@@ -6,6 +6,7 @@ import { renderWithProviders } from "@/test/render";
 import { JourneyFamilyExperience } from "./journey-family-experience";
 
 vi.mock("@/lib/api/demo", () => ({ listDemoPersonas: vi.fn() }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
 describe("journey family entry pages", () => {
   it("keeps unsupported claim lookups informational and does not call the demo API", () => {
@@ -22,6 +23,12 @@ describe("journey family entry pages", () => {
 
     expect(screen.getByRole("heading", { name: "UAN and account recovery help" })).toBeTruthy();
     expect(screen.getByText("This lookup is not configured")).toBeTruthy();
+  });
+
+  it("keeps balance and KYC flagship pages informational until deterministic contracts exist", () => {
+    renderWithProviders(<JourneyFamilyExperience slug="pf-balance" />);
+    expect(screen.getByRole("heading", { name: "PF balance and passbook" })).toBeTruthy();
+    expect(screen.getByText(/Live PF balance, passbook/)).toBeTruthy();
   });
 
   it("keeps the focused entry page available in the committed Hindi catalogue", async () => {

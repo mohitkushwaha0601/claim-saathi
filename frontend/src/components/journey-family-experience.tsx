@@ -21,13 +21,18 @@ import { PrimaryButton } from "./primary-button";
 
 type PageKind = "journey" | "help";
 
+const SLUG_ALIASES: Record<string, string> = {
+  "withdraw-pf": "partial-withdrawal",
+  "transfer-pf": "transfer",
+};
+
 const GOAL_BY_SLUG: Record<string, IntentGoal> = {
   "partial-withdrawal": "ACCESS_SOME_PF_FUNDS",
   transfer: "TRANSFER_PF_AFTER_EMPLOYMENT_CHANGE",
   "final-settlement": "FINAL_PF_SETTLEMENT",
 };
 
-const COPY_BY_SLUG: Record<string, { kind: PageKind; titleKey: string; descriptionKey: string }> = {
+const COPY_BY_SLUG: Record<string, { kind: PageKind; titleKey: string; descriptionKey: string; unavailableCopyKey?: string }> = {
   "partial-withdrawal": {
     kind: "journey",
     titleKey: "partialTitle",
@@ -40,6 +45,8 @@ const COPY_BY_SLUG: Record<string, { kind: PageKind; titleKey: string; descripti
     descriptionKey: "settlementDescription",
   },
   "claim-status": { kind: "help", titleKey: "claimStatusTitle", descriptionKey: "claimStatusDescription" },
+  "pf-balance": { kind: "help", titleKey: "balanceTitle", descriptionKey: "balanceDescription", unavailableCopyKey: "balanceUnavailableCopy" },
+  kyc: { kind: "help", titleKey: "kycTitle", descriptionKey: "kycDescription", unavailableCopyKey: "kycUnavailableCopy" },
   "account-recovery": { kind: "help", titleKey: "accountTitle", descriptionKey: "accountDescription" },
 };
 
@@ -49,7 +56,8 @@ export function JourneyFamilyExperience({ slug }: { slug: string }) {
   const commonT = useTranslations("Common");
   const errorT = useTranslations("Errors");
   const router = useRouter();
-  const page = COPY_BY_SLUG[slug];
+  const resolvedSlug = SLUG_ALIASES[slug] ?? slug;
+  const page = COPY_BY_SLUG[resolvedSlug];
   const [intent, setIntent] = useState<BoundIntent | null>(null);
   const [amount, setAmount] = useState("");
   const [amountError, setAmountError] = useState<string | null>(null);
@@ -60,7 +68,7 @@ export function JourneyFamilyExperience({ slug }: { slug: string }) {
 
   useEffect(() => {
     if (!page || page.kind === "help") return;
-    const goal = GOAL_BY_SLUG[slug];
+    const goal = GOAL_BY_SLUG[resolvedSlug];
     let active = true;
     listDemoPersonas()
       .then((response) => {
@@ -79,7 +87,7 @@ export function JourneyFamilyExperience({ slug }: { slug: string }) {
     return () => {
       active = false;
     };
-  }, [page, slug]);
+  }, [page, resolvedSlug]);
 
   if (!page) return null;
 
@@ -126,7 +134,7 @@ export function JourneyFamilyExperience({ slug }: { slug: string }) {
         {page.kind === "help" ? (
           <div className="mt-8 rounded-[10px] border border-line bg-canvas p-5">
             <h2 className="text-xl font-bold text-ink">{t("notConfiguredTitle")}</h2>
-            <p className="mt-2 leading-7 text-muted">{t("notConfiguredCopy")}</p>
+            <p className="mt-2 leading-7 text-muted">{t(page.unavailableCopyKey ?? "notConfiguredCopy")}</p>
             <Link href="/how-it-works" className="mt-5 inline-flex min-h-11 items-center rounded-lg bg-brand px-4 font-semibold text-white hover:bg-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">{t("learnHow")}</Link>
           </div>
         ) : state === "loading" ? (
