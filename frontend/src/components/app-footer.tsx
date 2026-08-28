@@ -11,7 +11,7 @@ export function AppFooter() {
   return (
     <footer className="border-t border-line bg-ink text-white">
       <PageContainer>
-        <div className="grid gap-8 py-10 lg:grid-cols-[1.3fr_0.85fr_0.85fr]">
+        <div className="grid gap-8 py-10 lg:grid-cols-[1.3fr_0.85fr_0.85fr_0.8fr]">
           <div>
             <p className="text-xs font-bold tracking-[0.16em] text-white/65 uppercase">
               ClaimSaathi
@@ -51,6 +51,18 @@ export function AppFooter() {
             </h2>
             <p className="mt-4 text-sm leading-6 text-white/80">
               {safety("copy")}
+            </p>
+          </div>
+          <div>
+            <h2 className="text-sm font-bold tracking-[0.1em] text-white/75 uppercase">
+              {common("languages")}
+            </h2>
+            <ul className="mt-4 grid gap-3 text-sm font-semibold text-white/90">
+              <li lang="en">{common("english")}</li>
+              <li lang="hi">{common("hindi")}</li>
+            </ul>
+            <p className="mt-4 text-xs leading-5 text-white/60">
+              {common("languageCoverage")}
             </p>
           </div>
         </div>

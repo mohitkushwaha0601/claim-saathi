@@ -63,6 +63,7 @@ function personaLoadErrorKind(
 export function HomeExperience() {
   const router = useRouter();
   const t = useTranslations("Home");
+  const journeyT = useTranslations("JourneyPages");
   const errorT = useTranslations("Errors");
   const networkT = useTranslations("Network");
   const { online, saveData } = useAppPreferences();
@@ -210,7 +211,7 @@ export function HomeExperience() {
     <main id="main-content" className="pb-16 pt-10 sm:pb-24 sm:pt-14">
       <section
         aria-labelledby="service-hub-heading"
-        className="grid gap-6 rounded-[2rem] border border-line bg-[linear-gradient(180deg,#fffef8_0%,#f1f6f2_100%)] p-5 sm:p-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8"
+        className="grid gap-6 rounded-[14px] border border-line bg-surface p-5 sm:p-7 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8"
       >
         <div>
           <p className="text-sm font-bold tracking-[0.16em] text-brand uppercase">
@@ -274,7 +275,7 @@ export function HomeExperience() {
                 key={card.title}
                 href={card.href}
                 prefetch={false}
-                className="group rounded-2xl border border-line bg-canvas p-4 transition hover:border-brand/40 hover:bg-brand-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                className="group rounded-[10px] border border-line bg-canvas p-4 transition hover:border-brand hover:bg-brand-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               >
                 <p className="text-xs font-bold tracking-[0.12em] text-muted uppercase">
                   {card.eyebrow}
@@ -478,6 +479,18 @@ export function HomeExperience() {
             />
           </div>
         ) : null}
+      </section>
+
+      <section aria-labelledby="journey-families-heading" className="mt-16 sm:mt-20">
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand">{t("taskEyebrow")}</p>
+        <h2 id="journey-families-heading" className="mt-2 text-2xl font-bold tracking-[-0.025em] text-ink sm:text-3xl">{t("taskTitle")}</h2>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          <Link href="/services/partial-withdrawal" className="rounded-[10px] border border-line bg-surface p-4 font-semibold text-ink hover:border-brand hover:text-brand focus-visible:outline-2 focus-visible:outline-brand">{t("intents.ACCESS_SOME_PF_FUNDS.summary")}</Link>
+          <Link href="/services/transfer" className="rounded-[10px] border border-line bg-surface p-4 font-semibold text-ink hover:border-brand hover:text-brand focus-visible:outline-2 focus-visible:outline-brand">{t("intents.TRANSFER_PF_AFTER_EMPLOYMENT_CHANGE.summary")}</Link>
+          <Link href="/services/final-settlement" className="rounded-[10px] border border-line bg-surface p-4 font-semibold text-ink hover:border-brand hover:text-brand focus-visible:outline-2 focus-visible:outline-brand">{t("intents.FINAL_PF_SETTLEMENT.summary")}</Link>
+          <Link href="/services/claim-status" className="rounded-[10px] border border-line bg-surface p-4 font-semibold text-ink hover:border-brand hover:text-brand focus-visible:outline-2 focus-visible:outline-brand">{journeyT("claimStatusTitle")}</Link>
+          <Link href="/services/account-recovery" className="rounded-[10px] border border-line bg-surface p-4 font-semibold text-ink hover:border-brand hover:text-brand focus-visible:outline-2 focus-visible:outline-brand">{journeyT("accountTitle")}</Link>
+        </div>
       </section>
 
       <section
