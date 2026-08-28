@@ -200,6 +200,24 @@
       "memberIds": {"title": "सदस्य ID", "copy": "सदस्य ID लिए या दिखाए नहीं जाते।"}
     }
   },
+  "UAN": {
+    "eyebrow": "UAN मार्गदर्शन",
+    "title": "अपने UAN विकल्प समझें",
+    "intro": "अपनी स्थिति चुनें और फिर आधिकारिक सेवा पर जाएँ। ClaimSaathi केवल मार्ग समझाता है।",
+    "boundary": "यह केवल जानकारी वाला प्रोटोटाइप है। ClaimSaathi UAN, Aadhaar, OTP, पासवर्ड या बायोमेट्रिक डेटा नहीं लेता और UAN सक्रिय या जनरेट नहीं करता।",
+    "optionsEyebrow": "अपनी स्थिति चुनें",
+    "optionsTitle": "आप पर क्या लागू होता है?",
+    "options": {
+      "new": {"title": "मेरे पास UAN नहीं है", "copy": "आधिकारिक EPFO मैनुअल UMANG ऐप और Aadhaar Face Authentication से UAN आवंटन और सक्रियण बताता है।"},
+      "existing": {"title": "मेरे पास UAN है पर सक्रिय नहीं है", "copy": "आधिकारिक EPFO मैनुअल UMANG से मौजूदा UAN सक्रिय करने की जानकारी देता है। ClaimSaathi सक्रियण नहीं करता।"},
+      "activated": {"title": "मेरा UAN पहले से सक्रिय है", "copy": "अपने खाते के लिए आधिकारिक सदस्य पोर्टल का उपयोग करें। ClaimSaathi साइन इन या credentials संभालता नहीं है।"}
+    },
+    "officialManual": "आधिकारिक EPFO मैनुअल खोलें",
+    "memberPortal": "आधिकारिक सदस्य पोर्टल खोलें",
+    "safetyTitle": "Face authentication ClaimSaathi के बाहर होता है",
+    "safetyCopy": "Face authentication एक बाहरी, सहमति-आधारित पहचान प्रक्रिया है। बाहरी सेवा का उपयोग करने से पहले UIDAI की आधिकारिक जानकारी देखें।",
+    "faceAuthSource": "UIDAI face authentication जानकारी पढ़ें"
+  },
   "Safety": {
     "label": "प्रोटोटाइप सुरक्षा जानकारी",
     "title": "एक सुरक्षित प्रदर्शन",

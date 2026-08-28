@@ -17,7 +17,7 @@ export const SERVICE_REGISTRY = [
   { id: "transfer", href: "/services/transfer", keywords: ["transfer", "old company", "changed jobs", "move"], titleKey: "transfer", descriptionKey: "transferCopy", availability: "REVIEWED_SYNTHETIC_JOURNEY", featured: true },
   { id: "kyc", keywords: ["kyc", "aadhaar", "pan", "bank"], titleKey: "kyc", descriptionKey: "kycCopy", availability: "INFORMATIONAL_PREVIEW", featured: true },
   { id: "claim-status", href: "/services/claim-status", keywords: ["claim", "track", "status", "submitted"], titleKey: "claimStatus", descriptionKey: "claimStatusCopy", availability: "INFORMATIONAL_PREVIEW", featured: false },
-  { id: "uan", keywords: ["uan", "find uan", "activate"], titleKey: "uan", descriptionKey: "uanCopy", availability: "INFORMATIONAL_PREVIEW", featured: false },
+  { id: "uan", href: "/services/uan", keywords: ["uan", "find uan", "activate"], titleKey: "uan", descriptionKey: "uanCopy", availability: "INFORMATIONAL_PREVIEW", featured: false },
   { id: "nomination", keywords: ["nomination", "nominee"], titleKey: "nomination", descriptionKey: "nominationCopy", availability: "INFORMATIONAL_PREVIEW", featured: false },
   { id: "settlement", href: "/services/final-settlement", keywords: ["settlement", "left job", "final"], titleKey: "settlement", descriptionKey: "settlementCopy", availability: "REVIEWED_SYNTHETIC_JOURNEY", featured: false },
 ] as const satisfies readonly ServiceRegistryItem[];

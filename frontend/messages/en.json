@@ -205,6 +205,24 @@
       "memberIds": {"title": "Member IDs", "copy": "Member IDs are not collected or displayed."}
     }
   },
+  "UAN": {
+    "eyebrow": "UAN guidance",
+    "title": "Understand your UAN options",
+    "intro": "Choose the situation that matches you, then continue through the official service. ClaimSaathi only explains the route.",
+    "boundary": "Informational prototype only. ClaimSaathi does not collect UAN, Aadhaar, OTP, password, or biometric data and does not activate or generate a UAN.",
+    "optionsEyebrow": "Choose your situation",
+    "optionsTitle": "What describes you?",
+    "options": {
+      "new": {"title": "I do not have a UAN", "copy": "The official EPFO manual describes UAN allotment and activation through the UMANG app using Aadhaar Face Authentication."},
+      "existing": {"title": "I have a UAN but it is not activated", "copy": "The official EPFO manual describes activation for existing UANs through UMANG. ClaimSaathi does not perform the activation."},
+      "activated": {"title": "I already have an activated UAN", "copy": "Use the official member portal for your own account access. ClaimSaathi does not sign you in or handle credentials."}
+    },
+    "officialManual": "Open official EPFO manual",
+    "memberPortal": "Open official member portal",
+    "safetyTitle": "Face authentication remains outside ClaimSaathi",
+    "safetyCopy": "Face authentication is an external, consent-based identity process. Review the official UIDAI information before using an external service.",
+    "faceAuthSource": "Read UIDAI face authentication information"
+  },
   "Safety": {
     "label": "Prototype safety information",
     "title": "A safe demonstration",
