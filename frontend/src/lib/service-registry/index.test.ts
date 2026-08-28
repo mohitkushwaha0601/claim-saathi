@@ -17,7 +17,7 @@ const translate = (key: string) => text[key] ?? key;
 
 describe("service registry search", () => {
   it("returns stable featured services for an empty query", () => {
-    expect(searchServices("", translate).map((item) => item.id)).toEqual(["balance", "withdraw", "transfer", "kyc"]);
+    expect(searchServices("", translate).map((item) => item.id)).toEqual(["balance", "withdraw", "transfer", "kyc", "claim-status", "uan"]);
   });
 
   it.each([["withdraw PF", "withdraw"], ["need money", "withdraw"], ["old company PF", "transfer"], ["check balance", "balance"], ["Aadhaar", "kyc"], ["track claim", "claim-status"]])("matches %s to %s", (query, expectedId) => {

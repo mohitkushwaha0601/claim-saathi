@@ -17,8 +17,10 @@ export function AccessibilityToolbar() {
     toggleHighContrast,
     reducedMotion,
     readableSpacing,
+    theme,
     toggleReducedMotion,
     toggleReadableSpacing,
+    setTheme,
   } = useAppPreferences();
 
   return (
@@ -34,6 +36,17 @@ export function AccessibilityToolbar() {
       </summary>
       <div className="accessibility-panel fixed top-24 right-2 left-2 z-40 max-h-[calc(100dvh-7rem)] w-auto overflow-y-auto rounded-2xl border-2 border-line-strong bg-surface p-4 shadow-xl sm:absolute sm:top-[calc(100%+0.5rem)] sm:right-0 sm:left-auto sm:max-h-none sm:w-[min(22rem,calc(100vw-2rem))] sm:overflow-visible">
         <p className="font-bold text-ink">{t("title")}</p>
+
+        <fieldset className="mt-4">
+          <legend className="text-sm font-semibold text-muted">{t("appearance")}</legend>
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            {(["system", "light", "dark"] as const).map((mode) => (
+              <button key={mode} type="button" aria-pressed={theme === mode} onClick={() => setTheme(mode)} className="min-h-11 rounded-lg border border-line-strong px-2 text-sm font-semibold text-ink aria-pressed:border-brand aria-pressed:bg-brand-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+                {t(`themes.${mode}`)}
+              </button>
+            ))}
+          </div>
+        </fieldset>
 
         <fieldset className="mt-4">
           <legend className="text-sm font-semibold text-muted">

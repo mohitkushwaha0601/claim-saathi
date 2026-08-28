@@ -24,9 +24,11 @@ const STORAGE_KEYS = {
   reducedMotion: "claimsaathi.reducedMotion",
   readableSpacing: "claimsaathi.readableSpacing",
   demoPersona: "claimsaathi.demoPersona",
+  theme: "claimsaathi.theme",
 } as const;
 
 export type JourneyMode = "quick" | "guided";
+export type ThemeMode = "system" | "light" | "dark";
 
 interface PreferencesContextValue {
   locale: AppLocale;
@@ -38,6 +40,7 @@ interface PreferencesContextValue {
   demoPersonaId: string | null;
   online: boolean;
   saveData: boolean;
+  theme: ThemeMode;
   setLocale: (locale: AppLocale) => void;
   decreaseTextScale: () => void;
   resetTextScale: () => void;
@@ -47,6 +50,7 @@ interface PreferencesContextValue {
   toggleReducedMotion: () => void;
   toggleReadableSpacing: () => void;
   setDemoPersonaId: (personaId: string | null) => void;
+  setTheme: (theme: ThemeMode) => void;
 }
 
 const PreferencesContext = createContext<PreferencesContextValue | null>(null);
@@ -62,6 +66,10 @@ function isTextScale(value: unknown): value is TextScale {
     typeof value === "number" &&
     TEXT_SCALES.includes(value as TextScale)
   );
+}
+
+function isThemeMode(value: unknown): value is ThemeMode {
+  return value === "system" || value === "light" || value === "dark";
 }
 
 function setStoredPreference(key: string, value: string) {
@@ -98,6 +106,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
   const [demoPersonaId, updateDemoPersonaId] = useState<string | null>(null);
   const [online, setOnline] = useState(true);
   const [saveData, setSaveData] = useState(false);
+  const [theme, updateTheme] = useState<ThemeMode>("system");
 
   useEffect(() => {
     let active = true;
@@ -110,6 +119,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
     const storedReducedMotion = readStoredPreference(STORAGE_KEYS.reducedMotion);
     const storedReadableSpacing = readStoredPreference(STORAGE_KEYS.readableSpacing);
     const storedDemoPersona = readStoredPreference(STORAGE_KEYS.demoPersona);
+    const storedTheme = readStoredPreference(STORAGE_KEYS.theme);
 
     const updateNetworkStatus = () => setOnline(navigator.onLine);
     const updateSaveData = () => setSaveData(readSaveDataPreference());
@@ -139,6 +149,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
       if (storedReducedMotion === "true") updateReducedMotion(true);
       if (storedReadableSpacing === "true") updateReadableSpacing(true);
       if (storedDemoPersona) updateDemoPersonaId(storedDemoPersona);
+      if (isThemeMode(storedTheme)) updateTheme(storedTheme);
       updateNetworkStatus();
       updateSaveData();
     });
@@ -160,7 +171,8 @@ export function AppProviders({ children }: { children: ReactNode }) {
     root.dataset.contrast = highContrast ? "high" : "standard";
     root.dataset.motion = reducedMotion ? "reduced" : "standard";
     root.dataset.spacing = readableSpacing ? "readable" : "standard";
-  }, [highContrast, locale, readableSpacing, reducedMotion, textScale]);
+    root.dataset.theme = theme;
+  }, [highContrast, locale, readableSpacing, reducedMotion, textScale, theme]);
 
   const value = useMemo<PreferencesContextValue>(
     () => ({
@@ -173,6 +185,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
       demoPersonaId,
       online,
       saveData,
+      theme,
       setLocale(nextLocale) {
         if (nextLocale === "en") {
           setMessages(englishMessages);
@@ -238,8 +251,12 @@ export function AppProviders({ children }: { children: ReactNode }) {
           try { window.localStorage.removeItem(STORAGE_KEYS.demoPersona); } catch { /* optional preference */ }
         }
       },
+      setTheme(nextTheme) {
+        updateTheme(nextTheme);
+        setStoredPreference(STORAGE_KEYS.theme, nextTheme);
+      },
     }),
-    [demoPersonaId, highContrast, journeyMode, locale, online, readableSpacing, reducedMotion, saveData, textScale],
+    [demoPersonaId, highContrast, journeyMode, locale, online, readableSpacing, reducedMotion, saveData, textScale, theme],
   );
 
   return (

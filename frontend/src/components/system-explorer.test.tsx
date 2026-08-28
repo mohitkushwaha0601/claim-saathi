@@ -351,9 +351,11 @@ describe("Phase 7D system explorer", () => {
     expect(listDemoPersonasMock).not.toHaveBeenCalled();
 
     renderWithProviders(<AppHeader />);
-    expect(screen.getByRole("link", { name: "How it works" }).getAttribute("href")).toBe("/how-it-works");
-    expect(screen.getAllByRole("link", { name: "Start a task" }).every((link) => link.getAttribute("href") === "/#start-a-task")).toBe(true);
-    expect(screen.getAllByRole("link", { name: "Safety" }).every((link) => link.getAttribute("href") === "/how-it-works#safe-stop")).toBe(true);
+    expect(screen.getByRole("link", { name: "Employees" }).getAttribute("href")).toBe("/employee");
+    expect(screen.getByRole("link", { name: "Employers" }).getAttribute("href")).toBe("/employer");
+    expect(screen.getByRole("link", { name: "Pensioners" }).getAttribute("href")).toBe("/pensioner");
+    expect(screen.getAllByRole("link", { name: "Services" }).every((link) => link.getAttribute("href") === "/#start-a-task")).toBe(true);
+    expect(screen.getAllByRole("link", { name: "Help" }).every((link) => link.getAttribute("href") === "/how-it-works")).toBe(true);
   });
 
   it("runs the real demo API sequence and renders Ravi's backend trace", async () => {

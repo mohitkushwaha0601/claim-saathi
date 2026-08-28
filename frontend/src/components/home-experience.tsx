@@ -82,6 +82,7 @@ export function HomeExperience() {
     null,
   );
   const amountInputRef = useRef<HTMLInputElement>(null);
+  const showLegacyHomeSections = false;
 
   const loadPersonas = useCallback(async () => {
     if (!navigator.onLine) {
@@ -213,6 +214,7 @@ export function HomeExperience() {
   return (
     <main id="main-content" className="pb-16 pt-10 sm:pb-24 sm:pt-14">
       <HomeDiscovery />
+      {showLegacyHomeSections ? <>
       <section
         aria-labelledby="service-hub-heading"
         className="grid gap-6 rounded-[14px] border border-line bg-surface p-5 sm:p-7 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8"
@@ -309,7 +311,7 @@ export function HomeExperience() {
           </div>
         </aside>
       </section>
-
+      </> : null}
       <section
         id="start-a-task"
         aria-labelledby="task-heading"
@@ -491,6 +493,7 @@ export function HomeExperience() {
         ) : null}
       </section>
 
+      {showLegacyHomeSections ? <>
       <section aria-labelledby="journey-families-heading" className="mt-16 sm:mt-20">
         <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand">{t("taskEyebrow")}</p>
         <h2 id="journey-families-heading" className="mt-2 text-2xl font-bold tracking-[-0.025em] text-ink sm:text-3xl">{t("taskTitle")}</h2>
@@ -555,6 +558,11 @@ export function HomeExperience() {
             </p>
           </div>
         </div>
+      </section>
+      </> : null}
+      <section className="mt-10 flex flex-col gap-3 rounded-xl border border-line bg-surface p-4 sm:flex-row sm:items-center sm:justify-between" aria-label={t("compactBoundary")}>
+        <p className="font-semibold text-ink">{t("compactBoundary")}</p>
+        <Link href="/how-it-works#safe-stop" className="font-semibold text-brand underline-offset-4 hover:underline">{t("compactBoundaryLink")}</Link>
       </section>
     </main>
   );

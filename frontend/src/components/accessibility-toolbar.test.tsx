@@ -86,4 +86,17 @@ describe("accessibility preferences", () => {
     expect(window.localStorage.getItem("claimsaathi.reducedMotion")).toBe("true");
     expect(window.localStorage.getItem("claimsaathi.readableSpacing")).toBe("true");
   });
+
+  it("switches and persists the selected appearance", async () => {
+    const first = renderToolbar();
+    openToolbar();
+    fireEvent.click(screen.getByRole("button", { name: "Dark" }));
+    expect(document.documentElement.dataset.theme).toBe("dark");
+    expect(window.localStorage.getItem("claimsaathi.theme")).toBe("dark");
+    first.unmount();
+
+    renderToolbar();
+    await waitFor(() => expect(document.documentElement.dataset.theme).toBe("dark"));
+    expect(screen.getByRole("button", { name: "Dark" }).getAttribute("aria-pressed")).toBe("true");
+  });
 });

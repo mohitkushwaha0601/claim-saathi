@@ -53,30 +53,32 @@ export function AppHeader() {
                 prefetch={false}
                 className="inline-flex min-h-11 items-center justify-center rounded-lg bg-brand px-4 text-sm font-semibold text-white underline-offset-4 transition hover:bg-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               >
-                {t("startATask")}
+                {t("services")}
               </Link>
               <Link
-                href="/how-it-works"
+                href="/employee"
                 prefetch={false}
                 className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line bg-surface px-4 text-sm font-semibold text-ink underline-offset-4 transition hover:border-brand hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               >
-                {t("howItWorks")}
+                {t("employees")}
               </Link>
               <Link
-                href="/how-it-works#safe-stop"
+                href="/employer"
                 prefetch={false}
                 className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line bg-surface px-4 text-sm font-semibold text-ink underline-offset-4 transition hover:border-brand hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               >
-                {t("safety")}
+                {t("employers")}
               </Link>
+              <Link href="/pensioner" prefetch={false} className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line bg-surface px-4 text-sm font-semibold text-ink underline-offset-4 transition hover:border-brand hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">{t("pensioners")}</Link>
+              <Link href="/how-it-works" prefetch={false} className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line bg-surface px-4 text-sm font-semibold text-ink underline-offset-4 transition hover:border-brand hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">{t("help")}</Link>
             </nav>
           </div>
         </PageContainer>
       </header>
       <div className="mobile-tab-bar" aria-label={t("primaryNavigation")}>
         <Link href="/" prefetch={false}>{t("home")}</Link>
-        <Link href="/#start-a-task" prefetch={false}>{t("startATask")}</Link>
-        <Link href="/how-it-works#safe-stop" prefetch={false}>{t("safety")}</Link>
+        <Link href="/#start-a-task" prefetch={false}>{t("services")}</Link>
+        <Link href="/how-it-works" prefetch={false}>{t("help")}</Link>
       </div>
     </>
   );

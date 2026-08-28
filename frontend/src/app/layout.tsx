@@ -33,6 +33,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       data-text-scale="100"
       suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try { var theme = localStorage.getItem("claimsaathi.theme") || "system"; if (theme === "light" || theme === "dark" || theme === "system") document.documentElement.dataset.theme = theme; } catch (_) { document.documentElement.dataset.theme = "system"; }`,
+          }}
+        />
+      </head>
       <body className="min-h-dvh bg-canvas text-ink antialiased">
         <AppProviders>
           <AppHeader />

@@ -16,8 +16,8 @@ export const SERVICE_REGISTRY = [
   { id: "withdraw", href: "/services/partial-withdrawal", keywords: ["withdraw", "need", "money", "funds", "access"], titleKey: "withdraw", descriptionKey: "withdrawCopy", availability: "REVIEWED_SYNTHETIC_JOURNEY", featured: true },
   { id: "transfer", href: "/services/transfer", keywords: ["transfer", "old company", "changed jobs", "move"], titleKey: "transfer", descriptionKey: "transferCopy", availability: "REVIEWED_SYNTHETIC_JOURNEY", featured: true },
   { id: "kyc", href: "/services/kyc", keywords: ["kyc", "aadhaar", "pan", "bank"], titleKey: "kyc", descriptionKey: "interactiveKycCopy", availability: "REVIEWED_SYNTHETIC_JOURNEY", featured: true },
-  { id: "claim-status", href: "/services/claim-status", keywords: ["claim", "track", "status", "submitted"], titleKey: "claimStatus", descriptionKey: "claimStatusCopy", availability: "INFORMATIONAL_PREVIEW", featured: false },
-  { id: "uan", href: "/services/uan", keywords: ["uan", "find uan", "activate"], titleKey: "uan", descriptionKey: "uanCopy", availability: "INFORMATIONAL_PREVIEW", featured: false },
+  { id: "claim-status", href: "/services/claim-status", keywords: ["claim", "track", "status", "submitted"], titleKey: "claimStatus", descriptionKey: "claimStatusCopy", availability: "INFORMATIONAL_PREVIEW", featured: true },
+  { id: "uan", href: "/services/uan", keywords: ["uan", "find uan", "activate"], titleKey: "uan", descriptionKey: "uanCopy", availability: "INFORMATIONAL_PREVIEW", featured: true },
   { id: "nomination", keywords: ["nomination", "nominee"], titleKey: "nomination", descriptionKey: "nominationCopy", availability: "INFORMATIONAL_PREVIEW", featured: false },
   { id: "settlement", href: "/services/final-settlement", keywords: ["settlement", "left job", "final"], titleKey: "settlement", descriptionKey: "settlementCopy", availability: "REVIEWED_SYNTHETIC_JOURNEY", featured: false },
 ] as const satisfies readonly ServiceRegistryItem[];
@@ -26,7 +26,7 @@ export type ServiceTranslator = (key: string) => string;
 
 export function searchServices(query: string, translate: ServiceTranslator): readonly ServiceRegistryItem[] {
   const normalizedQuery = query.trim().toLowerCase();
-  if (!normalizedQuery) return SERVICE_REGISTRY.filter((item) => item.featured).slice(0, 4);
+  if (!normalizedQuery) return SERVICE_REGISTRY.filter((item) => item.featured).slice(0, 6);
 
   const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
   return SERVICE_REGISTRY.filter((item) => {

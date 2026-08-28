@@ -20,6 +20,11 @@
     "hindi": "Hindi",
     "languageCoverage": "The prototype currently provides English and Hindi content.",
     "startATask": "Start a task",
+    "services": "Services",
+    "employees": "Employees",
+    "employers": "Employers",
+    "pensioners": "Pensioners",
+    "help": "Help",
     "safety": "Safety",
     "howItWorks": "How it works",
     "demo": "Demo",
@@ -57,6 +62,8 @@
     "reducedMotionHelp": "Limit animation and movement",
     "readableSpacing": "Comfortable spacing",
     "readableSpacingHelp": "Use more space between lines of text"
+    ,"appearance": "Appearance"
+    ,"themes": {"system": "System", "light": "Light", "dark": "Dark"}
   },
   "Network": {
     "offlineNotice": "Offline — journey checks require a connection.",
@@ -143,6 +150,8 @@
     "trustEyebrow": "Trust and boundary",
     "trustTitle": "The service should feel helpful without pretending to be EPFO",
     "trustCopy": "ClaimSaathi is an independent prototype. It keeps synthetic data, reviewed rules, and uncertainty states visible so citizens can trust the guidance without mistaking it for a live government action.",
+    "compactBoundary": "Guided by reviewed rules. Never guess.",
+    "compactBoundaryLink": "Read safety details",
     "discovery": {
       "eyebrow": "EPFO service hub",
       "title": "What do you need to do?",
@@ -154,9 +163,10 @@
       "noResults": "No matching service is available in this prototype yet. Try a different phrase or start with a task below.",
       "preview": "Informational preview",
       "rolesEyebrow": "Choose your perspective",
-      "rolesTitle": "I'm a…",
+      "rolesTitle": "Who are you?",
+      "popularTitle": "Popular services",
       "exploreRole": "Explore services",
-      "roles": {"employee": {"title": "Employee", "copy": "Manage your PF and employment records."}, "employer": {"title": "Employer", "copy": "Explore establishment and contribution services."}, "pensioner": {"title": "Pensioner", "copy": "Find pension information and support."}},
+      "roles": {"employee": {"title": "Employee", "copy": "Manage PF, claims, KYC and employment records."}, "employer": {"title": "Employer", "copy": "Manage employees, contributions and establishment services."}, "pensioner": {"title": "Pensioner", "copy": "Manage pension, PPO and payment information."}},
       "updatesEyebrow": "Important to know",
       "updates": {"boundary": {"title": "Independent prototype", "copy": "This hub uses synthetic data and does not submit transactions to EPFO."}, "uncertainty": {"title": "Some journeys may stop", "copy": "When required facts or policy evidence cannot be verified, ClaimSaathi shows a safe stop instead of guessing."}},
       "items": {"balance": {"title": "PF balance and passbook"}, "balanceCopy": "View your balance, contribution history and synthetic passbook.", "withdraw": {"title": "Withdraw PF"}, "withdrawCopy": "Start the reviewed synthetic withdrawal journey.", "transfer": {"title": "Transfer PF"}, "transferCopy": "Start the reviewed synthetic transfer journey.", "kyc": {"title": "Update KYC"}, "kycCopy": "Check KYC status, understand requirements and walk through a demo update.", "claimStatus": {"title": "Track claim"}, "claimStatusCopy": "Open the current informational claim-status preview.", "uan": {"title": "Find or activate UAN"}, "uanCopy": "UAN guidance is not yet implemented in this prototype.", "nomination": {"title": "Manage nomination"}, "nominationCopy": "Nomination guidance is not yet implemented in this prototype.", "settlement": {"title": "Final PF settlement"}, "settlementCopy": "Start the reviewed synthetic settlement journey.", "interactiveBalanceCopy": "View your balance, contribution history and synthetic passbook.", "interactiveKycCopy": "Check KYC status, understand requirements and walk through a demo update."},
@@ -333,7 +343,10 @@
   "Safety": {
     "label": "Prototype safety information",
     "title": "A safe demonstration",
-    "copy": "This prototype uses synthetic records. No claim is submitted to EPFO. Government decisions are determined by reviewed rules in this prototype, not by AI."
+    "copy": "This prototype uses synthetic records. No claim is submitted to EPFO. Government decisions are determined by reviewed rules in this prototype, not by AI.",
+    "pageTitle": "Safety boundaries",
+    "pageIntro": "Read what this prototype can explain, what it does not do, and where official services remain separate.",
+    "howItWorks": "Read how ClaimSaathi works"
   },
   "Journey": {
     "loading": "Loading your synthetic journey…",
