@@ -3,7 +3,11 @@ import { cleanup } from "@testing-library/react";
 
 afterEach(() => {
   cleanup();
-  window.localStorage.clear();
+  try {
+    window.localStorage.clear();
+  } catch {
+    // Some Node/jsdom combinations expose a partial localStorage shim.
+  }
   document.documentElement.lang = "en";
   document.documentElement.dataset.textScale = "100";
   document.documentElement.dataset.contrast = "standard";
