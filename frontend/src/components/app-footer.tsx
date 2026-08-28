@@ -67,7 +67,8 @@ export function AppFooter() {
           </div>
         </div>
         <div className="border-t border-white/15 py-4 text-xs leading-5 text-white/55">
-          {common("demoBoundary")}
+          <p>{common("demoBoundary")}</p>
+          <p className="mt-1 text-white/75">{common("tagline")}</p>
         </div>
       </PageContainer>
     </footer>

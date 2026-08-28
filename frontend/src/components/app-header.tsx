@@ -22,8 +22,7 @@ export function AppHeader() {
       <header className="border-b border-line bg-surface">
         <div className="bg-ink text-white">
           <PageContainer>
-            <div className="flex min-h-9 items-center justify-between gap-3 text-xs font-semibold sm:text-sm">
-              <span>{t("tagline")}</span>
+            <div className="flex min-h-9 items-center justify-end gap-3 text-xs font-semibold sm:text-sm">
               <span className="hidden text-white/75 sm:inline">{t("demo")}</span>
             </div>
           </PageContainer>
@@ -38,9 +37,6 @@ export function AppHeader() {
               >
                 <span className="block text-xl font-extrabold tracking-[-0.03em] text-ink sm:text-2xl">
                   Claim<span className="text-brand">Saathi</span>
-                </span>
-                <span className="mt-0.5 block max-w-72 text-xs leading-4 text-muted sm:text-sm">
-                  {t("tagline")}
                 </span>
               </Link>
               <div className="flex min-w-0 flex-wrap items-center justify-end gap-2 sm:gap-3">
