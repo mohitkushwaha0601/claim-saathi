@@ -114,6 +114,15 @@ async function expectNoHorizontalOverflow(page: Page) {
   ).toBeLessThanOrEqual(metrics.viewportWidth);
 }
 
+test("homepage remains usable without horizontal overflow at required widths", async ({ page }) => {
+  for (const width of [375, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+  }
+});
+
 test("Ravi completes the backend PASS path and refresh remains read-only", async ({
   page,
 }) => {
