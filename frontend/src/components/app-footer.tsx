@@ -7,21 +7,16 @@ import { PageContainer } from "./page-container";
 
 export function AppFooter() {
   const common = useTranslations("Common");
-  const safety = useTranslations("Safety");
   return (
     <footer className="border-t border-line bg-ink text-white">
       <PageContainer>
-        <div className="grid gap-8 py-10 lg:grid-cols-[1.3fr_0.85fr_0.85fr_0.8fr]">
+        <div className="grid gap-8 py-10 lg:grid-cols-[1.3fr_0.85fr_0.85fr]">
           <div>
             <p className="text-xs font-bold tracking-[0.16em] text-white/65 uppercase">
               ClaimSaathi
             </p>
-            <p className="mt-3 max-w-xl text-base leading-7 text-white/85">
-              {common("footer")}
-            </p>
-            <p className="mt-4 text-sm leading-6 text-white/70">
-              {safety("copy")}
-            </p>
+            <p className="mt-3 text-base font-bold text-white/90">{common("teamName")}</p>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-white/80">{common("builtFor")}</p>
           </div>
           <div>
             <h2 className="text-sm font-bold tracking-[0.1em] text-white/75 uppercase">
@@ -47,14 +42,6 @@ export function AppFooter() {
           </div>
           <div>
             <h2 className="text-sm font-bold tracking-[0.1em] text-white/75 uppercase">
-              {safety("label")}
-            </h2>
-            <p className="mt-4 text-sm leading-6 text-white/80">
-              {safety("copy")}
-            </p>
-          </div>
-          <div>
-            <h2 className="text-sm font-bold tracking-[0.1em] text-white/75 uppercase">
               {common("languages")}
             </h2>
             <ul className="mt-4 grid gap-3 text-sm font-semibold text-white/90">
@@ -66,9 +53,8 @@ export function AppFooter() {
             </p>
           </div>
         </div>
-        <div className="border-t border-white/15 py-4 text-xs leading-5 text-white/55">
-          <p>{common("demoBoundary")}</p>
-          <p className="mt-1 text-white/75">{common("tagline")}</p>
+        <div className="border-t border-white/15 py-4 text-xs leading-5 text-white/75">
+          {common("tagline")}
         </div>
       </PageContainer>
     </footer>

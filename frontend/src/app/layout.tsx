@@ -5,7 +5,6 @@ import { AppFooter } from "@/components/app-footer";
 import { AppHeader } from "@/components/app-header";
 import { AppProviders } from "@/components/app-providers";
 import { ConnectivityNotice } from "@/components/connectivity-notice";
-import { DemoBoundaryBar } from "@/components/demo-boundary-bar";
 
 import "./globals.css";
 
@@ -37,7 +36,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="min-h-dvh bg-canvas text-ink antialiased">
         <AppProviders>
           <AppHeader />
-          <DemoBoundaryBar />
           <ConnectivityNotice />
           {children}
           <AppFooter />

@@ -11,7 +11,6 @@ import type {
 } from "@/lib/api/types";
 import { renderWithProviders } from "@/test/render";
 
-import { DemoBoundaryBar } from "./demo-boundary-bar";
 import {
   demoServiceUnavailableMessage,
   HomeExperience,
@@ -97,19 +96,9 @@ describe("intent-first landing experience", () => {
     );
   });
 
-  it("renders three backend-bound intents and the synthetic boundary", async () => {
-    renderWithProviders(
-      <>
-        <DemoBoundaryBar />
-        <HomeExperience />
-      </>,
-    );
+  it("renders three backend-bound intents", async () => {
+    renderWithProviders(<HomeExperience />);
 
-    expect(
-      screen.getByText(
-        "Independent prototype · Uses synthetic data · No real EPFO action",
-      ),
-    ).toBeTruthy();
     expect(
       screen.getByRole("link", { name: "Start a task" }).getAttribute("href"),
     ).toBe("/#start-a-task");
