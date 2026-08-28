@@ -21,7 +21,7 @@ describe("employee hub", () => {
 
     expect(screen.getAllByRole("link", { name: /Withdraw PF/ })[0].getAttribute("href")).toBe("/services/partial-withdrawal");
     expect(screen.getAllByRole("link", { name: /Transfer PF/ })[0].getAttribute("href")).toBe("/services/transfer");
-    expect(screen.queryAllByRole("link", { name: /Update KYC/ })).toHaveLength(0);
+    expect(screen.getAllByRole("link", { name: /Update KYC/ })[0].getAttribute("href")).toBe("/services/kyc");
     expect(screen.getAllByText("Informational preview").length).toBeGreaterThan(0);
   });
 });

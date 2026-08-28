@@ -4,7 +4,7 @@ import { Card, PrototypeBoundary } from "./ui";
 
 const EPFO_UAN_MANUAL = "https://www.epfindia.gov.in/site_docs/PDFs/Circulars/Y2025-2026/MandatoryAllotment_ActivationOfUANThroughUMANGAPPUsingFAT.pdf";
 const UIDAI_FACE_AUTH = "https://uidai.gov.in/en/contact-support/have-any-question/303-faqs/authentication.html";
-const EPFO_MEMBER_PORTAL = "https://unifiedportal-mem.epfindia.gov.in/";
+export const EPFO_MEMBER_PORTAL = "https://unifiedportal-mem.epfindia.gov.in/";
 
 const OPTIONS = ["new", "existing", "activated"] as const;
 

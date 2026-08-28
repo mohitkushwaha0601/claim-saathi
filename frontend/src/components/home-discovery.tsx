@@ -40,5 +40,7 @@ export function HomeDiscovery() {
 }
 
 function DiscoveryContent({ item, t }: { item: ServiceRegistryItem; t: ReturnType<typeof useTranslations> }) {
-  return <><div className="flex items-start justify-between gap-3"><h2 className="font-bold text-ink group-hover:text-brand">{t(`items.${item.titleKey}.title`)}</h2>{item.availability === "INFORMATIONAL_PREVIEW" ? <span className="shrink-0 rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-muted">{t("preview")}</span> : <span aria-hidden="true" className="text-brand">→</span>}</div><p className="mt-1 text-sm leading-6 text-muted">{t(`items.${item.descriptionKey}`)}</p></>;
+  const descriptionKey = item.descriptionKey.includes(".") ? item.descriptionKey : `items.${item.descriptionKey}`;
+  const ctaKey = item.id === "balance" ? "balanceCta" : item.id === "kyc" ? "kycCta" : null;
+  return <><div className="flex items-start justify-between gap-3"><h2 className="font-bold text-ink group-hover:text-brand">{t(`items.${item.titleKey}.title`)}</h2>{item.availability === "INFORMATIONAL_PREVIEW" ? <span className="shrink-0 rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-muted">{t("preview")}</span> : <span aria-hidden="true" className="text-brand">→</span>}</div><p className="mt-1 text-sm leading-6 text-muted">{t(descriptionKey)}</p>{ctaKey ? <span className="mt-3 inline-flex text-sm font-bold text-brand">{t(ctaKey)}</span> : null}</>;
 }

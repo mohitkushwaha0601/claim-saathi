@@ -12,11 +12,13 @@ describe("homepage service discovery", () => {
     expect(screen.getByRole("heading", { name: "What do you need to do?" })).toBeTruthy();
     expect(screen.getByRole("textbox", { name: "Search for a service" })).toBeTruthy();
     expect(screen.getByText("Withdraw PF")).toBeTruthy();
+    expect(screen.getByText("Explore passbook →")).toBeTruthy();
+    expect(screen.getByText("Explore KYC →")).toBeTruthy();
     expect(screen.getByText("Employee")).toBeTruthy();
     expect(screen.getByText("Independent prototype")).toBeTruthy();
   });
 
-  it("matches a natural phrase and keeps unsupported services informational", () => {
+  it("matches natural phrases and links interactive services", () => {
     renderWithProviders(<HomeDiscovery />);
     const search = screen.getByRole("textbox", { name: "Search for a service" });
 
@@ -25,7 +27,6 @@ describe("homepage service discovery", () => {
 
     fireEvent.change(search, { target: { value: "update Aadhaar" } });
     expect(screen.getByText("Update KYC")).toBeTruthy();
-    expect(screen.getByText("Informational preview")).toBeTruthy();
-    expect(screen.queryByRole("link", { name: /Update KYC/ })).toBeNull();
+    expect(screen.getByRole("link", { name: /Update KYC/ }).getAttribute("href")).toBe("/services/kyc");
   });
 });

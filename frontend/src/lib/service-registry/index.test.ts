@@ -24,9 +24,8 @@ describe("service registry search", () => {
     expect(searchServices(query, translate).map((item) => item.id)).toContain(expectedId);
   });
 
-  it("keeps preview services without an invented route", () => {
-    expect(searchServices("check balance", translate)[0]).toMatchObject({ id: "balance", availability: "INFORMATIONAL_PREVIEW" });
-    expect(searchServices("check balance", translate)[0]).not.toHaveProperty("href");
+  it("routes the interactive balance service to its synthetic journey", () => {
+    expect(searchServices("check balance", translate)[0]).toMatchObject({ id: "balance", availability: "REVIEWED_SYNTHETIC_JOURNEY", href: "/services/pf-balance" });
   });
 
   it("returns no result for unknown terms and remains deterministic", () => {
