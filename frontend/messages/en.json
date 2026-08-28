@@ -350,6 +350,8 @@
     "checkAgain": "Check again"
   },
   "JourneyPages": {
+    "noJourneyTitle": "No compatible demo journey",
+    "noJourneyCopy": "This service cannot be demonstrated with the currently configured synthetic records.",
     "help": "Help",
     "journeyEyebrow": "Guided synthetic journey",
     "helpEyebrow": "Help and availability",
@@ -456,6 +458,8 @@
     }
   },
   "Sources": {
+    "emptyTitle": "No verified sources are available",
+    "emptyCopy": "The source record could not be shown, so this explanation remains unavailable.",
     "provenance": "Provenance",
     "rules": "Rules used for this check",
     "loading": "Loading reviewed source details…",

@@ -18,6 +18,7 @@ import { validatePositiveIntegerRupees } from "@/lib/rupees";
 import { ErrorState } from "./error-state";
 import { LoadingState } from "./loading-state";
 import { PrimaryButton } from "./primary-button";
+import { EmptyState } from "./ui";
 
 type PageKind = "journey" | "help";
 
@@ -163,7 +164,11 @@ export function JourneyFamilyExperience({ slug }: { slug: string }) {
               <PrimaryButton type="button" className="mt-6" onClick={() => void startJourney()}>{busy ? t("starting") : t("start")}</PrimaryButton>
             )}
           </div>
-        ) : null}
+        ) : (
+          <div className="mt-8">
+            <EmptyState title={t("noJourneyTitle")}>{t("noJourneyCopy")}</EmptyState>
+          </div>
+        )}
       </section>
     </main>
   );

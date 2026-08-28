@@ -8,6 +8,7 @@ import type { PolicySourceResponse } from "@/lib/api/types";
 
 import { ErrorState } from "./error-state";
 import { LoadingState } from "./loading-state";
+import { EmptyState } from "./ui";
 
 const inFlightSourceRequests = new Map<
   string,
@@ -104,7 +105,9 @@ export function PolicySources({
           />
         ) : null}
         {state.status === "ready" ? (
-          <ul className="grid gap-4">
+          state.sources.length === 0 ? (
+            <EmptyState title={t("emptyTitle")}>{t("emptyCopy")}</EmptyState>
+          ) : <ul className="grid gap-4">
             {state.sources.map((source) => {
               const referenceUrl = externalHttpUrl(source.reference_url);
               const titleKey = `titles.${source.source_id}`;
