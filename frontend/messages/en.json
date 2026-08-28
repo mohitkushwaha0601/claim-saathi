@@ -118,6 +118,23 @@
     "trustEyebrow": "Trust and boundary",
     "trustTitle": "The service should feel helpful without pretending to be EPFO",
     "trustCopy": "ClaimSaathi is an independent prototype. It keeps synthetic data, reviewed rules, and uncertainty states visible so citizens can trust the guidance without mistaking it for a live government action.",
+    "discovery": {
+      "eyebrow": "EPFO service hub",
+      "title": "What do you need to do?",
+      "intro": "Find the right EPFO service without having to know the form or process.",
+      "searchLabel": "Search for a service",
+      "searchPlaceholder": "Search for a service",
+      "examplesLabel": "Search examples",
+      "examples": {"withdrawExample": "withdraw PF", "balanceExample": "check balance", "kycExample": "update KYC", "claimExample": "track claim"},
+      "noResults": "No matching service is available in this prototype yet. Try a different phrase or start with a task below.",
+      "preview": "Informational preview",
+      "rolesEyebrow": "Choose your perspective",
+      "rolesTitle": "I'm a…",
+      "roles": {"employee": {"title": "Employee", "copy": "Manage your PF and employment records."}, "employer": {"title": "Employer", "copy": "Explore establishment and contribution services."}, "pensioner": {"title": "Pensioner", "copy": "Find pension information and support."}},
+      "updatesEyebrow": "Important to know",
+      "updates": {"boundary": {"title": "Independent prototype", "copy": "This hub uses synthetic data and does not submit transactions to EPFO."}, "uncertainty": {"title": "Some journeys may stop", "copy": "When required facts or policy evidence cannot be verified, ClaimSaathi shows a safe stop instead of guessing."}},
+      "items": {"balance": {"title": "PF balance and passbook"}, "balanceCopy": "View an informational account path; live account data is not connected.", "withdraw": {"title": "Withdraw PF"}, "withdrawCopy": "Start the reviewed synthetic withdrawal journey.", "transfer": {"title": "Transfer PF"}, "transferCopy": "Start the reviewed synthetic transfer journey.", "kyc": {"title": "Update KYC"}, "kycCopy": "Explore an informational KYC preview using no real identity data.", "claimStatus": {"title": "Track claim"}, "claimStatusCopy": "Open the current informational claim-status preview.", "uan": {"title": "Find or activate UAN"}, "uanCopy": "UAN guidance is not yet implemented in this prototype.", "nomination": {"title": "Manage nomination"}, "nominationCopy": "Nomination guidance is not yet implemented in this prototype.", "settlement": {"title": "Final PF settlement"}, "settlementCopy": "Start the reviewed synthetic settlement journey."}
+    },
     "intents": {
       "ACCESS_SOME_PF_FUNDS": {
         "title": "I need some money from my PF",

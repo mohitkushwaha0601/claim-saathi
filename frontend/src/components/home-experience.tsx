@@ -17,6 +17,7 @@ import { validatePositiveIntegerRupees } from "@/lib/rupees";
 
 import { useAppPreferences } from "./app-providers";
 import { ErrorState } from "./error-state";
+import { HomeDiscovery } from "./home-discovery";
 import { IntentCard } from "./intent-card";
 import { LoadingState } from "./loading-state";
 import { PrimaryButton } from "./primary-button";
@@ -209,6 +210,7 @@ export function HomeExperience() {
 
   return (
     <main id="main-content" className="pb-16 pt-10 sm:pb-24 sm:pt-14">
+      <HomeDiscovery />
       <section
         aria-labelledby="service-hub-heading"
         className="grid gap-6 rounded-[14px] border border-line bg-surface p-5 sm:p-7 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8"
@@ -275,6 +277,7 @@ export function HomeExperience() {
                 key={card.title}
                 href={card.href}
                 prefetch={false}
+                aria-label={card.cta}
                 className="group rounded-[10px] border border-line bg-canvas p-4 transition hover:border-brand hover:bg-brand-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               >
                 <p className="text-xs font-bold tracking-[0.12em] text-muted uppercase">

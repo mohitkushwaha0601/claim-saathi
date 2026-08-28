@@ -118,6 +118,23 @@
     "trustEyebrow": "विश्वास और सीमा",
     "trustTitle": "सेवा उपयोगी लगे, लेकिन EPFO होने का दावा न करे",
     "trustCopy": "ClaimSaathi एक स्वतंत्र प्रोटोटाइप है। यह synthetic data, reviewed rules, और uncertainty states को स्पष्ट रखता है ताकि नागरिक guidance पर भरोसा कर सकें, बिना इसे live government action समझे।",
+    "discovery": {
+      "eyebrow": "EPFO सेवा केंद्र",
+      "title": "आपको क्या करना है?",
+      "intro": "फॉर्म या प्रक्रिया जाने बिना सही EPFO सेवा खोजें।",
+      "searchLabel": "सेवा खोजें",
+      "searchPlaceholder": "सेवा खोजें",
+      "examplesLabel": "खोज के उदाहरण",
+      "examples": {"withdrawExample": "PF निकालना", "balanceExample": "बैलेंस देखना", "kycExample": "KYC अपडेट करना", "claimExample": "क्लेम ट्रैक करना"},
+      "noResults": "इस प्रोटोटाइप में अभी ऐसी सेवा उपलब्ध नहीं है। अलग शब्द आज़माएँ या नीचे दिए कार्य से शुरू करें।",
+      "preview": "जानकारी का पूर्वावलोकन",
+      "rolesEyebrow": "अपनी भूमिका चुनें",
+      "rolesTitle": "मैं हूँ…",
+      "roles": {"employee": {"title": "कर्मचारी", "copy": "अपने PF और रोजगार रिकॉर्ड देखें।"}, "employer": {"title": "नियोक्ता", "copy": "प्रतिष्ठान और योगदान सेवाओं की जानकारी देखें।"}, "pensioner": {"title": "पेंशनभोगी", "copy": "पेंशन जानकारी और सहायता खोजें।"}},
+      "updatesEyebrow": "ज़रूरी जानकारी",
+      "updates": {"boundary": {"title": "स्वतंत्र प्रोटोटाइप", "copy": "यह केंद्र सिंथेटिक डेटा का उपयोग करता है और EPFO में लेन-देन जमा नहीं करता।"}, "uncertainty": {"title": "कुछ यात्राएँ रुक सकती हैं", "copy": "ज़रूरी तथ्य या नीति सत्यापित न होने पर ClaimSaathi अनुमान लगाने के बजाय सुरक्षित रूप से रुकता है।"}},
+      "items": {"balance": {"title": "PF बैलेंस और पासबुक"}, "balanceCopy": "जानकारी वाला खाता पथ देखें; लाइव खाता डेटा जुड़ा नहीं है।", "withdraw": {"title": "PF निकालें"}, "withdrawCopy": "समीक्षित सिंथेटिक निकासी यात्रा शुरू करें।", "transfer": {"title": "PF ट्रांसफर करें"}, "transferCopy": "समीक्षित सिंथेटिक ट्रांसफर यात्रा शुरू करें।", "kyc": {"title": "KYC अपडेट करें"}, "kycCopy": "वास्तविक पहचान डेटा के बिना KYC जानकारी देखें।", "claimStatus": {"title": "क्लेम ट्रैक करें"}, "claimStatusCopy": "मौजूदा जानकारी वाले क्लेम-स्टेटस पथ को खोलें।", "uan": {"title": "UAN खोजें या सक्रिय करें"}, "uanCopy": "इस प्रोटोटाइप में UAN मार्गदर्शन अभी लागू नहीं है।", "nomination": {"title": "नॉमिनेशन प्रबंधित करें"}, "nominationCopy": "नॉमिनेशन मार्गदर्शन अभी लागू नहीं है।", "settlement": {"title": "अंतिम PF सेटलमेंट"}, "settlementCopy": "समीक्षित सिंथेटिक सेटलमेंट यात्रा शुरू करें।"}
+    },
     "intents": {
       "ACCESS_SOME_PF_FUNDS": {
         "title": "मुझे अपने PF से कुछ पैसे चाहिए",
