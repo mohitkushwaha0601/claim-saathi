@@ -5,10 +5,13 @@ ClaimSaathi is a deterministic, audit-traceable Employees' Provident Fund Organi
 | Resource / Detail | Link / Information |
 | --- | --- |
 | **Team Name** | **Proof of Chaos** |
-| **Developed By** | Yash Mishra & Mohit Kushwaha |
+| **Developed By** | Yash Mishra & [Mohit Kushwaha](https://www.youtube.com/@Mohit.Kushwaha0601) |
 | **Built For** | [buildwhatmovesindia.com](https://buildwhatmovesindia.com/) |
 | **Live Application** | [claim-saathi-six.vercel.app](https://claim-saathi-six.vercel.app/) |
 | **GitHub Repository** | [github.com/mohitkushwaha0601/claim-saathi](https://github.com/mohitkushwaha0601/claim-saathi) |
+| **Frontend Deployment** | Powered by **Vercel** |
+| **Backend Deployment** | Powered by **Railway** |
+| **Video Controls & Stats** | [Analytics 📊](https://www.youtube.com/analytics#;fi=v-8MOuD0Vxnuc) • [Edit Video ✏️](https://studio.youtube.com/video/8MOuD0Vxnuc/edit) • [Promote Video 🚀](https://studio.youtube.com/channel/UC80Psb4Hn5JHNd882mG7Heg/content/promotions?d=pcd&videoId=8MOuD0Vxnuc&promotionEntryPoint=PROMOTION_ENTRY_POINT_VIDEO_WATCH_PAGE) |
 
 > **Powered by Codex** • **[Watch the Demo Video 📺](https://youtu.be/8MOuD0Vxnuc)**
 
