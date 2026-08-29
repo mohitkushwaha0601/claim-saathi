@@ -15,17 +15,20 @@ import { isAppLocale, type AppLocale } from "@/i18n/config";
 
 export const TEXT_SCALES = [100, 125, 150, 175, 200] as const;
 export type TextScale = (typeof TEXT_SCALES)[number];
+export type ColorTheme = "light" | "dark";
 
 const STORAGE_KEYS = {
   locale: "claimsaathi.locale",
   textScale: "claimsaathi.textScale",
   highContrast: "claimsaathi.highContrast",
+  colorTheme: "claimsaathi.colorTheme",
 } as const;
 
 interface PreferencesContextValue {
   locale: AppLocale;
   textScale: TextScale;
   highContrast: boolean;
+  colorTheme: ColorTheme;
   online: boolean;
   saveData: boolean;
   setLocale: (locale: AppLocale) => void;
@@ -33,6 +36,7 @@ interface PreferencesContextValue {
   resetTextScale: () => void;
   increaseTextScale: () => void;
   toggleHighContrast: () => void;
+  toggleColorTheme: () => void;
 }
 
 const PreferencesContext = createContext<PreferencesContextValue | null>(null);
@@ -48,6 +52,10 @@ function isTextScale(value: unknown): value is TextScale {
     typeof value === "number" &&
     TEXT_SCALES.includes(value as TextScale)
   );
+}
+
+function isColorTheme(value: unknown): value is ColorTheme {
+  return value === "light" || value === "dark";
 }
 
 function setStoredPreference(key: string, value: string) {
@@ -78,6 +86,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
   const [messages, setMessages] = useState<AppMessages>(englishMessages);
   const [textScale, updateTextScale] = useState<TextScale>(100);
   const [highContrast, updateHighContrast] = useState(false);
+  const [colorTheme, updateColorTheme] = useState<ColorTheme>("light");
   const [online, setOnline] = useState(true);
   const [saveData, setSaveData] = useState(false);
 
@@ -88,6 +97,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
       readStoredPreference(STORAGE_KEYS.textScale),
     );
     const storedContrast = readStoredPreference(STORAGE_KEYS.highContrast);
+    const storedColorTheme = readStoredPreference(STORAGE_KEYS.colorTheme);
 
     const updateNetworkStatus = () => setOnline(navigator.onLine);
     const updateSaveData = () => setSaveData(readSaveDataPreference());
@@ -113,6 +123,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
       }
       if (isTextScale(storedTextScale)) updateTextScale(storedTextScale);
       if (storedContrast === "true") updateHighContrast(true);
+      if (isColorTheme(storedColorTheme)) updateColorTheme(storedColorTheme);
       updateNetworkStatus();
       updateSaveData();
     });
@@ -132,13 +143,15 @@ export function AppProviders({ children }: { children: ReactNode }) {
     root.lang = locale;
     root.dataset.textScale = String(textScale);
     root.dataset.contrast = highContrast ? "high" : "standard";
-  }, [highContrast, locale, textScale]);
+    root.dataset.theme = colorTheme;
+  }, [colorTheme, highContrast, locale, textScale]);
 
   const value = useMemo<PreferencesContextValue>(
     () => ({
       locale,
       textScale,
       highContrast,
+      colorTheme,
       online,
       saveData,
       setLocale(nextLocale) {
@@ -181,8 +194,15 @@ export function AppProviders({ children }: { children: ReactNode }) {
           return next;
         });
       },
+      toggleColorTheme() {
+        updateColorTheme((current) => {
+          const next = current === "light" ? "dark" : "light";
+          setStoredPreference(STORAGE_KEYS.colorTheme, next);
+          return next;
+        });
+      },
     }),
-    [highContrast, locale, online, saveData, textScale],
+    [colorTheme, highContrast, locale, online, saveData, textScale],
   );
 
   return (

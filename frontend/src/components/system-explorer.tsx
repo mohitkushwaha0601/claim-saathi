@@ -81,20 +81,20 @@ export function SystemExplorer() {
           {t("comparisonNote")}
         </p>
 
-        <div className="mt-8 grid overflow-hidden rounded-3xl border border-line bg-line lg:grid-cols-2 lg:gap-px">
-          <div className="bg-ink p-6 text-white sm:p-8">
-            <p className="text-xs font-bold tracking-[0.14em] text-white/70 uppercase">
+        <div className="mt-8 grid overflow-hidden rounded-3xl border border-line lg:grid-cols-2">
+          <div className="bg-surface p-6 sm:p-8">
+            <p className="text-xs font-bold tracking-[0.14em] text-muted uppercase">
               {t("traditional")}
             </p>
-            <p className="mt-3 text-2xl font-bold leading-tight sm:text-3xl">
+            <p className="mt-3 text-2xl font-bold leading-tight text-ink sm:text-3xl">
               {t("citizenOrchestrates")}
             </p>
           </div>
-          <div className="bg-brand p-6 text-white sm:p-8">
-            <p className="text-xs font-bold tracking-[0.14em] text-white/75 uppercase">
+          <div className="border-t border-line bg-brand-soft p-6 sm:p-8 lg:border-t-0 lg:border-l">
+            <p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">
               ClaimSaathi
             </p>
-            <p className="mt-3 text-2xl font-bold leading-tight sm:text-3xl">
+            <p className="mt-3 text-2xl font-bold leading-tight text-ink sm:text-3xl">
               {t("systemOrchestrates")}
             </p>
           </div>
@@ -150,7 +150,7 @@ export function SystemExplorer() {
             ))}
           </div>
           <div aria-hidden="true" className="py-2 text-center font-bold text-brand">↓</div>
-          <div className="rounded-xl bg-ink p-4 text-center font-bold text-white">{t("immutable")}</div>
+          <div className="rounded-xl border border-brand/40 bg-brand-soft p-4 text-center font-bold text-ink">{t("immutable")}</div>
         </div>
 
         <div className="mt-5 grid gap-5 lg:grid-cols-[1.25fr_0.75fr]">
@@ -262,14 +262,17 @@ export function SystemExplorer() {
         </div>
       </section>
 
-      <section className="mt-20 rounded-3xl bg-ink p-6 text-white sm:p-10" aria-labelledby="explorer-cta-heading">
-        <h2 id="explorer-cta-heading" className="text-3xl font-bold tracking-[-0.035em]">
+      <section className="mt-20 rounded-3xl border border-brand/30 bg-brand-soft p-6 sm:p-10" aria-labelledby="explorer-cta-heading">
+        <p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">
+          ClaimSaathi
+        </p>
+        <h2 id="explorer-cta-heading" className="mt-2 text-3xl font-bold tracking-[-0.035em] text-ink sm:text-4xl">
           {t("ctaTitle")}
         </h2>
-        <p className="mt-3 max-w-2xl leading-7 text-white/80">
+        <p className="mt-3 max-w-2xl text-base leading-7 text-muted">
           {t("ctaCopy")}
         </p>
-        <Link href="/" prefetch={false} className="mt-6 inline-flex min-h-12 items-center rounded-xl bg-white px-5 py-3 font-bold text-ink transition hover:bg-brand-soft focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">
+        <Link href="/" prefetch={false} className="mt-6 inline-flex min-h-12 items-center rounded-xl bg-brand px-5 py-3 font-bold text-white transition hover:bg-brand-strong focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand">
           {t("cta")}
         </Link>
       </section>
