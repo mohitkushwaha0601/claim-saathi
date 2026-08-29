@@ -22,6 +22,7 @@ function FlowList({ items }: { items: readonly string[] }) {
 
 export function SystemExplorer() {
   const t = useTranslations("SystemExplorer");
+  const stateT = useTranslations("DecisionStates");
   const formFirstSteps = t.raw("formFirstSteps") as string[];
   const claimSaathiSteps = t.raw("claimSaathiSteps") as string[];
   const transformations = t.raw("transformations") as [string, string][];
@@ -81,20 +82,20 @@ export function SystemExplorer() {
           {t("comparisonNote")}
         </p>
 
-        <div className="mt-8 grid overflow-hidden rounded-3xl border border-line bg-line lg:grid-cols-2 lg:gap-px">
-          <div className="bg-ink p-6 text-white sm:p-8">
-            <p className="text-xs font-bold tracking-[0.14em] text-white/70 uppercase">
+        <div className="mt-8 grid overflow-hidden rounded-3xl border border-line lg:grid-cols-2">
+          <div className="bg-surface p-6 sm:p-8">
+            <p className="text-xs font-bold tracking-[0.14em] text-muted uppercase">
               {t("traditional")}
             </p>
-            <p className="mt-3 text-2xl font-bold leading-tight sm:text-3xl">
+            <p className="mt-3 text-2xl font-bold leading-tight text-ink sm:text-3xl">
               {t("citizenOrchestrates")}
             </p>
           </div>
-          <div className="bg-brand p-6 text-white sm:p-8">
-            <p className="text-xs font-bold tracking-[0.14em] text-white/75 uppercase">
+          <div className="border-t border-line bg-brand-soft p-6 sm:p-8 lg:border-t-0 lg:border-l">
+            <p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">
               ClaimSaathi
             </p>
-            <p className="mt-3 text-2xl font-bold leading-tight sm:text-3xl">
+            <p className="mt-3 text-2xl font-bold leading-tight text-ink sm:text-3xl">
               {t("systemOrchestrates")}
             </p>
           </div>
@@ -150,7 +151,7 @@ export function SystemExplorer() {
             ))}
           </div>
           <div aria-hidden="true" className="py-2 text-center font-bold text-brand">↓</div>
-          <div className="rounded-xl bg-ink p-4 text-center font-bold text-white">{t("immutable")}</div>
+          <div className="rounded-xl border border-brand/40 bg-brand-soft p-4 text-center font-bold text-ink">{t("immutable")}</div>
         </div>
 
         <div className="mt-5 grid gap-5 lg:grid-cols-[1.25fr_0.75fr]">
@@ -199,13 +200,13 @@ export function SystemExplorer() {
         </h2>
         <div className="mt-7 grid gap-4 sm:grid-cols-2">
           <article className="min-w-0 rounded-2xl border border-slate-300 bg-slate-50 p-5 sm:p-6">
-            <h3 className="text-xl font-bold text-slate-950 [overflow-wrap:anywhere]">UNABLE_TO_VERIFY</h3>
+            <h3 className="text-xl font-bold text-slate-950 [overflow-wrap:anywhere]">{stateT("UNABLE_TO_VERIFY.label")}</h3>
             <p className="mt-2 text-sm leading-6 text-slate-800">
               {t("unableCopy")}
             </p>
           </article>
           <article className="min-w-0 rounded-2xl border border-violet-200 bg-violet-50 p-5 sm:p-6">
-            <h3 className="text-xl font-bold text-violet-950 [overflow-wrap:anywhere]">POLICY_REVIEW_REQUIRED</h3>
+            <h3 className="text-xl font-bold text-violet-950 [overflow-wrap:anywhere]">{stateT("POLICY_REVIEW_REQUIRED.label")}</h3>
             <p className="mt-2 text-sm leading-6 text-violet-900">
               {t("reviewCopy")}
             </p>
@@ -227,12 +228,12 @@ export function SystemExplorer() {
           <p className="inline-flex rounded-full bg-brand-soft px-3 py-1 text-xs font-bold tracking-[0.1em] text-brand uppercase">
             {t("deterministic")}
           </p>
-          <ol className="mt-5 grid gap-2 sm:grid-cols-5 sm:items-center" aria-label={t("decisionPathLabel")}>
+          <ol className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-center" aria-label={t("decisionPathLabel")}>
             {decisionPath.map((item, index) => (
-              <li key={item} className="flex min-w-0 items-center gap-2 sm:block sm:text-center">
-                <span className="block min-w-0 flex-1 rounded-xl border border-brand/25 bg-brand-soft p-3 text-xs font-bold leading-5 text-ink">{item}</span>
+              <li key={item} className="flex flex-col items-center gap-2 sm:flex-1 sm:flex-row">
+                <span className="block min-w-0 flex-1 w-full text-center rounded-xl border border-brand/25 bg-brand-soft p-3 text-xs font-bold leading-5 text-ink">{item}</span>
                 {index < 4 ? (
-                  <span aria-hidden="true" className="font-bold text-brand sm:mt-2 sm:block sm:rotate-90">→</span>
+                  <span aria-hidden="true" className="font-bold text-brand rotate-90 sm:rotate-0">→</span>
                 ) : null}
               </li>
             ))}
@@ -243,12 +244,12 @@ export function SystemExplorer() {
             {t("notGovernmentDecision")}
           </p>
           <h3 className="mt-4 text-xl font-bold text-ink">{t("oneWay")}</h3>
-          <ol className="mt-4 grid gap-2 sm:grid-cols-4 sm:items-center" aria-label={t("explanationPathLabel")}>
+          <ol className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center" aria-label={t("explanationPathLabel")}>
             {explanationPath.map((item, index) => (
-              <li key={item} className="flex min-w-0 items-center gap-2 sm:block sm:text-center">
-                <span className="block min-w-0 flex-1 rounded-xl border border-line bg-surface p-3 text-xs font-bold leading-5 text-ink">{item}</span>
+              <li key={item} className="flex flex-col items-center gap-2 sm:flex-1 sm:flex-row">
+                <span className="block min-w-0 flex-1 w-full text-center rounded-xl border border-line bg-surface p-3 text-xs font-bold leading-5 text-ink">{item}</span>
                 {index < 3 ? (
-                  <span aria-hidden="true" className="font-bold text-slate-600 sm:mt-2 sm:block sm:rotate-90">→</span>
+                  <span aria-hidden="true" className="font-bold text-slate-600 rotate-90 sm:rotate-0">→</span>
                 ) : null}
               </li>
             ))}
@@ -262,14 +263,17 @@ export function SystemExplorer() {
         </div>
       </section>
 
-      <section className="mt-20 rounded-3xl bg-ink p-6 text-white sm:p-10" aria-labelledby="explorer-cta-heading">
-        <h2 id="explorer-cta-heading" className="text-3xl font-bold tracking-[-0.035em]">
+      <section className="mt-20 rounded-3xl border border-brand/30 bg-brand-soft p-6 sm:p-10" aria-labelledby="explorer-cta-heading">
+        <p className="text-xs font-bold tracking-[0.14em] text-brand uppercase">
+          ClaimSaathi
+        </p>
+        <h2 id="explorer-cta-heading" className="mt-2 text-3xl font-bold tracking-[-0.035em] text-ink sm:text-4xl">
           {t("ctaTitle")}
         </h2>
-        <p className="mt-3 max-w-2xl leading-7 text-white/80">
+        <p className="mt-3 max-w-2xl text-base leading-7 text-muted">
           {t("ctaCopy")}
         </p>
-        <Link href="/" prefetch={false} className="mt-6 inline-flex min-h-12 items-center rounded-xl bg-white px-5 py-3 font-bold text-ink transition hover:bg-brand-soft focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">
+        <Link href="/" prefetch={false} className="mt-6 inline-flex min-h-12 items-center rounded-xl bg-brand px-5 py-3 font-bold text-white transition hover:bg-brand-strong focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand">
           {t("cta")}
         </Link>
       </section>

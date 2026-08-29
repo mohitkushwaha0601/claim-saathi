@@ -25,7 +25,9 @@
     "currentScale": "Current text size: {scale}%",
     "highContrast": "High contrast",
     "highContrastHelp": "Use stronger colors and borders",
-    "close": "Close accessibility settings"
+    "close": "Close accessibility settings",
+    "darkMode": "Dark mode",
+    "darkModeHelp": "Use a darker, lower-glare color palette"
   },
   "Network": {
     "offlineNotice": "Offline — journey checks require a connection.",

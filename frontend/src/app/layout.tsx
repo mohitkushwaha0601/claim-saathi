@@ -30,6 +30,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html
       lang="en"
       data-contrast="standard"
+      data-theme="light"
       data-scroll-behavior="smooth"
       data-text-scale="100"
       suppressHydrationWarning

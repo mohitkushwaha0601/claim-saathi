@@ -10,6 +10,20 @@
   --brand: #1f6650;
   --brand-strong: #174c3c;
   --brand-soft: #e8f2ed;
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  --canvas: #101512;
+  --surface: #18211c;
+  --ink: #f2f6f3;
+  --muted: #b7c5bc;
+  --line: #34443b;
+  --line-strong: #62766a;
+  --brand: #79d1ae;
+  --brand-strong: #9ce2c3;
+  --brand-soft: #203f34;
+  color-scheme: dark;
 }
 
 html[data-text-scale="100"] {
@@ -43,6 +57,49 @@ html[data-contrast="high"] {
   --brand-strong: #002f26;
   --brand-soft: #dff7ed;
 }
+
+html[data-theme="dark"][data-contrast="high"] {
+  --canvas: #000000;
+  --surface: #101010;
+  --ink: #ffffff;
+  --muted: #f0f0f0;
+  --line: #d0d0d0;
+  --line-strong: #ffffff;
+  --brand: #9ff0c9;
+  --brand-strong: #c7ffe2;
+  --brand-soft: #173d2c;
+}
+
+html[data-theme="dark"] :is(
+  [class~="bg-white"],
+  [class~="bg-white/60"],
+  [class~="bg-white/70"],
+  [class~="bg-white/80"]
+) {
+  background-color: var(--surface) !important;
+}
+
+html[data-theme="dark"] :is([class~="bg-amber-50"], [class~="bg-amber-100"]) { background-color: #422f0a !important; }
+html[data-theme="dark"] :is([class~="text-amber-800"], [class~="text-amber-900"], [class~="text-amber-950"]) { color: #ffdf8a !important; }
+html[data-theme="dark"] :is([class~="border-amber-200"], [class~="border-amber-900"]) { border-color: #956b20 !important; }
+html[data-theme="dark"] :is([class~="bg-emerald-50"]) { background-color: #123b2d !important; }
+html[data-theme="dark"] :is([class~="text-emerald-900"], [class~="text-emerald-950"]) { color: #a6e8c6 !important; }
+html[data-theme="dark"] :is([class~="border-emerald-200"]) { border-color: #438467 !important; }
+html[data-theme="dark"] :is([class~="bg-rose-50"]) { background-color: #451b24 !important; }
+html[data-theme="dark"] :is([class~="text-rose-800"], [class~="text-rose-950"]) { color: #ffc1ca !important; }
+html[data-theme="dark"] :is([class~="border-rose-200"]) { border-color: #a45160 !important; }
+html[data-theme="dark"] :is([class~="bg-sky-50"]) { background-color: #102f42 !important; }
+html[data-theme="dark"] :is([class~="text-sky-900"], [class~="text-sky-950"]) { color: #b8e5ff !important; }
+html[data-theme="dark"] :is([class~="border-sky-200"]) { border-color: #397c9c !important; }
+html[data-theme="dark"] :is([class~="bg-slate-50"], [class~="bg-slate-200"]) { background-color: #26302f !important; }
+html[data-theme="dark"] :is([class~="text-slate-600"], [class~="text-slate-800"], [class~="text-slate-950"]) { color: #e0e9e4 !important; }
+html[data-theme="dark"] :is([class~="border-slate-200"], [class~="border-slate-300"]) { border-color: #64756d !important; }
+html[data-theme="dark"] :is([class~="bg-violet-50"], [class~="bg-violet-100"]) { background-color: #302242 !important; }
+html[data-theme="dark"] :is([class~="text-violet-900"], [class~="text-violet-950"]) { color: #e1c8ff !important; }
+html[data-theme="dark"] :is([class~="border-violet-200"], [class~="border-violet-300"]) { border-color: #76549b !important; }
+html[data-theme="dark"] :is([class~="bg-brand"], [class~="hover:bg-brand"]:hover) { color: #0b1c15 !important; }
+html[data-theme="dark"] :is([class~="bg-brand"]) :is([class~="text-white"], [class~="text-white/80"], [class~="text-white/75"], [class~="text-white/70"]) { color: #0b1c15 !important; }
+html[data-theme="dark"] :is([class~="hover:bg-brand-strong"]:hover) { color: #0b1c15 !important; }
 
 @theme inline {
   --color-canvas: var(--canvas);

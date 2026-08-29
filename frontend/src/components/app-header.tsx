@@ -13,7 +13,7 @@ export function AppHeader() {
     <>
       <a
         href="#main-content"
-        className="fixed top-3 left-3 z-50 -translate-y-24 rounded-lg bg-ink px-4 py-3 font-semibold text-white focus:translate-y-0"
+        className="fixed top-3 left-3 z-50 -translate-y-24 rounded-lg border-2 border-brand bg-surface px-4 py-3 font-semibold text-ink shadow-lg focus:translate-y-0"
       >
         {t("skipToContent")}
       </a>

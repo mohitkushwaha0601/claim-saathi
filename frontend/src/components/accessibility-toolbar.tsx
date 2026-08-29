@@ -1,24 +1,40 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useEffect, useRef } from "react";
 
 import { useAppPreferences } from "./app-providers";
 
 export function AccessibilityToolbar() {
+  const menuRef = useRef<HTMLDetailsElement>(null);
   const t = useTranslations("Accessibility");
   const {
     locale,
     textScale,
     highContrast,
+    colorTheme,
     setLocale,
     decreaseTextScale,
     resetTextScale,
     increaseTextScale,
     toggleHighContrast,
+    toggleColorTheme,
   } = useAppPreferences();
 
+  useEffect(() => {
+    const closeWhenClickingOutside = (event: PointerEvent) => {
+      const menu = menuRef.current;
+      if (menu?.open && event.target instanceof Node && !menu.contains(event.target)) {
+        menu.open = false;
+      }
+    };
+
+    document.addEventListener("pointerdown", closeWhenClickingOutside);
+    return () => document.removeEventListener("pointerdown", closeWhenClickingOutside);
+  }, []);
+
   return (
-    <details className="accessibility-menu relative">
+    <details ref={menuRef} className="accessibility-menu relative">
       <summary
         aria-label={t("open")}
         className="flex min-h-11 cursor-pointer list-none items-center rounded-lg border border-line px-3 font-bold text-brand marker:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
@@ -111,6 +127,22 @@ export function AccessibilityToolbar() {
           </span>
           <span aria-hidden="true" className="font-bold text-brand">
             {highContrast ? "✓" : "○"}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          aria-label={t("darkMode")}
+          aria-pressed={colorTheme === "dark"}
+          onClick={toggleColorTheme}
+          className="mt-3 flex min-h-11 w-full items-center justify-between gap-3 rounded-lg border border-line-strong px-3 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        >
+          <span>
+            <span className="block font-semibold text-ink">{t("darkMode")}</span>
+            <span className="block text-xs leading-5 text-muted">{t("darkModeHelp")}</span>
+          </span>
+          <span aria-hidden="true" className="font-bold text-brand">
+            {colorTheme === "dark" ? "✓" : "○"}
           </span>
         </button>
       </div>

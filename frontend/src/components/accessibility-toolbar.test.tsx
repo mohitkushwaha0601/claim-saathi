@@ -16,7 +16,23 @@ function openToolbar() {
   return summary!;
 }
 
+function getMenu() {
+  const summary = screen.getByText("Aa").closest("summary");
+  expect(summary).not.toBeNull();
+  return summary!.parentElement as HTMLDetailsElement;
+}
+
 describe("accessibility preferences", () => {
+  it("closes when the user clicks outside the menu", () => {
+    renderToolbar();
+    openToolbar();
+    expect(getMenu().open).toBe(true);
+
+    fireEvent.pointerDown(document.body);
+
+    expect(getMenu().open).toBe(false);
+  });
+
   it("steps from 100% to 200%, reverses, and resets without scaling a canvas", async () => {
     renderToolbar();
     openToolbar();
@@ -54,6 +70,24 @@ describe("accessibility preferences", () => {
     await waitFor(() => {
       expect(document.documentElement.dataset.textScale).toBe("125");
       expect(document.documentElement.dataset.contrast).toBe("high");
+    });
+  });
+
+  it("toggles and persists dark mode across a remount", async () => {
+    const first = renderToolbar();
+    openToolbar();
+    fireEvent.click(screen.getByRole("button", { name: "Dark mode" }));
+
+    expect(document.documentElement.dataset.theme).toBe("dark");
+    expect(window.localStorage.getItem("claimsaathi.colorTheme")).toBe("dark");
+    first.unmount();
+
+    renderToolbar();
+    await waitFor(() => {
+      expect(document.documentElement.dataset.theme).toBe("dark");
+      expect(
+        screen.getByRole("button", { name: "Dark mode" }).getAttribute("aria-pressed"),
+      ).toBe("true");
     });
   });
 
