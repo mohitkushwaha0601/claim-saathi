@@ -22,6 +22,7 @@ function FlowList({ items }: { items: readonly string[] }) {
 
 export function SystemExplorer() {
   const t = useTranslations("SystemExplorer");
+  const stateT = useTranslations("DecisionStates");
   const formFirstSteps = t.raw("formFirstSteps") as string[];
   const claimSaathiSteps = t.raw("claimSaathiSteps") as string[];
   const transformations = t.raw("transformations") as [string, string][];
@@ -199,13 +200,13 @@ export function SystemExplorer() {
         </h2>
         <div className="mt-7 grid gap-4 sm:grid-cols-2">
           <article className="min-w-0 rounded-2xl border border-slate-300 bg-slate-50 p-5 sm:p-6">
-            <h3 className="text-xl font-bold text-slate-950 [overflow-wrap:anywhere]">UNABLE_TO_VERIFY</h3>
+            <h3 className="text-xl font-bold text-slate-950 [overflow-wrap:anywhere]">{stateT("UNABLE_TO_VERIFY.label")}</h3>
             <p className="mt-2 text-sm leading-6 text-slate-800">
               {t("unableCopy")}
             </p>
           </article>
           <article className="min-w-0 rounded-2xl border border-violet-200 bg-violet-50 p-5 sm:p-6">
-            <h3 className="text-xl font-bold text-violet-950 [overflow-wrap:anywhere]">POLICY_REVIEW_REQUIRED</h3>
+            <h3 className="text-xl font-bold text-violet-950 [overflow-wrap:anywhere]">{stateT("POLICY_REVIEW_REQUIRED.label")}</h3>
             <p className="mt-2 text-sm leading-6 text-violet-900">
               {t("reviewCopy")}
             </p>
@@ -227,12 +228,12 @@ export function SystemExplorer() {
           <p className="inline-flex rounded-full bg-brand-soft px-3 py-1 text-xs font-bold tracking-[0.1em] text-brand uppercase">
             {t("deterministic")}
           </p>
-          <ol className="mt-5 grid gap-2 sm:grid-cols-5 sm:items-center" aria-label={t("decisionPathLabel")}>
+          <ol className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-center" aria-label={t("decisionPathLabel")}>
             {decisionPath.map((item, index) => (
-              <li key={item} className="flex min-w-0 items-center gap-2 sm:block sm:text-center">
-                <span className="block min-w-0 flex-1 rounded-xl border border-brand/25 bg-brand-soft p-3 text-xs font-bold leading-5 text-ink">{item}</span>
+              <li key={item} className="flex flex-col items-center gap-2 sm:flex-1 sm:flex-row">
+                <span className="block min-w-0 flex-1 w-full text-center rounded-xl border border-brand/25 bg-brand-soft p-3 text-xs font-bold leading-5 text-ink">{item}</span>
                 {index < 4 ? (
-                  <span aria-hidden="true" className="font-bold text-brand sm:mt-2 sm:block sm:rotate-90">→</span>
+                  <span aria-hidden="true" className="font-bold text-brand rotate-90 sm:rotate-0">→</span>
                 ) : null}
               </li>
             ))}
@@ -243,12 +244,12 @@ export function SystemExplorer() {
             {t("notGovernmentDecision")}
           </p>
           <h3 className="mt-4 text-xl font-bold text-ink">{t("oneWay")}</h3>
-          <ol className="mt-4 grid gap-2 sm:grid-cols-4 sm:items-center" aria-label={t("explanationPathLabel")}>
+          <ol className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center" aria-label={t("explanationPathLabel")}>
             {explanationPath.map((item, index) => (
-              <li key={item} className="flex min-w-0 items-center gap-2 sm:block sm:text-center">
-                <span className="block min-w-0 flex-1 rounded-xl border border-line bg-surface p-3 text-xs font-bold leading-5 text-ink">{item}</span>
+              <li key={item} className="flex flex-col items-center gap-2 sm:flex-1 sm:flex-row">
+                <span className="block min-w-0 flex-1 w-full text-center rounded-xl border border-line bg-surface p-3 text-xs font-bold leading-5 text-ink">{item}</span>
                 {index < 3 ? (
-                  <span aria-hidden="true" className="font-bold text-slate-600 sm:mt-2 sm:block sm:rotate-90">→</span>
+                  <span aria-hidden="true" className="font-bold text-slate-600 rotate-90 sm:rotate-0">→</span>
                 ) : null}
               </li>
             ))}
